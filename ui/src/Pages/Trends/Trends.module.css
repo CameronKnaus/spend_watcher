@@ -1,0 +1,14 @@
+.pageContainer {
+  padding: 24px 16px;
+  padding-bottom: 160px;
+}
+
+.contentContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 36px;
+}
+
+.module {
+  width: 100%;
+}

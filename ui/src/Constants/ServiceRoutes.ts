@@ -1,0 +1,40 @@
+import EnvironmentSettings from 'Constants/EnvironmentSettings.json';
+const { devMode, prodAPI, localAPI } = EnvironmentSettings;
+
+const domainName = devMode ? localAPI : prodAPI;
+
+const SERVICE_ROUTES: Record<string, string> = {
+  postLogin: domainName + '/user/v1/login',
+  postRegister: domainName + '/user/v1/register',
+  getCheckAuthentication: domainName + '/user/v1/verify',
+  getSpendingDetails: domainName + '/spending/v1/details',
+  postAddDiscretionarySpending: domainName + '/spending/v1/discretionary/add',
+  postEditDiscretionarySpending: domainName + '/spending/v1/discretionary/edit',
+  postDeleteDiscretionarySpending: domainName + '/spending/v1/discretionary/delete',
+  getRecurringSummary: domainName + '/spending/v1/recurring/summary',
+  postAddRecurringSpend: domainName + '/spending/v1/recurring/add',
+  postEditRecurringSpend: domainName + '/spending/v1/recurring/edit',
+  postDeleteRecurringSpend: domainName + '/spending/v1/recurring/delete',
+  postUpdateRecurringSpendStatus: domainName + '/spending/v1/recurring/set-active',
+  getRecurringTransactionsList: domainName + '/spending/v1/recurring/transactions',
+  postEditRecurringTransaction: domainName + '/spending/v1/recurring/transactions/edit',
+  postAddRecurringTransaction: domainName + '/spending/v1/recurring/transactions/add',
+  getSpendingHistoryStart: domainName + '/spending/v1/history-start',
+  getTransactions: domainName + '/spending/v1/transactions',
+  getTripsList: domainName + '/trips/v1/list',
+  getTripLinkedExpenses: domainName + '/trips/v1/expenses',
+  postAddTrip: domainName + '/trips/v1/add',
+  postEditTrip: domainName + '/trips/v1/edit',
+  postDeleteTrip: domainName + '/trips/v1/delete',
+  getAccountsSummary: domainName + '/accounts/v1/summary',
+  postAddAccount: domainName + '/accounts/v1/add',
+  postEditAccount: domainName + '/accounts/v1/edit',
+  postSetActiveAccount: domainName + '/accounts/v1/set-active',
+  postDeleteAccount: domainName + '/accounts/v1/delete',
+  getAccountValueHistory: domainName + '/accounts/v1/history',
+  postAddAccountUpdate: domainName + '/accounts/v1/update/add',
+  postEditAccountUpdate: domainName + '/accounts/v1/update/edit',
+  getAccountGrowthOverTime: domainName + '/accounts/v1/growth-over-time',
+};
+
+export default SERVICE_ROUTES;

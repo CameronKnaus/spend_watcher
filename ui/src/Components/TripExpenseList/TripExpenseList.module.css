@@ -1,0 +1,12 @@
+.row {
+  margin-bottom: 12px;
+  background-color: var(--token-color-background-secondary);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.linkedTransactionsLabel {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-regular);
+  margin-bottom: 12px;
+}

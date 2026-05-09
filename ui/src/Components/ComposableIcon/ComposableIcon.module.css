@@ -1,0 +1,11 @@
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+  /* The background color here is used as a default */
+  background-color: var(--token-background-primary);
+  position: relative;
+  color: var(--token-color-category-icon);
+}

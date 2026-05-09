@@ -1,0 +1,49 @@
+.button {
+  width: 100%;
+}
+
+.interactiveRow {
+  display: flex;
+  width: 100%;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.detailsContainer {
+  flex-basis: 100%;
+}
+
+.primaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-body-small);
+}
+
+.dataRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.secondaryRow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  color: var(--token-color-text-subdued);
+  font-size: var(--font-caption);
+}
+
+.chevron {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.callToAction {
+  background-color: var(--token-cta-background-color);
+  color: var(--token-cta-text-color);
+  padding: 4px;
+  border-radius: 0 0 8px 8px;
+  margin-top: 4px;
+}

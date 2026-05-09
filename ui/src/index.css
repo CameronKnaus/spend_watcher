@@ -1,0 +1,22 @@
+@import './Styles/Global/Global.css';
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    Trebuchet MS,
+    Lucida Grande,
+    Lucida Sans Unicode,
+    Lucida Sans,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

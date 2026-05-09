@@ -1,0 +1,18 @@
+.loader {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 90%), #e9e9e9;
+  background-repeat: repeat-y;
+  background-size: 120px 200px;
+  background-position: -50% 0;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  width: 100%;
+  height: 24px;
+  margin-bottom: 16px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 150% 0;
+  }
+}

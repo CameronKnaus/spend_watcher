@@ -1,23 +1,24 @@
 {
-    "name": "spend-watcher",
-    "description": "This project is for personal spending tracking. It is a monolith encompassing a react frontend and node backend.",
-    "version": "0.1.0",
-    "private": true,
-    "engines": {
-        "node": ">=22"
-    },
-    "scripts": {
-        "dev": "pnpm -r --parallel run dev",
-        "lint": "pnpm -r run lint",
-        "lint:fix": "pnpm -r run lint:fix",
-        "format": "pnpm -r run format",
-        "test": "pnpm --filter @spend-watcher/ui run test"
-    },
-    "devDependencies": {
-        "typescript": "^5.5.3",
-        "prettier": "^3.3.3",
-        "eslint": "^8.57.0",
-        "@typescript-eslint/parser": "^7.16.1",
-        "@typescript-eslint/eslint-plugin": "^7.16.1"
-    }
+  "name": "spend-watcher",
+  "description": "This project is for personal spending tracking. It is a monolith encompassing a react frontend and node backend.",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "pnpm -r --parallel run dev",
+    "dev": "pnpm -r --parallel run dev",
+    "lint": "pnpm -r run lint",
+    "lint:fix": "pnpm -r run lint:fix",
+    "format": "pnpm -r run format",
+    "test": "pnpm --filter @spend-watcher/ui run test"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "prettier": "^3.3.3",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.16.1",
+    "@typescript-eslint/eslint-plugin": "^7.16.1"
+  }
 }

@@ -1,0 +1,21 @@
+.errorContainer {
+  width: 100%;
+  display: flex;
+  border-radius: 8px;
+  padding: 16px;
+  column-gap: 8px;
+  max-width: 600px;
+}
+
+.iconContainer {
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 16px;
+  font-size: 16px;
+  padding-top: 3px;
+}
+
+.messageText {
+  flex-grow: 1;
+  flex-basis: 0;
+}

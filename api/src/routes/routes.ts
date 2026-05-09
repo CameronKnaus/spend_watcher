@@ -6,10 +6,10 @@ import SpendingController from './spending/spending.controller';
 import TripsController from './trips/trips.controller';
 
 const api = Router()
-    .use('/user', AuthController)
-    // TODO: Verify that the auth token validation is occurring when passing in here
-    .use('/accounts', verifyAuthToken, AccountsController)
-    .use('/spending', verifyAuthToken, SpendingController)
-    .use('/trips', verifyAuthToken, TripsController);
+  .use('/user', AuthController)
+  // TODO: Verify that the auth token validation is occurring when passing in here
+  .use('/accounts', verifyAuthToken, AccountsController)
+  .use('/spending', verifyAuthToken, SpendingController)
+  .use('/trips', verifyAuthToken, TripsController);
 
 export default Router().use('/api', api);

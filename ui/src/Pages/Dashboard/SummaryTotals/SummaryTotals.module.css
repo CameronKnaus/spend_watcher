@@ -1,0 +1,32 @@
+.summaryTile {
+  flex-basis: calc(33% - var(--dashboard-column-gap));
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 375px;
+  flex-wrap: wrap;
+}
+
+.summaryDataMobileContainer {
+  display: flex;
+  row-gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mobileSummaryItem {
+  width: 100%;
+}
+
+.totalLabel {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-primary);
+}
+
+.distinctTotals {
+  display: contents;
+}
+
+.mobileSummaryLabel {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-primary);
+}

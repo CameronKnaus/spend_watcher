@@ -1,0 +1,20 @@
+.accountsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.totalAmount {
+  font-size: var(--font-heading-large);
+  font-weight: var(--font-weight-thin);
+  color: var(--token-color-semantic-gain);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.totalSkeleton {
+  height: 38px;
+  width: 166px;
+  margin: auto;
+}

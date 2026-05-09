@@ -1,29 +1,28 @@
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-        "target": "ES2022",
-        "lib": ["DOM", "ESNext"],
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "jsx": "react-jsx",
-        "baseUrl": "./src",
-        "paths": {
-            "@type/*": ["src/Types/*"],
-            "@components/*": ["src/Components/*"],
-            "@pages/*": ["src/Pages/*"],
-            "@utils/*": ["src/Util/*"],
-            "@hooks/*": ["src/Hooks/*"],
-            "@constants/*": ["src/Constants/*"],
-            "@content/*": ["src/Content/*"]
-        },
-        "types": ["vite/client"],
-        "allowJs": true,
-        "noEmit": true,
-        "isolatedModules": true,
-        "allowSyntheticDefaultImports": true,
-        "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["DOM", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "@type/*": ["src/Types/*"],
+      "@components/*": ["src/Components/*"],
+      "@pages/*": ["src/Pages/*"],
+      "@utils/*": ["src/Util/*"],
+      "@hooks/*": ["src/Hooks/*"],
+      "@constants/*": ["src/Constants/*"],
+      "@content/*": ["src/Content/*"]
     },
-    "include": ["./src", "./custom.d.ts"],
-    "exclude": ["./src/Legacy"]
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  },
+  "include": ["./src", "./custom.d.ts"],
+  "exclude": ["./src/Legacy"]
 }

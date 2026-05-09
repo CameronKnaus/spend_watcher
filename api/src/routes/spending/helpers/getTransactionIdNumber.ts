@@ -1,7 +1,7 @@
 import { DiscretionaryTransactionId, RecurringTransactionId } from '../spending.model';
 
 export default function getTransactionIdNumber(
-    transactionId: DiscretionaryTransactionId | RecurringTransactionId,
+  transactionId: DiscretionaryTransactionId | RecurringTransactionId,
 ): number {
-    return parseInt(transactionId.split('-')[1]);
+  return parseInt(transactionId.split('-')[1]);
 }

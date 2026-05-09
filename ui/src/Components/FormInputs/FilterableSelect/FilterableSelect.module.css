@@ -1,0 +1,87 @@
+.selectContainer {
+  position: relative;
+  cursor: default;
+}
+
+.selectContainer .arrow {
+  border-color: #999 transparent transparent;
+  border-style: solid;
+  border-width: 6px 6px 0;
+  content: ' ';
+  display: block;
+  height: 0;
+  margin-top: 0.3rem;
+  position: absolute;
+  right: 8px;
+  top: 13px;
+  width: 0;
+}
+
+.selectContainer .arrow.open {
+  border-color: transparent transparent #999;
+  border-width: 0 6px 6px;
+}
+
+.selectContainer > input {
+  line-height: 1.5;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: default;
+  outline: none;
+  padding: 8px 10px;
+  transition: all 200ms ease;
+  width: 100%;
+}
+
+.nothingSelected {
+  color: var(--theme-placeholder-text);
+}
+
+.selectContainer .options {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  -webkit-overflow-scrolling: touch;
+}
+
+.selectContainer .option {
+  box-sizing: border-box;
+  color: var(--theme-subdued-text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+}
+
+.selectContainer .option.selected,
+.selectContainer .option:hover {
+  background-color: #f2f9fc;
+  color: #333;
+}
+
+.iconContainer {
+  font-size: 1rem;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin-right: 12px;
+  color: #ffffff;
+  flex-shrink: 0;
+  /* The background color here is used as a default */
+  background-color: #333333;
+}
+
+.clearLabel {
+  width: 100%;
+  text-align: center;
+}

@@ -1,0 +1,62 @@
+.authContainer {
+  background-color: var(--token-color-background-primary);
+  padding: 24px 16px 0;
+  border: 1px solid var(--token-color-border-secondary);
+  border-radius: 16px;
+  margin: 80px auto auto;
+  box-shadow: 0 0 8px 2px var(--token-background-secondary-elevation-medium);
+  width: 100%;
+  max-width: var(--breakpoint-min-supported-width);
+}
+
+.spendWatcherHeader {
+  font-size: var(--font-body-large);
+  color: var(--token-color-text-standard);
+  font-weight: var(--font-weight-semi-bold);
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+  color: var(--theme-color-primary-500);
+}
+
+.formHeader {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-standard);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 16px;
+}
+
+.authForm > label {
+  font-weight: var(--form-label-font-weight);
+  color: var(--form-label-color);
+  display: block;
+  font-size: var(--form-label-font-size);
+  padding-bottom: var(--form-padding-below-label);
+}
+
+.authForm > label > input::placeholder {
+  color: var(--token-color-text-placeholder);
+}
+
+.textInput {
+  border: none;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: var(--form-input-font-size);
+  background-color: var(--token-color-background-primary);
+  margin-bottom: var(--form-space-between-items) !important;
+}
+
+.buttonRowContainer {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 16px;
+  padding: 16px 0;
+}
+
+.buttonRowContainer > button {
+  padding: 8px 16px;
+}

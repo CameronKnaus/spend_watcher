@@ -1,0 +1,80 @@
+.desktopNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  color: var(--token-navigation-color);
+  background-color: var(--token-color-background-primary);
+  padding: 16px 0;
+  border-right: var(--token-color-border-tertiary) 1px solid;
+  width: fit-content;
+  isolation: isolate;
+  z-index: 1;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 28px;
+  font-size: var(--font-heading-small);
+  text-wrap: nowrap;
+  overflow-x: hidden;
+  margin: 12px 0;
+  /* This padding-bottom ensures that the scale() transform on hover doesn't clip */
+  padding: 16px 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+  color: var(--token-navigation-color);
+  text-decoration: none;
+  padding: 0 16px;
+  position: relative;
+}
+
+.menuItem:hover {
+  cursor: pointer;
+}
+
+.menuItem:hover .icon {
+  transform: scale(1.2);
+}
+
+.menuItem:hover .navTextContainer {
+  color: var(--token-color-text-dark);
+}
+
+.icon {
+  --icon-size: 2.25rem;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  transition-duration: 0.4s;
+  position: relative;
+}
+
+.selectionBackground {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background-color: var(--token-button-primary-color);
+  border-radius: 50%;
+  transition-duration: 0.4s;
+  z-index: -1;
+}
+
+.outletContainer {
+  --page-side-padding: 24px;
+  padding-top: 32px;
+  max-width: var(--breakpoint-max-page-width);
+  margin: 0 auto;
+}

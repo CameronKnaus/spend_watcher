@@ -1,0 +1,5 @@
+:root {
+  --breakpoint-min-supported-width: 375px;
+  --breakpoint-mobile: 768px;
+  --breakpoint-max-page-width: 1440px;
+}

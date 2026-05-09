@@ -1,0 +1,31 @@
+.tripForm > label {
+  font-weight: var(--form-label-font-weight);
+  color: var(--form-label-color);
+  display: block;
+  font-size: var(--form-label-font-size);
+  padding-bottom: var(--form-padding-below-label);
+}
+
+.tripForm > label > input::placeholder {
+  color: var(--token-color-text-placeholder);
+}
+
+.textInput {
+  border: none;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: var(--form-input-font-size);
+  background-color: var(--token-color-background-primary);
+  margin-bottom: var(--form-space-between-items) !important;
+}
+
+.dateLabel {
+  margin-bottom: 12px;
+}
+
+.deleteButtonContainer {
+  padding-top: 64px;
+  margin-bottom: 16px;
+}

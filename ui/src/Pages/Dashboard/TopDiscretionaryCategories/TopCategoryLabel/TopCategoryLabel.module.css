@@ -1,0 +1,35 @@
+.categoryListItem {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: space-between;
+  gap: 4px;
+  justify-self: stretch;
+}
+
+.categoryIcon {
+  border-radius: 4px;
+}
+
+.categoryIcon {
+  border-radius: 4px;
+}
+
+.percentageValue {
+  font-size: var(--font-caption);
+  color: var(--token-color-text-subdued);
+}
+
+.categoryListItem {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: space-between;
+  gap: 4px;
+  justify-self: stretch;
+}
+
+.amountContainer {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+}

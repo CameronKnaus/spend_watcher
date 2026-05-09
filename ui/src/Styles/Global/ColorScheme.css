@@ -1,0 +1,162 @@
+:root {
+  /* ------------------- PRIMITIVES ------------------- */
+  /* Neutral Colors */
+  --theme-color-neutral-000: #333333;
+  --theme-color-neutral-100: #465053;
+  --theme-color-neutral-200: #64767d;
+  --theme-color-neutral-300: #778e97;
+  --theme-color-neutral-400: #a6b8bf;
+  --theme-color-neutral-500: #c3d4da;
+  --theme-color-neutral-600: #d4e2e8;
+  --theme-color-neutral-700: #e2eef3;
+  --theme-color-neutral-800: #f0f7f9;
+  --theme-color-neutral-900: #f8fbfc;
+  --theme-color-neutral-1000: #ffffff;
+
+  /* Primary Colors */
+  --theme-color-primary-100: #24322e;
+  --theme-color-primary-200: #34554b;
+  --theme-color-primary-300: #3d7664;
+  --theme-color-primary-400: #419b80;
+  --theme-color-primary-500: #43a875;
+  --theme-color-primary-600: #4ec68a;
+  --theme-color-primary-700: #67daa1;
+  --theme-color-primary-800: #b6f6e3;
+  --theme-color-primary-900: #d4fcf0;
+
+  /* Secondary Colors */
+  --theme-color-secondary-100: #1a2f38;
+  --theme-color-secondary-200: #204555;
+  --theme-color-secondary-300: #255d74;
+  --theme-color-secondary-400: #277596;
+  --theme-color-secondary-500: #268fba;
+  --theme-color-secondary-600: #35addf;
+  --theme-color-secondary-700: #71caef;
+  --theme-color-secondary-800: #a0def8;
+  --theme-color-secondary-900: #ebf9ff;
+
+  /* Tertiary Colors */
+  --theme-color-tertiary-100: #3b1c20;
+  --theme-color-tertiary-200: #5b252c;
+  --theme-color-tertiary-300: #7e2a35;
+  --theme-color-tertiary-400: #bf1239;
+  --theme-color-tertiary-500: #ed0c3f;
+  --theme-color-tertiary-600: #fa3360;
+  --theme-color-tertiary-700: #fd5d82;
+  --theme-color-tertiary-800: #ffadc0;
+  --theme-color-tertiary-900: #ffe5eb;
+
+  /* Spend Category Colors */
+  --theme-color-spend-category-AIRFARE: #49c165;
+  --theme-color-spend-category-BUSINESS: #ae9209;
+  --theme-color-spend-category-CANNABIS: #4c8d1b;
+  --theme-color-spend-category-CLOTHING: #cebe79;
+  --theme-color-spend-category-DRINKS: #50667f;
+  --theme-color-spend-category-EDUCATION: #48bcb0;
+  --theme-color-spend-category-ENTERTAINMENT: #de2682;
+  --theme-color-spend-category-EV_CHARGING: #0dcd1d;
+  --theme-color-spend-category-FITNESS: #3f3f3f;
+  --theme-color-spend-category-LODGING: #a4433d;
+  --theme-color-spend-category-FUEL: #b77b43;
+  --theme-color-spend-category-GAMES: #4884bc;
+  --theme-color-spend-category-GIFTS: #b191ff;
+  --theme-color-spend-category-GROCERIES: #82aa46;
+  --theme-color-spend-category-GROOMING: #972acf;
+  --theme-color-spend-category-HEALTH: #a30015;
+  --theme-color-spend-category-HOBBY: #df81c1;
+  --theme-color-spend-category-HOUSING: #577590;
+  --theme-color-spend-category-INSURANCE: #bc4848;
+  --theme-color-spend-category-MATERIAL_ITEMS: #f20d2b;
+  --theme-color-spend-category-NICOTINE: #707670;
+  --theme-color-spend-category-OTHER: #776871;
+  --theme-color-spend-category-PETS: #888d53;
+  --theme-color-spend-category-RESTAURANTS: #ff8442;
+  --theme-color-spend-category-TAXES: #f15f62;
+  --theme-color-spend-category-TRANSPORTATION: #e5ad04;
+  --theme-color-spend-category-TREATS: #f1b7df;
+  --theme-color-spend-category-UTILITIES: #2ba1d4;
+  --theme-color-spend-category-VEHICLE: #fc440f;
+
+  /* Account Category Colors */
+  --theme-color-account-category-BONDS: #e87217;
+  --theme-color-account-category-CHECKING: #4884bc;
+  --theme-color-account-category-INVESTING: #84b63a;
+  --theme-color-account-category-SAVINGS: #f20d2b;
+
+  /* ------------------- TOKENS ------------------- */
+  /* Background Colors */
+  --token-color-background-primary: var(--theme-color-neutral-900);
+  --token-color-background-secondary: var(--theme-color-neutral-800);
+
+  /* Category Colors */
+  --token-color-category-icon: var(--theme-color-neutral-900);
+
+  /* Border Colors */
+  --token-color-border-secondary: var(--theme-color-neutral-500);
+  --token-color-border-tertiary: var(--theme-color-neutral-700);
+  --token-color-border-light: var(--theme-color-neutral-900);
+
+  /* Semantic colors */
+  --token-color-semantic-gain: var(--theme-color-primary-500);
+  --token-color-semantic-loss: var(--theme-color-tertiary-600);
+  --token-color-semantic-expense: var(--theme-color-tertiary-500);
+  --token-color-semantic-expense: var(--theme-color-tertiary-500);
+  --token-color-semantic-danger: var(--theme-color-tertiary-600);
+  --token-color-semantic-info: var(--theme-color-secondary-500);
+  --token-color-semantic-addition: var(--theme-color-primary-500);
+
+  /* Button Colors */
+  --token-disable-button-background: var(--theme-color-neutral-400);
+  --token-button-primary-color: var(--theme-color-primary-500);
+  --token-button-primary-hover-color: var(--theme-color-primary-400);
+  --token-button-secondary-text-color: var(--theme-color-secondary-900);
+  --token-button-secondary-color: var(--theme-color-secondary-200);
+  --token-button-secondary-hover-color: var(--theme-color-secondary-100);
+  --token-button-tertiary-color: var(--theme-color-tertiary-500);
+  --token-button-tertiary-hover-color: var(--theme-color-tertiary-400);
+  --token-button-details-color: var(--theme-color-neutral-300);
+  --token-button-details-color-hover: var(--theme-color-neutral-400);
+
+  /* Text Colors */
+  --token-color-text-standard: var(--theme-color-neutral-100);
+  --token-color-text-subdued: var(--theme-color-neutral-200);
+  --token-color-text-dark: var(--theme-color-neutral-000);
+  --token-color-text-placeholder: var(--theme-color-neutral-400);
+
+  --token-navigation-color: var(--theme-color-neutral-100);
+  --token-navigation-selected: var(--theme-color-primary-600);
+
+  --token-color-skeleton-loader: var(--theme-color-neutral-700);
+
+  /* Alert colors */
+  /* error */
+  --token-error-background-color: var(--theme-color-tertiary-900);
+  --token-error-title-color: var(--theme-color-tertiary-500);
+  --token-error-icon-color: var(--theme-color-tertiary-500);
+  --token-error-message-color: var(--theme-color-tertiary-300);
+  --token-error-border-color: var(--theme-color-tertiary-700);
+  /* info */
+  --token-info-background-color: var(--theme-color-secondary-900);
+  --token-info-title-color: var(--theme-color-secondary-500);
+  --token-info-icon-color: var(--theme-color-secondary-500);
+  --token-info-message-color: var(--theme-color-secondary-300);
+  --token-info-border-color: var(--theme-color-secondary-700);
+  /* success */
+  --token-success-background-color: var(--theme-color-primary-900);
+  --token-success-title-color: var(--theme-color-primary-500);
+  --token-success-icon-color: var(--theme-color-primary-500);
+  --token-success-message-color: var(--theme-color-primary-300);
+  --token-success-border-color: var(--theme-color-primary-700);
+  /* warning */
+  --token-warning-background-color: var(--theme-color-neutral-900);
+  --token-warning-title-color: var(--theme-color-neutral-200);
+  --token-warning-icon-color: var(--theme-color-neutral-200);
+  --token-warning-message-color: var(--theme-color-neutral-100);
+  --token-warning-border-color: var(--theme-color-neutral-700);
+
+  --token-cta-background-color: var(--theme-color-primary-500);
+  --token-cta-text-color: var(--theme-color-neutral-1000);
+
+  --token-urgent-cta-background-color: var(--theme-color-tertiary-500);
+  --token-urgent-cta-text-color: var(--theme-color-neutral-1000);
+}

@@ -1,0 +1,42 @@
+.topDiscretionaryCategories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.percentageBar {
+  display: flex;
+  flex-basis: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: clip;
+
+  --percentage-bar-height: 8px;
+  height: var(--percentage-bar-height);
+}
+
+.percentageBarGroup {
+  height: var(--percentage-bar-height);
+}
+
+.categoryList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  font-size: var(--font-body-small);
+
+  --category-list-item-gap: 16px;
+  column-gap: var(--category-list-item-gap);
+  row-gap: 12px;
+}
+
+.moreButton {
+  color: var(--token-button-secondary-text-color);
+  padding: 4px 16px;
+  border-radius: 8px;
+  font-size: var(--font-body-small);
+  margin-left: auto;
+  margin-bottom: 4px;
+}

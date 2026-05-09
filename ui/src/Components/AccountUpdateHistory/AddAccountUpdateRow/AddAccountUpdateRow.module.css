@@ -1,0 +1,16 @@
+.addNewRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  margin: 16px 0;
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-regular);
+}
+
+.addNewRow:hover {
+  background-color: var(--token-button-secondary-hover-color);
+}

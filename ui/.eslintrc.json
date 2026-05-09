@@ -1,35 +1,35 @@
 {
-    "overrides": [
-        {
-            "files": ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-            "parserOptions": {
-                "ecmaFeatures": {
-                    "jsx": true
-                }
-            },
-            "env": {
-                "browser": true
-            },
-            "extends": [
-                "eslint:recommended",
-                "plugin:@typescript-eslint/recommended",
-                "plugin:react/recommended",
-                "plugin:react-hooks/recommended"
-            ],
-            "parser": "@typescript-eslint/parser",
-            "rules": {
-                "react/jsx-uses-react": "off",
-                "react/react-in-jsx-scope": "off",
-                "@typescript-eslint/no-explicit-any": "warn",
-                "no-console": "warn",
-                "@typescript-eslint/no-unused-vars": "warn"
-            }
+  "overrides": [
+    {
+      "files": ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+      "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
         }
-    ],
-    "plugins": ["@typescript-eslint", "react", "react-hooks"],
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
+      },
+      "env": {
+        "browser": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "no-console": "warn",
+        "@typescript-eslint/no-unused-vars": "warn"
+      }
     }
+  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

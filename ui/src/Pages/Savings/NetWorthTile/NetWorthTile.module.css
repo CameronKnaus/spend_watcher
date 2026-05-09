@@ -1,0 +1,32 @@
+.container {
+  padding: 10px 0;
+  background: linear-gradient(
+    -2deg,
+    var(--theme-color-primary-400) 0%,
+    var(--theme-color-primary-500) 5%,
+    var(--theme-color-primary-500) 10%,
+    var(--theme-color-primary-600) 20%,
+    var(--theme-color-primary-600) 100%
+  );
+  color: var(--theme-color-primary-900);
+  min-height: 400px;
+}
+
+.loaderContainer {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.skeletonOverride {
+  background:
+    linear-gradient(
+      90deg,
+      var(--theme-color-primary-500),
+      var(--theme-color-primary-600) 50%,
+      var(--theme-color-primary-500) 90%
+    ),
+    var(--theme-color-primary-500);
+  background-repeat: repeat-y;
+  background-size: 120px 200px;
+  background-position: -50% 0;
+}

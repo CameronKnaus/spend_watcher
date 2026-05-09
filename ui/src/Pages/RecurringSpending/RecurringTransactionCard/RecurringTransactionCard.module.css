@@ -1,0 +1,53 @@
+.card {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+  background-color: var(--token-color-background-primary);
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.transactionDetails {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dataRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-body-small);
+}
+
+.detailsRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-caption);
+  color: var(--token-color-text-subdued);
+}
+
+.fixedTag {
+  color: var(--token-button-secondary-text-color);
+  background-color: var(--theme-color-secondary-200);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.spendAmount {
+  font-weight: var(--font-weight-semi-bold);
+}
+
+.updateRequiredTag {
+  color: var(--token-urgent-cta-text-color);
+  background-color: var(--token-urgent-cta-background-color);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: var(--font-caption);
+  font-weight: var(--font-weight-regular);
+}

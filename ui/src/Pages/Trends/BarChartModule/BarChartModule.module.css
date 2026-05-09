@@ -1,0 +1,9 @@
+.container {
+  padding: 10px 0;
+}
+
+.header {
+  padding: 0 16px;
+  font-size: var(--font-heading-medium);
+  font-weight: var(--font-weight-medium);
+}

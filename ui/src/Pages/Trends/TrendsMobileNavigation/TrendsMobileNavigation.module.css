@@ -1,0 +1,24 @@
+.navContainer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background-color: var(--token-color-background-primary);
+  border-top: 2px solid var(--token-color-border-tertiary);
+  isolation: isolate;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 16px;
+  gap: 8px;
+  animation: enterUpwards 0.3s ease-out;
+}
+
+/* TODO: have an exit animation as well? */
+@keyframes enterUpwards {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

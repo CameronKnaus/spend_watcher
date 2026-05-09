@@ -1,0 +1,12 @@
+:root {
+  --page-title-bottom-margin: 24px;
+  --page-title-font-size: var(--font-heading-large);
+  --page-title-font-weight: var(--font-weight-medium);
+}
+
+/* Mobile only styles */
+@media (max-width: 768px) {
+  :root {
+    --page-title-font-size: var(--font-heading-medium);
+  }
+}

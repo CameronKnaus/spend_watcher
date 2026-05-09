@@ -1,0 +1,27 @@
+:root {
+  --shadow-color: 194deg 13% 70%;
+  --token-background-secondary-elevation-low:
+    0.3px 0.4px 0.4px hsl(var(--shadow-color) / 0.44), 0.3px 0.5px 0.4px -2.5px hsl(var(--shadow-color) / 0.29),
+    0.9px 1.2px 1.1px -4.9px hsl(var(--shadow-color) / 0.15);
+  --token-background-secondary-elevation-medium:
+    0.3px 0.4px 0.5px hsl(var(--shadow-color) / 0.32), 0.6px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.28),
+    1.7px 2.2px 2.7px -2.3px hsl(var(--shadow-color) / 0.23), 4.4px 5.8px 7.1px -3.5px hsl(var(--shadow-color) / 0.18);
+  --token-background-secondary-elevation-high:
+    0.3px 0.4px 0.5px hsl(var(--shadow-color) / 0.26), 0.7px 1px 1.2px -0.6px hsl(var(--shadow-color) / 0.24),
+    1.4px 1.9px 2.3px -1.2px hsl(var(--shadow-color) / 0.22), 2.7px 3.5px 4.3px -1.7px hsl(var(--shadow-color) / 0.2),
+    4.8px 6.3px 7.7px -2.3px hsl(var(--shadow-color) / 0.18),
+    8.3px 10.9px 13.4px -2.9px hsl(var(--shadow-color) / 0.15),
+    13.4px 17.6px 21.6px -3.5px hsl(var(--shadow-color) / 0.13);
+}
+
+.background-secondary-elevation-low {
+  box-shadow: var(--token-background-secondary-elevation-low);
+}
+
+.background-secondary-elevation-medium {
+  box-shadow: var(--token-background-secondary-elevation-medium);
+}
+
+.background-secondary-elevation-high {
+  box-shadow: var(--token-background-secondary-elevation-high);
+}

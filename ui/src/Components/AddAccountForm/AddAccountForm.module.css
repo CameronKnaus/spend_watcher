@@ -1,0 +1,50 @@
+.form > label {
+  font-weight: var(--form-label-font-weight);
+  color: var(--form-label-color);
+  display: block;
+  font-size: var(--form-label-font-size);
+  padding-bottom: var(--form-padding-below-label);
+}
+
+.form > label > input::placeholder {
+  color: var(--token-color-text-placeholder);
+}
+
+.textInput {
+  border: none;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: var(--form-input-font-size);
+  background-color: var(--token-color-background-primary);
+  margin-bottom: var(--form-space-between-items) !important;
+}
+
+.checkInputContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 4px;
+  margin-bottom: var(--form-space-between-items);
+}
+
+/* TODO: These check box styles could be grouped into a reusable component */
+.checkInputContainer:hover,
+.checkInputContainer > input:hover,
+.checkInputContainer > label:hover {
+  cursor: pointer;
+}
+
+.checkBox {
+  height: var(--form-checkbox-size);
+  width: var(--form-checkbox-size);
+}
+
+.checkLabel {
+  font-size: var(--form-check-box-label-font-size);
+  font-weight: var(--form-check-box-label-font-weight);
+  padding-left: 0.5rem;
+  display: inline-block;
+}

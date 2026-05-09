@@ -1,0 +1,42 @@
+.module {
+  padding: 16px;
+  background-color: var(--token-color-background-primary);
+  width: 350px;
+  border-radius: 16px;
+}
+
+.tripName {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+}
+
+.tripDates {
+  margin-top: 4px;
+  font-size: var(--font-caption);
+}
+
+.spendTotalDataPoints {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.actionButton {
+  color: var(--token-button-secondary-text-color);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: var(--font-body-small);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: fit-content;
+}

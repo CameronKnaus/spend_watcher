@@ -1,0 +1,56 @@
+.rowContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+}
+
+.label {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-thin);
+}
+
+.amountLabel {
+  font-size: var(--font-body-small);
+  display: block;
+  padding-bottom: 4px;
+}
+
+.moneyInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.editIcon {
+  position: absolute;
+  left: 0px;
+}
+
+.moneyInput {
+  border: none;
+  border-bottom: 1px solid var(--token-color-border-secondary);
+  padding: 8px;
+  background-color: transparent;
+  text-align: right;
+}
+
+.confirmChangeButton {
+  border-radius: 2px;
+  margin-top: 8px;
+  padding: 8px 16px;
+  animation: slidein 0.5s;
+}
+
+@keyframes slidein {
+  from {
+    transform: translatey(-1rem);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}

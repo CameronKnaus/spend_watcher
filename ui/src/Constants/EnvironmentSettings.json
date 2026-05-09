@@ -1,0 +1,5 @@
+{
+  "devMode": false,
+  "prodAPI": "https://www.spendwatcher.com/api",
+  "localAPI": "http://localhost:4000/api"
+}

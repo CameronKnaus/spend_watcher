@@ -1,0 +1,66 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pageContainer {
+  display: flex;
+  gap: 24px;
+}
+
+.sideBarContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-width: 300px;
+}
+
+.createNewExpenseButton {
+  padding: 16px;
+}
+
+.totalsWidget {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.totalsContainer {
+  font-size: var(--font-body-large);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contentTitle {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 16px;
+}
+
+.transactionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 16px;
+
+  --recurring-transactions-column-gap: 24px;
+  column-gap: var(--recurring-transactions-column-gap);
+}
+
+.cardContainer {
+  flex: 1;
+
+  --card-container-half-width: calc(50% - (var(--recurring-transactions-column-gap) / 2));
+  min-width: max(340px, var(--card-container-half-width));
+  max-width: var(--card-container-half-width);
+}
+
+/* XS Breakpoint */
+@media (max-width: 768px) {
+  .pageContainer {
+    flex-wrap: wrap;
+  }
+}

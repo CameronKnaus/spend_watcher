@@ -1,20 +1,20 @@
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "Bundler",
-        "rootDir": "src",
-        "baseUrl": "./",
-        "paths": {
-            "@routes/*": ["src/routes/*"],
-            "@lib/*": ["src/lib/*"],
-            "@utils/*": ["src/utils/*"],
-            "@type/*": ["src/type/*"]
-        },
-        "outDir": "dist",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "rootDir": "src",
+    "baseUrl": "./",
+    "paths": {
+      "@routes/*": ["src/routes/*"],
+      "@lib/*": ["src/lib/*"],
+      "@utils/*": ["src/utils/*"],
+      "@type/*": ["src/type/*"]
     },
-    "include": ["./", "./custom.d.ts", "src/index.ts"]
+    "outDir": "dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["./", "./custom.d.ts", "src/index.ts"]
 }

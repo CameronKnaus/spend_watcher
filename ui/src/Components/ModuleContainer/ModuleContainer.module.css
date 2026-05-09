@@ -1,0 +1,19 @@
+.defaultContainer {
+  padding: 10px 16px;
+  background-color: var(--token-color-background-primary);
+  border-radius: 12px;
+  width: 100%;
+}
+
+.heading {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 8px;
+}
+
+.skeletonLoaderContainer {
+  padding: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

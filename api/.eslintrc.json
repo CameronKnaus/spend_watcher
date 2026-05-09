@@ -1,17 +1,17 @@
 {
-    "env": {
-        "browser": true
-    },
-    "overrides": [
-        {
-            "files": ["**/*.{js,mjs,cjs,ts}"],
-            "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"]
-        }
-    ],
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint"],
-    "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "warn"
+  "env": {
+    "browser": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.{js,mjs,cjs,ts}"],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"]
     }
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
+  }
 }

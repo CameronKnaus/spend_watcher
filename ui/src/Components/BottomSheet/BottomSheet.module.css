@@ -1,0 +1,15 @@
+.bottomSheet {
+  background-color: var(--token-color-background-primary);
+  border-top: 2px solid var(--token-color-border-light);
+  padding: 16px;
+  column-gap: 16px;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.bottomSheet > button {
+  padding: 16px;
+}

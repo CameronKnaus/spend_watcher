@@ -18,16 +18,16 @@ app.use(cookieParser());
 
 // Cross Origin Resource Sharing (CORS) settings
 app.use((req, res, next) => {
-    res.set('Access-Control-Allow-Origin', allowedOrigin);
-    res.set('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-    res.set('Access-Control-Request-Method: GET, POST');
-    res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-token, Authorization');
-    res.set('Access-Control-Allow-Credentials', 'true');
-    if (req.method === 'OPTIONS') {
-        res.end();
-    } else {
-        next();
-    }
+  res.set('Access-Control-Allow-Origin', allowedOrigin);
+  res.set('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+  res.set('Access-Control-Request-Method: GET, POST');
+  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-token, Authorization');
+  res.set('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    res.end();
+  } else {
+    next();
+  }
 });
 
 // Equip app with json manipulation capabilities
@@ -47,11 +47,11 @@ const PORT = process.env.PORT || 4000;
 
 // Starting our server.
 app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });
 
 if (isDevMode) {
-    console.log('\x1b[35mDevelopment Mode Enabled \x1b[0m');
-    logRouteList(app);
-    console.log(`\x1b[33mListening for requests from ${allowedOrigin}...\x1b[0m`);
+  console.log('\x1b[35mDevelopment Mode Enabled \x1b[0m');
+  logRouteList(app);
+  console.log(`\x1b[33mListening for requests from ${allowedOrigin}...\x1b[0m`);
 }

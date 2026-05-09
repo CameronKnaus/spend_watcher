@@ -1,0 +1,9 @@
+.pageContainer {
+  padding: 0px var(--page-side-padding);
+}
+
+.pageTitle {
+  margin-bottom: 24px;
+  font-size: var(--page-title-font-size);
+  font-weight: var(--page-title-font-weight);
+}

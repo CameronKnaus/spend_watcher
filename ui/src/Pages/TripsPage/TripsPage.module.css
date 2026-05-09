@@ -1,0 +1,12 @@
+.tripModulesContainer {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Mobile screen size */
+@media (max-width: 768px) {
+  .tripModulesContainer {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,86 @@
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src:
+    local('Inter'),
+    url(../Fonts/Inter.ttf) format('truetype');
+  /* font weight allows for the variable weight provided by Inter font */
+  font-weight: 1 999;
+}
+
+/* FONT SIZING AS VARIABLES */
+:root {
+  /* Font Weights */
+  --font-weight-thin: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+
+  /* Font sizes */
+  --font-display-large: 60px;
+  --font-display-small: 48px;
+  --font-heading-extra-large: 40px;
+  --font-heading-large: 32px;
+  --font-heading-medium: 24px;
+  --font-heading-small: 20px;
+  --font-body-large: 18px;
+  --font-body-medium: 16px;
+  --font-body-small: 14px;
+  --font-caption: 12px;
+}
+
+.font-display-large {
+  font-size: var(--font-display-large);
+}
+
+.font-display-small {
+  font-size: var(--font-display-small);
+}
+
+.font-heading-extra-large {
+  font-size: var(--font-heading-extra-large);
+}
+
+.font-heading-large {
+  font-size: var(--font-heading-large);
+}
+
+.font-heading-medium {
+  font-size: var(--font-heading-medium);
+}
+
+.font-heading-small {
+  font-size: var(--font-heading-small);
+}
+
+.font-body-large {
+  font-size: var(--font-body-large);
+}
+
+.font-body-medium {
+  font-size: var(--font-body-medium);
+}
+
+.font-body-small {
+  font-size: var(--font-body-small);
+}
+
+.font-caption {
+  font-size: var(--font-caption);
+}
+
+.font-thin {
+  font-weight: var(--font-weight-thin);
+}
+
+.font-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-semi-bold {
+  font-weight: var(--font-weight-semi-bold);
+}

@@ -8,38 +8,38 @@ import { addToSummary } from './generateSummary';
 import initSummaryTotals from './initSummaryTotals';
 
 export default function spendingDetailsTransform(
-    discretionaryTransactions: DiscretionaryTransactionHistorySQLRow[],
-    recurringTransactions: RecurringTransactionHistorySQLRow[],
+  discretionaryTransactions: DiscretionaryTransactionHistorySQLRow[],
+  recurringTransactions: RecurringTransactionHistorySQLRow[],
 ): SpendingDetailsV1Response {
-    const { discretionaryTransactionIdList, recurringTransactionIdList, transactionDataList, transactionDictionary } =
-        formatTransactions(discretionaryTransactions, recurringTransactions);
+  const { discretionaryTransactionIdList, recurringTransactionIdList, transactionDataList, transactionDictionary } =
+    formatTransactions(discretionaryTransactions, recurringTransactions);
 
-    const summary = initSummaryTotals();
-    const totalsByCategory: TotalsByCategory = {};
-    const transactionsByDate: TransactionsByDate = {};
+  const summary = initSummaryTotals();
+  const totalsByCategory: TotalsByCategory = {};
+  const transactionsByDate: TransactionsByDate = {};
 
-    // Iterate through all transactions and perform calculations
-    transactionDataList.forEach((transaction) => {
-        addToSummary(summary, transaction);
-        addToCategoryTotals(totalsByCategory, transaction);
+  // Iterate through all transactions and perform calculations
+  transactionDataList.forEach((transaction) => {
+    addToSummary(summary, transaction);
+    addToCategoryTotals(totalsByCategory, transaction);
 
-        mutateTransactionsByDate(transactionsByDate, transaction);
-    });
+    mutateTransactionsByDate(transactionsByDate, transaction);
+  });
 
-    const discretionaryTotal = summary.discretionaryTotals.amount;
-    const recurringTotal = summary.recurringTotals.amount;
-    return {
-        // Default sorted descending by discretionary amount
-        spendCategoryOverview: generateCategoryOverview(totalsByCategory, summary),
-        // Provides a way to get transaction information by ID, rather than duplicate transaction entries many times
-        transactionDictionary,
-        spendTypeRatio: {
-            discretionary: discretionaryTotal / summary.total.amount,
-            recurring: recurringTotal / summary.total.amount,
-        },
-        summary,
-        discretionaryTransactionIdList,
-        recurringTransactionIdList,
-        transactionsByDate,
-    };
+  const discretionaryTotal = summary.discretionaryTotals.amount;
+  const recurringTotal = summary.recurringTotals.amount;
+  return {
+    // Default sorted descending by discretionary amount
+    spendCategoryOverview: generateCategoryOverview(totalsByCategory, summary),
+    // Provides a way to get transaction information by ID, rather than duplicate transaction entries many times
+    transactionDictionary,
+    spendTypeRatio: {
+      discretionary: discretionaryTotal / summary.total.amount,
+      recurring: recurringTotal / summary.total.amount,
+    },
+    summary,
+    discretionaryTransactionIdList,
+    recurringTransactionIdList,
+    transactionsByDate,
+  };
 }

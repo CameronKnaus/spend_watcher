@@ -1,0 +1,55 @@
+.container {
+  z-index: 999;
+  position: fixed;
+}
+
+.lockedBackground {
+  z-index: 1;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(30, 30, 30, 0.65);
+}
+
+.panelContainer {
+  z-index: 2;
+  width: 100%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  min-width: var(--breakpoint-min-supported-width);
+  max-width: 600px;
+}
+
+.titleTag {
+  color: #ffffff;
+  display: inline-block;
+  border-radius: 18px 18px 0 0;
+  position: relative;
+  /* This hides the title tag's bottom section */
+  top: 1.5rem;
+}
+
+.title {
+  font-size: var(--font-heading-medium);
+  margin: 0;
+  padding: 20px 1.5rem 40px;
+  font-weight: var(--font-weight-thin);
+}
+
+.panelContent {
+  background-color: var(--token-color-background-primary);
+  border-radius: 32px 32px 0 0;
+  position: relative;
+  max-height: 90dvh;
+}
+
+.scrollableArea {
+  padding: 1.5rem;
+
+  /* Scrollable safe zone */
+  padding-bottom: 100px;
+
+  max-height: 70dvh;
+  overflow-y: scroll;
+}

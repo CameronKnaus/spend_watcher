@@ -1,0 +1,33 @@
+.button {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  text-decoration: none;
+  max-width: 80px;
+}
+
+.icon {
+  --icon-size: 2.25rem;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  flex-grow: 0;
+  position: relative;
+}
+
+.buttonLabel {
+  flex-basis: 100%;
+  font-size: 10px;
+  color: var(--token-color-text-subdued);
+  text-align: center;
+  text-decoration: none;
+  text-wrap: wrap;
+  min-width: 80px;
+}

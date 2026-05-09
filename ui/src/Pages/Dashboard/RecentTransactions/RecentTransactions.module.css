@@ -1,0 +1,23 @@
+.dateHeader {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+  font-weight: var(--font-weight-regular);
+  margin-bottom: 8px;
+}
+
+.transactionGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.daysTotalAmount {
+  display: inline-block;
+  padding-left: 8px;
+  font-size: var(--font-caption);
+}
+
+.noTransactions {
+  color: var(--token-color-text-subdued);
+}
