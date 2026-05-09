@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+**/dist/
+**/build/
+*.tsbuildinfo
+
+# Environment
+**/.env
+**/.env.local
+**/.env.*.local
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+.VSCodeCounter/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# Build/scratch
+**/.tanstack/
+**/testQuery
