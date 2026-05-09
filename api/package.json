@@ -1,5 +1,5 @@
 {
-    "name": "spend-watcher-backend",
+    "name": "@spend-watcher/api",
     "version": "0.0.2",
     "type": "module",
     "description": "",
@@ -47,64 +47,10 @@
         "@types/mysql": "^2.15.26",
         "@types/node": "^20.12.7",
         "@types/uuid": "^9.0.8",
-        "@typescript-eslint/eslint-plugin": "^7.16.1",
-        "eslint": "^8.2.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.29.1",
         "globals": "^15.8.0",
-        "prettier": "^3.2.5",
         "ts-node": "^10.9.2",
-        "tsx": "^4.7.1",
-        "typescript": "^5.4.3"
-    },
-    "eslintConfig": {
-        "extends": "airbnb-base",
-        "env": {
-            "es6": true,
-            "browser": true
-        },
-        "parserOptions": {
-            "ecmaVersion": "latest"
-        },
-        "rules": {
-            "brace-style": [
-                "error",
-                "1tbs",
-                {
-                    "allowSingleLine": true
-                }
-            ],
-            "comma-dangle": [
-                "error",
-                "never"
-            ],
-            "no-unused-vars": [
-                "warn"
-            ],
-            "no-var": [
-                "off"
-            ],
-            "one-var": [
-                "off"
-            ],
-            "indent": [
-                "error",
-                4
-            ],
-            "consistent-return": [
-                "off"
-            ],
-            "no-param-reassign": [
-                "off"
-            ],
-            "prefer-promise-reject-errors": [
-                "off"
-            ],
-            "camelcase": "off",
-            "max-len": "off",
-            "no-plusplus": "off",
-            "no-console": "off",
-            "no-continue": "off"
-        }
+        "tsx": "^4.7.1"
     }
 }
