@@ -23,7 +23,7 @@ export default function HoverHitBox({ dimensions, handlePointerMove }: HoverHitB
     const hitBox = hitBoxRef.current;
     hitBox.addEventListener('touchmove', preventBehavior, { passive: false });
 
-    () => {
+    return () => {
       hitBox.removeEventListener('touchmove', preventBehavior);
     };
   }, []);

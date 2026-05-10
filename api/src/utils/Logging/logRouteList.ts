@@ -1,5 +1,4 @@
 import { Express } from 'express';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // This code was taken from a stack overflow post
 // https://stackoverflow.com/questions/14934452/how-to-get-all-registered-routes-in-express
 

@@ -8,9 +8,9 @@
     "start": "npx tsx src/index.ts",
     "dev": "tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npx eslint . --ext .ts",
-    "lint:fix": "npx eslint --fix . --ext .ts",
-    "format": "npx prettier --write ."
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "jwks-rsa": "^1.12.5",
     "morgan": "^1.10.1",
     "mysql": "^2.18.1",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -47,10 +47,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mysql": "^2.15.27",
     "@types/node": "^20.19.40",
-    "@types/uuid": "^9.0.8",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.32.0",
-    "globals": "^15.15.0",
+
+
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
   }
