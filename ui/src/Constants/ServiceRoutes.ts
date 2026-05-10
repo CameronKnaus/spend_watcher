@@ -1,7 +1,4 @@
-import EnvironmentSettings from 'Constants/EnvironmentSettings.json';
-const { devMode, prodAPI, localAPI } = EnvironmentSettings;
-
-const domainName = devMode ? localAPI : prodAPI;
+const domainName = import.meta.env.VITE_DOMAIN;
 
 const SERVICE_ROUTES: Record<string, string> = {
   postLogin: domainName + '/user/v1/login',

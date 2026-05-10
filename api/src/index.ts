@@ -2,13 +2,12 @@ import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { PROD_DOMAIN, LOCAL_DOMAIN } from './lib/ENVIRONMENT_SETTINGS.json';
 import routes from '@routes/routes';
 import HttpErrorHandler from '@utils/ErrorHandling/HttpErrorHandler';
 import logRouteList from '@utils/Logging/logRouteList';
 
 const isDevMode = process.env.ENVIRONMENT === 'DEV';
-const allowedOrigin = isDevMode ? LOCAL_DOMAIN : PROD_DOMAIN;
+const allowedOrigin = process.env.DOMAIN;
 
 // Define the express app
 const app = express();
