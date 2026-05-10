@@ -1,6 +1,6 @@
 import useContent from 'Hooks/useContent';
 import syntheticChangeEvent from 'Util/Events/syntheticChangeEvent';
-import { ComponentProps, forwardRef, ReactNode, useEffect, useRef, useState } from 'react';
+import { ComponentProps, ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import styles from './FilterableSelect.module.css';
 
 export type FilterableSelectOptionType<T> = {
@@ -14,11 +14,11 @@ export type FilterableSelectPropTypes<T> = {
   noSelectionText?: string;
   clearLabel?: string;
   optionsList: FilterableSelectOptionType<T>[];
+  ref?: Ref<HTMLInputElement>;
 } & ComponentProps<'input'>;
 
-function FilterableSelectComponent<T extends string>(
-  { opens = 'down', clearLabel, noSelectionText = '', optionsList, ...props }: FilterableSelectPropTypes<T>,
-  ref: React.ForwardedRef<HTMLInputElement>,
+function FilterableSelect<T extends string>(
+  { opens = 'down', clearLabel, noSelectionText = '', optionsList, ref, ...props }: FilterableSelectPropTypes<T>,
 ) {
   const [selectedValue, setSelectedValue] = useState<FilterableSelectOptionType<T> | undefined>();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -116,5 +116,4 @@ function FilterableSelectComponent<T extends string>(
   );
 }
 
-const FilterableSelect = forwardRef(FilterableSelectComponent);
 export default FilterableSelect;
