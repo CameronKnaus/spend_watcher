@@ -1,1 +1,1 @@
-web: api/node_modules/.bin/tsx api/src/index.ts
+web: node api/dist/index.js
