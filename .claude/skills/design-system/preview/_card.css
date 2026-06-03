@@ -1,0 +1,27 @@
+/* Shared styling for Design System preview cards. Pairs with ../colors_and_type.css */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  background: var(--token-color-background-secondary);
+  color: var(--token-color-text-standard);
+  -webkit-font-smoothing: antialiased;
+}
+.card {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.card-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+}
+.mono { font-family: var(--font-family-mono); }
+.swatch-label { font-size: 11px; color: var(--token-color-text-subdued); }
+.tile-demo {
+  background: var(--token-color-background-primary);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+}

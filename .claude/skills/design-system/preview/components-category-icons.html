@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<script src="../assets/icons.js"></script>
+<style>
+  .icons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .catico { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--token-color-category-icon); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Category icons · color + glyph chip (12px radius)</div>
+  <div class="icons" id="icons"></div>
+  <div class="swatch-label">Filled glyphs matching the app's react-icons style. Each category = one fixed icon + one fixed color, glyph knocked out near-white.</div>
+</div>
+<script>
+  const cats = [
+    ['house','#577590'],['cart','#82aa46'],['utensils','#ff8442'],['train','#e5ad04'],
+    ['film','#de2682'],['bolt','#2ba1d4'],['heart-pulse','#a30015'],['shirt','#cebe79'],
+    ['plane','#49c165'],['car','#fc440f'],['gift','#b191ff'],['dollar-sign','#776871']
+  ];
+  document.getElementById('icons').innerHTML = cats.map(([n,c]) =>
+    `<div class="catico" style="background:${c}">${swIcon(n, 24, '#f8fbfc')}</div>`).join('');
+</script>
+</body>
+</html>

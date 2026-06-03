@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .btn { font-size: 16px; color: #fff; border-radius: var(--radius-md); padding: 9px 20px; border: none; font-family: inherit; cursor: pointer; transition: background .3s; }
+  .primary { background: var(--token-button-primary-color); }
+  .primary:hover { background: var(--token-button-primary-hover-color); }
+  .secondary { background: var(--token-button-secondary-color); }
+  .secondary:hover { background: var(--token-button-secondary-hover-color); }
+  .tertiary { background: var(--token-button-tertiary-color); }
+  .tertiary:hover { background: var(--token-button-tertiary-hover-color); }
+  .detail { background: var(--token-button-details-color); }
+  .disabled { background: var(--token-disable-button-background); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Buttons · 12px radius · hover deepens fill (0.3s)</div>
+  <div class="card-row">
+    <button class="btn primary">Submit</button>
+    <button class="btn secondary">Register</button>
+    <button class="btn tertiary">Delete account</button>
+    <button class="btn detail">Details</button>
+    <button class="btn disabled">Disabled</button>
+  </div>
+  <div class="swatch-label">primary → green · secondary → deep blue · tertiary → red · detail → neutral. Verbs, sentence case. Hover shifts one step deeper.</div>
+</div>
+</body>
+</html>

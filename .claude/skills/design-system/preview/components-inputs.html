@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .field { display: flex; flex-direction: column; gap: 6px; max-width: 320px; }
+  .field label { font-size: 13px; font-weight: 500; }
+  .field input { border: none; border-bottom: 1px solid var(--token-color-border-secondary); text-align: center; font-size: 16px; font-family: inherit; padding: 6px 0; background: transparent; color: var(--token-color-text-standard); outline: none; }
+  .field input::placeholder { color: var(--token-color-text-placeholder); }
+  .field input:focus { border-color: var(--theme-color-primary-500); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Form inputs · underline only, centered</div>
+  <div class="card-row" style="gap:28px;align-items:flex-start">
+    <div class="field"><label>Username</label><input placeholder="Username"></div>
+    <div class="field"><label>Amount</label><input placeholder="$0.00"></div>
+  </div>
+  <div class="swatch-label">No box, no fill — a single hairline border-bottom. Text and placeholder centered. Focus turns the line green.</div>
+</div>
+</body>
+</html>

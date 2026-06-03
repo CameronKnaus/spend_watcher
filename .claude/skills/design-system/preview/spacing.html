@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .sp { display: flex; align-items: flex-end; gap: 16px; }
+  .sp-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .sp-bar { background: var(--theme-color-secondary-500); width: 26px; border-radius: 3px; }
+  .sp-val { font-size: 10px; font-family: var(--font-family-mono); color: var(--token-color-text-subdued); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Spacing rhythm · 4 / 8 / 12 / 16 / 24</div>
+  <div class="sp">
+    <div class="sp-item"><div class="sp-bar" style="height:4px"></div><div class="sp-val">4</div></div>
+    <div class="sp-item"><div class="sp-bar" style="height:8px"></div><div class="sp-val">8</div></div>
+    <div class="sp-item"><div class="sp-bar" style="height:12px"></div><div class="sp-val">12</div></div>
+    <div class="sp-item"><div class="sp-bar" style="height:16px"></div><div class="sp-val">16</div></div>
+    <div class="sp-item"><div class="sp-bar" style="height:24px"></div><div class="sp-val">24</div></div>
+    <div class="sp-item"><div class="sp-bar" style="height:32px"></div><div class="sp-val">32</div></div>
+  </div>
+  <div class="swatch-label">Page max-width 1440 · side padding 24 · mobile breakpoint 768 · tile padding ≈10–18 / 16–20.</div>
+</div>
+</body>
+</html>

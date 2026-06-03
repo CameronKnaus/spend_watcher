@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; font-family: inherit; cursor: pointer; background: var(--token-color-background-primary); border: 1px solid var(--theme-color-neutral-600); color: var(--token-color-text-subdued); }
+  .chip .dot { width: 8px; height: 8px; border-radius: 999px; }
+  .chip.active { color: var(--token-color-text-dark); }
+  .seg { display: inline-flex; border-radius: var(--radius-sm); background: var(--theme-color-neutral-700); padding: 2px; gap: 2px; }
+  .seg button { padding: 6px 14px; font-size: 13px; border: none; border-radius: 6px; font-family: inherit; cursor: pointer; background: transparent; color: var(--token-color-text-standard); font-weight: 500; }
+  .seg button.on { background: var(--theme-color-primary-500); color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Filter chips & segmented control</div>
+  <div class="card-row">
+    <span class="chip active" style="border-color:#577590;background:#5775901f;color:var(--token-color-text-dark)"><span class="dot" style="background:#577590"></span>Housing</span>
+    <span class="chip"><span class="dot" style="background:#ff8442"></span>Dining out</span>
+    <span class="chip"><span class="dot" style="background:#de2682"></span>Entertainment</span>
+    <span class="chip"><span class="dot" style="background:#2ba1d4"></span>Utilities</span>
+  </div>
+  <div class="card-row">
+    <div class="seg"><button class="on">Month</button><button>3M</button><button>YTD</button><button>1Y</button><button>All</button></div>
+    <div class="seg"><button class="on">Stacked</button><button>Grouped</button></div>
+  </div>
+  <div class="swatch-label">Active chip: category color border + dot + 12%-alpha tint. Segmented active segment fills green.</div>
+</div>
+</body>
+</html>

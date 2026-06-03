@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .pbar { display: flex; height: 8px; border-radius: 16px; overflow: clip; width: 100%; }
+  .pbar > div { height: 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; }
+  .leg { display: flex; align-items: center; gap: 7px; }
+  .leg .sw { width: 10px; height: 10px; border-radius: 999px; }
+  .leg .amt { color: var(--token-color-text-subdued); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Percentage bar · top discretionary categories</div>
+  <div class="pbar">
+    <div style="width:34%;background:#577590"></div>
+    <div style="width:24%;background:#ff8442"></div>
+    <div style="width:18%;background:#de2682"></div>
+    <div style="width:12%;background:#82aa46"></div>
+    <div style="flex:1;background:var(--theme-color-neutral-500)"></div>
+  </div>
+  <div class="legend">
+    <span class="leg"><span class="sw" style="background:#577590"></span>Housing <span class="amt">$420</span></span>
+    <span class="leg"><span class="sw" style="background:#ff8442"></span>Dining out <span class="amt">$296</span></span>
+    <span class="leg"><span class="sw" style="background:#de2682"></span>Entertainment <span class="amt">$222</span></span>
+    <span class="leg"><span class="sw" style="background:#82aa46"></span>Groceries <span class="amt">$148</span></span>
+    <span class="leg"><span class="sw" style="background:var(--theme-color-neutral-500)"></span>Remaining <span class="amt">$160</span></span>
+  </div>
+</div>
+</body>
+</html>

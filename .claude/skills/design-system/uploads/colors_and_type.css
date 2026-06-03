@@ -1,0 +1,275 @@
+/*
+ * SpendWatcher Design System — Color + Type tokens
+ * Sourced verbatim from CameronKnaus/spend_watcher@main
+ *   - ui/src/Styles/Global/ColorScheme.css
+ *   - ui/src/Styles/Global/Typography.css
+ *   - ui/src/Styles/Global/Shadows.css
+ *
+ * Token model:
+ *   --theme-*  primitives (raw hex)
+ *   --token-*  semantic aliases (consumers should reference these)
+ */
+
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src:
+    local('Inter'),
+    url('./fonts/Inter.ttf') format('truetype');
+  font-weight: 1 999;
+}
+
+:root {
+  /* ============================== TYPOGRAPHY ============================== */
+  --font-family-sans:
+    Inter, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', sans-serif;
+  --font-family-mono:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+  --font-weight-thin: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+
+  --font-display-large: 60px;
+  --font-display-small: 48px;
+  --font-heading-extra-large: 40px;
+  --font-heading-large: 32px;
+  --font-heading-medium: 24px;
+  --font-heading-small: 20px;
+  --font-body-large: 18px;
+  --font-body-medium: 16px;
+  --font-body-small: 14px;
+  --font-caption: 12px;
+
+  /* ============================== NEUTRALS ============================== */
+  --theme-color-neutral-000: #333333;
+  --theme-color-neutral-100: #465053;
+  --theme-color-neutral-200: #64767d;
+  --theme-color-neutral-300: #778e97;
+  --theme-color-neutral-400: #a6b8bf;
+  --theme-color-neutral-500: #c3d4da;
+  --theme-color-neutral-600: #d4e2e8;
+  --theme-color-neutral-700: #e2eef3;
+  --theme-color-neutral-800: #f0f7f9;
+  --theme-color-neutral-900: #f8fbfc;
+  --theme-color-neutral-1000: #ffffff;
+
+  /* ============================== PRIMARY (green) ============================== */
+  --theme-color-primary-100: #24322e;
+  --theme-color-primary-200: #34554b;
+  --theme-color-primary-300: #3d7664;
+  --theme-color-primary-400: #419b80;
+  --theme-color-primary-500: #43a875;
+  --theme-color-primary-600: #4ec68a;
+  --theme-color-primary-700: #67daa1;
+  --theme-color-primary-800: #b6f6e3;
+  --theme-color-primary-900: #d4fcf0;
+
+  /* ============================== SECONDARY (blue) ============================== */
+  --theme-color-secondary-100: #1a2f38;
+  --theme-color-secondary-200: #204555;
+  --theme-color-secondary-300: #255d74;
+  --theme-color-secondary-400: #277596;
+  --theme-color-secondary-500: #268fba;
+  --theme-color-secondary-600: #35addf;
+  --theme-color-secondary-700: #71caef;
+  --theme-color-secondary-800: #a0def8;
+  --theme-color-secondary-900: #ebf9ff;
+
+  /* ============================== TERTIARY (red/pink) ============================== */
+  --theme-color-tertiary-100: #3b1c20;
+  --theme-color-tertiary-200: #5b252c;
+  --theme-color-tertiary-300: #7e2a35;
+  --theme-color-tertiary-400: #bf1239;
+  --theme-color-tertiary-500: #ed0c3f;
+  --theme-color-tertiary-600: #fa3360;
+  --theme-color-tertiary-700: #fd5d82;
+  --theme-color-tertiary-800: #ffadc0;
+  --theme-color-tertiary-900: #ffe5eb;
+
+  /* ============================== SPEND CATEGORY COLORS ============================== */
+  --theme-color-spend-category-AIRFARE: #49c165;
+  --theme-color-spend-category-BUSINESS: #ae9209;
+  --theme-color-spend-category-CANNABIS: #4c8d1b;
+  --theme-color-spend-category-CLOTHING: #cebe79;
+  --theme-color-spend-category-DRINKS: #50667f;
+  --theme-color-spend-category-EDUCATION: #48bcb0;
+  --theme-color-spend-category-ENTERTAINMENT: #de2682;
+  --theme-color-spend-category-EV_CHARGING: #0dcd1d;
+  --theme-color-spend-category-FITNESS: #3f3f3f;
+  --theme-color-spend-category-LODGING: #a4433d;
+  --theme-color-spend-category-FUEL: #b77b43;
+  --theme-color-spend-category-GAMES: #4884bc;
+  --theme-color-spend-category-GIFTS: #b191ff;
+  --theme-color-spend-category-GROCERIES: #82aa46;
+  --theme-color-spend-category-GROOMING: #972acf;
+  --theme-color-spend-category-HEALTH: #a30015;
+  --theme-color-spend-category-HOBBY: #df81c1;
+  --theme-color-spend-category-HOUSING: #577590;
+  --theme-color-spend-category-INSURANCE: #bc4848;
+  --theme-color-spend-category-MATERIAL_ITEMS: #f20d2b;
+  --theme-color-spend-category-NICOTINE: #707670;
+  --theme-color-spend-category-OTHER: #776871;
+  --theme-color-spend-category-PETS: #888d53;
+  --theme-color-spend-category-RESTAURANTS: #ff8442;
+  --theme-color-spend-category-TAXES: #f15f62;
+  --theme-color-spend-category-TRANSPORTATION: #e5ad04;
+  --theme-color-spend-category-TREATS: #f1b7df;
+  --theme-color-spend-category-UTILITIES: #2ba1d4;
+  --theme-color-spend-category-VEHICLE: #fc440f;
+
+  /* ============================== ACCOUNT CATEGORY COLORS ============================== */
+  --theme-color-account-category-BONDS: #e87217;
+  --theme-color-account-category-CHECKING: #4884bc;
+  --theme-color-account-category-INVESTING: #84b63a;
+  --theme-color-account-category-SAVINGS: #f20d2b;
+
+  /* ============================== SEMANTIC TOKENS ============================== */
+  --token-color-background-primary: var(--theme-color-neutral-900);   /* tile / card background */
+  --token-color-background-secondary: var(--theme-color-neutral-800); /* page background */
+
+  --token-color-border-secondary: var(--theme-color-neutral-500);
+  --token-color-border-tertiary: var(--theme-color-neutral-700);
+  --token-color-border-light: var(--theme-color-neutral-900);
+
+  --token-color-text-standard: var(--theme-color-neutral-100);
+  --token-color-text-subdued: var(--theme-color-neutral-200);
+  --token-color-text-dark: var(--theme-color-neutral-000);
+  --token-color-text-placeholder: var(--theme-color-neutral-400);
+
+  --token-color-semantic-gain: var(--theme-color-primary-500);
+  --token-color-semantic-loss: var(--theme-color-tertiary-600);
+  --token-color-semantic-expense: var(--theme-color-tertiary-500);
+  --token-color-semantic-danger: var(--theme-color-tertiary-600);
+  --token-color-semantic-info: var(--theme-color-secondary-500);
+  --token-color-semantic-addition: var(--theme-color-primary-500);
+
+  --token-disable-button-background: var(--theme-color-neutral-400);
+  --token-button-primary-color: var(--theme-color-primary-500);
+  --token-button-primary-hover-color: var(--theme-color-primary-400);
+  --token-button-secondary-text-color: var(--theme-color-secondary-900);
+  --token-button-secondary-color: var(--theme-color-secondary-200);
+  --token-button-secondary-hover-color: var(--theme-color-secondary-100);
+  --token-button-tertiary-color: var(--theme-color-tertiary-500);
+  --token-button-tertiary-hover-color: var(--theme-color-tertiary-400);
+  --token-button-details-color: var(--theme-color-neutral-300);
+  --token-button-details-color-hover: var(--theme-color-neutral-400);
+
+  --token-navigation-color: var(--theme-color-neutral-100);
+  --token-navigation-selected: var(--theme-color-primary-600);
+  --token-color-skeleton-loader: var(--theme-color-neutral-700);
+  --token-color-category-icon: var(--theme-color-neutral-900);
+
+  /* Alerts: error / info / success / warning */
+  --token-error-background-color: var(--theme-color-tertiary-900);
+  --token-error-title-color: var(--theme-color-tertiary-500);
+  --token-error-icon-color: var(--theme-color-tertiary-500);
+  --token-error-message-color: var(--theme-color-tertiary-300);
+  --token-error-border-color: var(--theme-color-tertiary-700);
+
+  --token-info-background-color: var(--theme-color-secondary-900);
+  --token-info-title-color: var(--theme-color-secondary-500);
+  --token-info-icon-color: var(--theme-color-secondary-500);
+  --token-info-message-color: var(--theme-color-secondary-300);
+  --token-info-border-color: var(--theme-color-secondary-700);
+
+  --token-success-background-color: var(--theme-color-primary-900);
+  --token-success-title-color: var(--theme-color-primary-500);
+  --token-success-icon-color: var(--theme-color-primary-500);
+  --token-success-message-color: var(--theme-color-primary-300);
+  --token-success-border-color: var(--theme-color-primary-700);
+
+  --token-warning-background-color: var(--theme-color-neutral-900);
+  --token-warning-title-color: var(--theme-color-neutral-200);
+  --token-warning-icon-color: var(--theme-color-neutral-200);
+  --token-warning-message-color: var(--theme-color-neutral-100);
+  --token-warning-border-color: var(--theme-color-neutral-700);
+
+  --token-cta-background-color: var(--theme-color-primary-500);
+  --token-cta-text-color: var(--theme-color-neutral-1000);
+  --token-urgent-cta-background-color: var(--theme-color-tertiary-500);
+  --token-urgent-cta-text-color: var(--theme-color-neutral-1000);
+
+  /* ============================== ELEVATION (soft, multi-stop) ============================== */
+  --shadow-color: 194deg 13% 70%;
+  --token-background-secondary-elevation-low:
+    0.3px 0.4px 0.4px hsl(var(--shadow-color) / 0.44),
+    0.3px 0.5px 0.4px -2.5px hsl(var(--shadow-color) / 0.29),
+    0.9px 1.2px 1.1px -4.9px hsl(var(--shadow-color) / 0.15);
+  --token-background-secondary-elevation-medium:
+    0.3px 0.4px 0.5px hsl(var(--shadow-color) / 0.32),
+    0.6px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.28),
+    1.7px 2.2px 2.7px -2.3px hsl(var(--shadow-color) / 0.23),
+    4.4px 5.8px 7.1px -3.5px hsl(var(--shadow-color) / 0.18);
+  --token-background-secondary-elevation-high:
+    0.3px 0.4px 0.5px hsl(var(--shadow-color) / 0.26),
+    0.7px 1px 1.2px -0.6px hsl(var(--shadow-color) / 0.24),
+    1.4px 1.9px 2.3px -1.2px hsl(var(--shadow-color) / 0.22),
+    2.7px 3.5px 4.3px -1.7px hsl(var(--shadow-color) / 0.2),
+    4.8px 6.3px 7.7px -2.3px hsl(var(--shadow-color) / 0.18),
+    8.3px 10.9px 13.4px -2.9px hsl(var(--shadow-color) / 0.15),
+    13.4px 17.6px 21.6px -3.5px hsl(var(--shadow-color) / 0.13);
+
+  /* ============================== SHAPE ============================== */
+  --radius-xs: 4px;   /* tag pills, fixed-tag chips */
+  --radius-sm: 8px;   /* cards, alerts, secondary buttons, percentage bar */
+  --radius-md: 12px;  /* primary buttons, module containers, category icons */
+  --radius-lg: 16px;  /* auth card, percentage-bar wrap */
+  --radius-pill: 9999px;
+
+  /* ============================== LAYOUT ============================== */
+  --breakpoint-min-supported-width: 375px;
+  --breakpoint-mobile: 768px;
+  --breakpoint-max-page-width: 1440px;
+  --page-side-padding: 24px;
+  --page-title-bottom-margin: 24px;
+  --page-title-font-size: var(--font-heading-large);
+  --page-title-font-weight: var(--font-weight-medium);
+}
+
+/* ============================== SEMANTIC ELEMENT STYLES ============================== */
+html, body {
+  background-color: var(--token-color-background-secondary);
+  color: var(--token-color-text-standard);
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--font-heading-large);
+  font-weight: var(--font-weight-medium);
+}
+h2 {
+  font-size: var(--font-heading-medium);
+  font-weight: var(--font-weight-medium);
+}
+h3 {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+}
+p {
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-regular);
+}
+small,
+.caption {
+  font-size: var(--font-caption);
+  color: var(--token-color-text-subdued);
+}
+code {
+  font-family: var(--font-family-mono);
+}
+
+/* SpendWatcher's "soft" surface idiom: light tile on a slightly darker page */
+.tile {
+  background-color: var(--token-color-background-primary);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+}
+.tile--low    { box-shadow: var(--token-background-secondary-elevation-low); }
+.tile--medium { box-shadow: var(--token-background-secondary-elevation-medium); }
+.tile--high   { box-shadow: var(--token-background-secondary-elevation-high); }

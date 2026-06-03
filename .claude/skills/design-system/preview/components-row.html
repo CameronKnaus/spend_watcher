@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<script src="../assets/icons.js"></script>
+<style>
+  .row { display: flex; align-items: center; gap: 10px; width: 100%; }
+  .catico { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--token-color-category-icon); flex-shrink: 0; }
+  .details { flex: 1; }
+  .primary-row { display: flex; justify-content: space-between; font-size: 14px; }
+  .sub { font-size: 12px; color: var(--token-color-text-subdued); }
+  .chev { color: var(--token-color-text-placeholder); display: flex; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Transaction / interactive row</div>
+  <div class="tile-demo" style="display:flex;flex-direction:column;gap:14px">
+    <div class="row">
+      <div class="catico" style="background:#ff8442" data-i="utensils"></div>
+      <div class="details"><div class="primary-row"><span>Dining out</span><span style="color:var(--token-color-semantic-loss)">−$48.20</span></div><div class="sub">Thai takeout, Friday</div></div>
+      <span class="chev" data-c></span>
+    </div>
+    <div class="row">
+      <div class="catico" style="background:#82aa46" data-i="cart"></div>
+      <div class="details"><div class="primary-row"><span>Groceries</span><span style="color:var(--token-color-semantic-loss)">−$112.65</span></div><div class="sub">Weekly shop</div></div>
+      <span class="chev" data-c></span>
+    </div>
+  </div>
+  <div class="swatch-label">Category chip · label + note · amount in loss-red · right chevron affordance. Whole row clickable.</div>
+</div>
+<script>
+  document.querySelectorAll('[data-i]').forEach(el => el.innerHTML = swIcon(el.dataset.i, 18, '#f8fbfc'));
+  document.querySelectorAll('[data-c]').forEach(el => el.innerHTML = swIcon('chevron-right', 18));
+</script>
+</body>
+</html>

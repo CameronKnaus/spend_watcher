@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .ramp { display: flex; flex-direction: column; gap: 8px; }
+  .ramp-row { display: flex; align-items: center; gap: 12px; }
+  .ramp-name { width: 78px; font-size: 12px; font-weight: 500; }
+  .ramp-swatches { display: flex; flex: 1; border-radius: var(--radius-sm); overflow: hidden; }
+  .ramp-swatches > div { flex: 1; height: 34px; }
+  .chip500 { font-size: 10px; font-family: var(--font-family-mono); color: var(--token-color-text-subdued); width: 64px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Brand ramps · primary / secondary / tertiary</div>
+  <div class="ramp">
+    <div class="ramp-row">
+      <div class="ramp-name">Primary<br><span style="font-weight:400;color:var(--token-color-text-subdued);font-size:11px">green</span></div>
+      <div class="ramp-swatches">
+        <div style="background:#24322e"></div><div style="background:#34554b"></div><div style="background:#3d7664"></div><div style="background:#419b80"></div><div style="background:#43a875"></div><div style="background:#4ec68a"></div><div style="background:#67daa1"></div><div style="background:#b6f6e3"></div><div style="background:#d4fcf0"></div>
+      </div>
+      <div class="chip500">500<br>#43a875</div>
+    </div>
+    <div class="ramp-row">
+      <div class="ramp-name">Secondary<br><span style="font-weight:400;color:var(--token-color-text-subdued);font-size:11px">blue</span></div>
+      <div class="ramp-swatches">
+        <div style="background:#1a2f38"></div><div style="background:#204555"></div><div style="background:#255d74"></div><div style="background:#277596"></div><div style="background:#268fba"></div><div style="background:#35addf"></div><div style="background:#71caef"></div><div style="background:#a0def8"></div><div style="background:#ebf9ff"></div>
+      </div>
+      <div class="chip500">500<br>#268fba</div>
+    </div>
+    <div class="ramp-row">
+      <div class="ramp-name">Tertiary<br><span style="font-weight:400;color:var(--token-color-text-subdued);font-size:11px">red</span></div>
+      <div class="ramp-swatches">
+        <div style="background:#3b1c20"></div><div style="background:#5b252c"></div><div style="background:#7e2a35"></div><div style="background:#bf1239"></div><div style="background:#ed0c3f"></div><div style="background:#fa3360"></div><div style="background:#fd5d82"></div><div style="background:#ffadc0"></div><div style="background:#ffe5eb"></div>
+      </div>
+      <div class="chip500">500<br>#ed0c3f</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

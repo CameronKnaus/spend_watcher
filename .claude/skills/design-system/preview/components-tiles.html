@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mod { background: var(--token-color-background-primary); border-radius: var(--radius-md); padding: 12px 16px; }
+  .mod.med { box-shadow: var(--token-background-secondary-elevation-medium); }
+  .mod.low { box-shadow: var(--token-background-secondary-elevation-low); }
+  .mod h3 { font-size: 14px; font-weight: 500; margin: 0 0 6px; color: var(--token-color-text-subdued); }
+  .amt { font-size: 24px; font-weight: 300; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Summary tiles · ModuleContainer</div>
+  <div class="tiles">
+    <div class="mod med"><h3>Total spent</h3><div class="amt" style="color:var(--token-color-semantic-loss)">−$3,142.80</div></div>
+    <div class="mod low"><h3>Discretionary total</h3><div class="amt" style="color:var(--token-color-semantic-loss)">−$1,090.15</div></div>
+  </div>
+  <div class="swatch-label">Lighter-than-page surface · 12px radius · no border · elevation by importance (Total = medium, others = low) · medium-weight heading, thin amount.</div>
+</div>
+</body>
+</html>

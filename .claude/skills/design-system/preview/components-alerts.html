@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<script src="../assets/icons.js"></script>
+<style>
+  .alert { display: flex; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm); align-items: flex-start; }
+  .alert .ic { margin-top: 1px; display: flex; flex-shrink: 0; }
+  .alert h3 { font-size: 14px; margin: 0 0 2px; font-weight: 500; }
+  .alert p { font-size: 12px; margin: 0; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Alert messages · error / info / success / warning</div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="alert" style="background:var(--token-success-background-color);border:1px solid var(--token-success-border-color)">
+      <span class="ic" data-ic style="color:var(--token-success-icon-color)"></span>
+      <div><h3 style="color:var(--token-success-title-color)">Account synced</h3><p style="color:var(--token-success-message-color)">Your balances are up to date.</p></div>
+    </div>
+    <div class="alert" style="background:var(--token-info-background-color);border:1px solid var(--token-info-border-color)">
+      <span class="ic" data-ic style="color:var(--token-info-icon-color)"></span>
+      <div><h3 style="color:var(--token-info-title-color)">3 account(s) require updates for this month</h3></div>
+    </div>
+    <div class="alert" style="background:var(--token-error-background-color);border:1px solid var(--token-error-border-color)">
+      <span class="ic" data-ic style="color:var(--token-error-icon-color)"></span>
+      <div><h3 style="color:var(--token-error-title-color)">We couldn't load your trips</h3><p style="color:var(--token-error-message-color)">Please try again later.</p></div>
+    </div>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('[data-ic]').forEach(el => el.innerHTML = swIcon('circle-info', 16));
+</script>
+</body>
+</html>

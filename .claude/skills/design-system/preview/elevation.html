@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .el-row { display: flex; gap: 22px; }
+  .el { flex: 1; background: var(--token-color-background-primary); border-radius: var(--radius-md); height: 78px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--token-color-text-subdued); }
+  .low { box-shadow: var(--token-background-secondary-elevation-low); }
+  .medium { box-shadow: var(--token-background-secondary-elevation-medium); }
+  .high { box-shadow: var(--token-background-secondary-elevation-high); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Elevation · cool multi-stop shadows</div>
+  <div class="el-row">
+    <div class="el low">low</div>
+    <div class="el medium">medium</div>
+    <div class="el high">high</div>
+  </div>
+  <div class="swatch-label">Shadow color <span class="mono">hsl(194 13% 70%)</span> — desaturated blue-grey, never black. Cards carry no border; lift is shadow only.</div>
+</div>
+</body>
+</html>

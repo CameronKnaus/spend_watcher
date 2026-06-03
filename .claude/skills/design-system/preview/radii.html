@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .radii { display: flex; gap: 18px; align-items: flex-end; }
+  .r { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .r-box { width: 70px; height: 56px; background: var(--theme-color-primary-500); }
+  .r-label { font-size: 11px; font-weight: 500; }
+  .r-val { font-size: 10px; font-family: var(--font-family-mono); color: var(--token-color-text-subdued); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Corner radii</div>
+  <div class="radii">
+    <div class="r"><div class="r-box" style="border-radius:4px"></div><div class="r-label">xs</div><div class="r-val">4px · chips</div></div>
+    <div class="r"><div class="r-box" style="border-radius:8px"></div><div class="r-label">sm</div><div class="r-val">8px · cards</div></div>
+    <div class="r"><div class="r-box" style="border-radius:12px"></div><div class="r-label">md</div><div class="r-val">12px · tiles</div></div>
+    <div class="r"><div class="r-box" style="border-radius:16px"></div><div class="r-label">lg</div><div class="r-val">16px · auth</div></div>
+    <div class="r"><div class="r-box" style="border-radius:9999px;width:56px"></div><div class="r-label">pill</div><div class="r-val">9999px</div></div>
+  </div>
+</div>
+</body>
+</html>

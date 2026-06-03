@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="_card.css">
+<style>
+  .sem { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .sem-item { display: flex; flex-direction: column; gap: 8px; }
+  .sem-dot { height: 40px; border-radius: var(--radius-sm); }
+  .sem-name { font-size: 12px; font-weight: 500; }
+  .sem-val { font-size: 10px; font-family: var(--font-family-mono); color: var(--token-color-text-subdued); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Semantic color tokens</div>
+  <div class="sem">
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-color-semantic-gain)"></div><div class="sem-name">gain / success</div><div class="sem-val">primary-500</div></div>
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-color-semantic-loss)"></div><div class="sem-name">loss / danger</div><div class="sem-val">tertiary-600</div></div>
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-color-semantic-expense)"></div><div class="sem-name">expense</div><div class="sem-val">tertiary-500</div></div>
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-color-semantic-info)"></div><div class="sem-name">info</div><div class="sem-val">secondary-500</div></div>
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-cta-background-color)"></div><div class="sem-name">CTA</div><div class="sem-val">primary-500</div></div>
+    <div class="sem-item"><div class="sem-dot" style="background:var(--token-urgent-cta-background-color)"></div><div class="sem-name">urgent CTA</div><div class="sem-val">tertiary-500</div></div>
+  </div>
+</div>
+</body>
+</html>
