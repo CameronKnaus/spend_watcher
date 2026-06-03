@@ -1,3 +1,7 @@
 packages:
   - 'api'
   - 'ui'
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild

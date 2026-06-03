@@ -14,9 +14,6 @@
     "format": "pnpm -r run format",
     "test": "pnpm --filter @spend-watcher/ui run test"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": ["@parcel/watcher", "esbuild"]
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
