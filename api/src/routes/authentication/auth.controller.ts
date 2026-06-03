@@ -43,6 +43,7 @@ api.post('/v1/register', async (request: Request<RegisterRequestParams>, respons
 
 api.get('/v1/verify', verifyAuthToken, async (_: Request, response: Response) => {
   response.status(200).json({
+    authenticated: true,
     message: 'Token is valid',
   });
 });

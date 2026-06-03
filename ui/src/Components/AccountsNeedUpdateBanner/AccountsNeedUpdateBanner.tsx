@@ -7,7 +7,7 @@ export default function AccountsNeedUpdateBanner() {
   const getContent = useContent('accounts');
   const { data: accountsSummary } = useAccountSummaryService();
 
-  if (!accountsSummary) {
+  if (!accountsSummary?.accountsList) {
     return null;
   }
 
