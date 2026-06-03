@@ -24,31 +24,26 @@
   },
   "homepage": "https://github.com/CameronKnaus/spend_watcher#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "date-fns": "^3.6.0",
-    "dotenv": "^16.6.1",
-    "express": "^4.22.1",
-    "express-jwt": "^8.5.1",
-    "helmet": "^4.6.0",
-    "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.12.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.4.2",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "mysql": "^2.18.1",
     "uuid": "^14.0.0",
-    "zod": "^3.25.76"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@types/bcryptjs": "^2.4.6",
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
-    "@types/express": "^4.17.25",
+    "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mysql": "^2.15.27",
-    "@types/node": "^20.19.40",
-
-
+    "@types/node": "^22.19.18",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
   }

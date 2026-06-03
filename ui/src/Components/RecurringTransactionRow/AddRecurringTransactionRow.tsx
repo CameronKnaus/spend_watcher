@@ -11,7 +11,13 @@ import { useForm } from 'react-hook-form';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { AddRecurringTransactionRequestParams, v1AddRecurringTransactionSchema } from 'Types/Services/spending.model';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
+import { z as zod } from 'zod';
 import styles from './RecurringTransactionRow.module.css';
+
+const addRecurringFormSchema = v1AddRecurringTransactionSchema.partial({
+  amountSpent: true, // Make amountSpent optional as this will be handled manually
+});
+type AddRecurringFormValues = zod.infer<typeof addRecurringFormSchema>;
 
 type AddRecurringTransactionRowPropTypes = {
   expectedMonthlyAmount: number;
@@ -45,12 +51,8 @@ export default function AddRecurringTransactionRow({
     },
   });
 
-  const form = useForm<AddRecurringTransactionRequestParams>({
-    resolver: zodResolver(
-      v1AddRecurringTransactionSchema.partial({
-        amountSpent: true, // Make amountSpent optional as this will be handled manually
-      }),
-    ),
+  const form = useForm({
+    resolver: zodResolver(addRecurringFormSchema),
     defaultValues: {
       recurringSpendId,
       date,
@@ -72,12 +74,13 @@ export default function AddRecurringTransactionRow({
     );
   }
 
-  function handleSubmission(submission: AddRecurringTransactionRequestParams) {
-    if (!submission.amountSpent || recurringTransactionMutation.isPending) {
-      submission.amountSpent = expectedMonthlyAmount;
-    }
+  function handleSubmission(submission: AddRecurringFormValues) {
+    if (recurringTransactionMutation.isPending) return;
 
-    recurringTransactionMutation.mutate(submission);
+    recurringTransactionMutation.mutate({
+      ...submission,
+      amountSpent: submission.amountSpent ?? expectedMonthlyAmount,
+    });
   }
 
   const isValidInput = form.formState.isValid;

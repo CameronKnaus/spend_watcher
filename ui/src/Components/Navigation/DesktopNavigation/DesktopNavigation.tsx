@@ -15,7 +15,7 @@ const DEFAULT_WIDTH = 68;
 // This component turned out rough
 export default function DesktopNavigation() {
   const [menuExpanded, setMenuExpanded] = useState(false);
-  const [delayHandler, setDelayHandler] = useState<NodeJS.Timeout | null>(null);
+  const [delayHandler, setDelayHandler] = useState<ReturnType<typeof setTimeout> | null>(null);
   const menuListRef = useRef<HTMLDivElement>(null);
   const paddingOffset = 40;
   const expandedWidth = menuListRef.current ? menuListRef.current.scrollWidth + paddingOffset : DEFAULT_WIDTH;

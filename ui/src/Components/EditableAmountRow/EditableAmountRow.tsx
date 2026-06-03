@@ -6,18 +6,18 @@ import { FieldValues, Path, SubmitHandler, UseFormReturn } from 'react-hook-form
 import { FaPencilAlt } from 'react-icons/fa';
 import styles from './EditableAmountRow.module.css';
 
-type EditableAmountRowPropTypes<T extends FieldValues> = {
-  form: UseFormReturn<T>;
+type EditableAmountRowPropTypes<TFieldValues extends FieldValues, TTransformedValues = TFieldValues> = {
+  form: UseFormReturn<TFieldValues, any, TTransformedValues>;
   label: string;
   amountLabel: string;
   showConfirmButton: boolean;
   isLoading: boolean;
-  amountFormFieldName: Path<T>;
+  amountFormFieldName: Path<TFieldValues>;
   amountPlaceholder?: string;
-  onSubmission: SubmitHandler<T>;
+  onSubmission: SubmitHandler<TTransformedValues>;
 };
 
-export default function EditableAmountRow<T extends FieldValues>({
+export default function EditableAmountRow<TFieldValues extends FieldValues, TTransformedValues = TFieldValues>({
   form,
   label,
   amountLabel,
@@ -26,7 +26,7 @@ export default function EditableAmountRow<T extends FieldValues>({
   amountFormFieldName,
   amountPlaceholder = '',
   onSubmission,
-}: EditableAmountRowPropTypes<T>) {
+}: EditableAmountRowPropTypes<TFieldValues, TTransformedValues>) {
   const getContent = useContent('general');
 
   return (

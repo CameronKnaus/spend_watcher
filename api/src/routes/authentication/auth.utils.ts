@@ -1,7 +1,7 @@
 import db from '@lib/db';
 import HttpException from '@utils/ErrorHandling/HttpException';
 import { CookieOptions } from 'express';
-import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { Algorithm, Secret, SignOptions } from 'jsonwebtoken';
 
 const isDevMode = process.env.ENVIRONMENT === 'DEV';
 const monthInMilliseconds = 2592000000;
@@ -14,9 +14,10 @@ export const cookieOptions: CookieOptions = {
 
 export function generateAuthTokenByUsername(username: string): string {
   // JWT Token options
-  const options = {
-    algorithm: process.env.JWT_ALGORITHM,
-    expiresIn: process.env.JWT_EXPIRY,
+  const options: SignOptions = {
+    algorithm: process.env.JWT_ALGORITHM as Algorithm,
+    // Types of the package are a bit restrictive and I don't care enough to make this cleaner, it's a string.
+    expiresIn: process.env.JWT_EXPIRY as unknown as number,
     issuer: process.env.JWT_ISSUER,
     subject: username,
   };

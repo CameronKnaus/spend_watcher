@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { Secret, VerifyErrors } from 'jsonwebtoken';
+import jwt, { Algorithm, Secret, VerifyErrors } from 'jsonwebtoken';
 
 // Verify that the current token is legal
 export default function (request: Request, response: Response, next: NextFunction) {
@@ -11,14 +11,19 @@ export default function (request: Request, response: Response, next: NextFunctio
     });
   }
 
-  jwt.verify(token, process.env.SECRET_KEY as Secret, (err: VerifyErrors | null) => {
-    if (err) {
-      response.clearCookie('token');
-      return response.status(403).send({
-        message: 'Please login again',
-      });
-    }
+  jwt.verify(
+    token,
+    process.env.SECRET_KEY as Secret,
+    { algorithms: [process.env.JWT_ALGORITHM as Algorithm] },
+    (err: VerifyErrors | null) => {
+      if (err) {
+        response.clearCookie('token');
+        return response.status(403).send({
+          message: 'Please login again',
+        });
+      }
 
-    next();
-  });
+      next();
+    },
+  );
 }

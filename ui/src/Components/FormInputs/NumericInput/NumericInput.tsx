@@ -4,23 +4,23 @@ import { NumericFormat } from 'react-number-format';
 
 type NumericFormatWithoutEssentialAttributes = Omit<ComponentProps<typeof NumericFormat>, 'onChange' | 'value'>;
 
-export type NumericInputPropTypes<T extends FieldValues> = {
-  control: Control<T>;
+export type NumericInputPropTypes<TFieldValues extends FieldValues, TTransformedValues = TFieldValues> = {
+  control: Control<TFieldValues, any, TTransformedValues>;
   // react-number-format NumericFormat component isn't playing nice with react-hook-form
   // Validation isn't occurring onChange, only onBlur
   // Grabbing the trigger method from the form context to force validation on change
-  trigger: UseFormTrigger<T>;
-  name: Path<T>;
+  trigger: UseFormTrigger<TFieldValues>;
+  name: Path<TFieldValues>;
   isRequired?: boolean;
 } & NumericFormatWithoutEssentialAttributes;
 
-export default function NumericInput<T extends FieldValues>({
+export default function NumericInput<TFieldValues extends FieldValues, TTransformedValues = TFieldValues>({
   control,
   trigger,
   name,
   isRequired = false,
   ...props
-}: NumericInputPropTypes<T>) {
+}: NumericInputPropTypes<TFieldValues, TTransformedValues>) {
   return (
     <Controller
       control={control}

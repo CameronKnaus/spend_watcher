@@ -11,6 +11,10 @@ import {
   RecurringTransactionId,
   v1EditRecurringTransactionSchema,
 } from 'Types/Services/spending.model';
+import { z as zod } from 'zod';
+
+const editRecurringFormSchema = v1EditRecurringTransactionSchema.partial({ amountSpent: true });
+type EditRecurringFormValues = zod.infer<typeof editRecurringFormSchema>;
 
 type EditableRecurringTransactionRowPropTypes = {
   transactionId: RecurringTransactionId;
@@ -42,19 +46,22 @@ export default function EditableRecurringTransactionRow({
   });
 
   const getContent = useContent('recurringTransactionsList');
-  const form = useForm<EditRecurringTransactionRequestParams>({
-    resolver: zodResolver(v1EditRecurringTransactionSchema.partial({ amountSpent: true })),
+  const form = useForm({
+    resolver: zodResolver(editRecurringFormSchema),
     defaultValues: {
       transactionId,
     },
   });
 
-  function handleSubmission(submission: EditRecurringTransactionRequestParams) {
+  function handleSubmission(submission: EditRecurringFormValues) {
     if (!submission.amountSpent || recurringTransactionMutation.isPending) {
       return;
     }
 
-    recurringTransactionMutation.mutate(submission);
+    recurringTransactionMutation.mutate({
+      ...submission,
+      amountSpent: submission.amountSpent,
+    });
   }
 
   useEffect(() => {
