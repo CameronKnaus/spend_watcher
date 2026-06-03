@@ -1,1 +1,1 @@
-web: pnpm --filter @spend-watcher/api run start
+web: api/node_modules/.bin/tsx api/src/index.ts
