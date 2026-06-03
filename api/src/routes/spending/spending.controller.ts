@@ -355,6 +355,7 @@ api.get(
         currentYtdAvg != null && previousYearAvg != null && previousHasEnoughData && previousYearAvg > 0
           ? {
               year: previousYear,
+              monthlyAverage: previousYearAvg,
               percentChange: (currentYtdAvg - previousYearAvg) / previousYearAvg,
             }
           : null;

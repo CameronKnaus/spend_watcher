@@ -261,6 +261,7 @@ export type YearlyAverageV1Response = {
   monthlyAverage: number;
   comparison: {
     year: number;
+    monthlyAverage: number;
     percentChange: number;
   } | null;
 };

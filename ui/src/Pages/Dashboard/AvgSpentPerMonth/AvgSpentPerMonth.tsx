@@ -4,6 +4,7 @@ import SkeletonLoader from 'Components/Shared/SkeletonLoader';
 import useContent from 'Hooks/useContent';
 import useYearlyAverageService from 'Hooks/useYearlyAverageService';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
+import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import styles from './AvgSpentPerMonth.module.css';
 
 export default function AvgSpentPerMonth() {
@@ -40,7 +41,8 @@ export default function AvgSpentPerMonth() {
             {(data.comparison.percentChange * 100).toFixed(1)}%
           </span>
           <span className={styles.comparisonSuffix}>
-            {getContent('vsYearAvg', [String(data.comparison.year)])}
+            {getContent('vsYearAvg', [String(data.comparison.year)])} (
+            {formatCurrency(data.comparison.monthlyAverage, false, true)})
           </span>
         </div>
       )}
