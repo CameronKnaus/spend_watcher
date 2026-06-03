@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import useContent from 'Hooks/useContent';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
 import { useEffect } from 'react';
+import AvgSpentPerMonth from './AvgSpentPerMonth/AvgSpentPerMonth';
 import styles from './Dashboard.module.css';
 import RecentTransactions from './RecentTransactions';
 import SummaryTotals from './SummaryTotals/SummaryTotals';
@@ -33,6 +34,7 @@ export default function Dashboard() {
         <div className={styles.leftSection}>
           <div className={styles.spendingGrid}>
             <SummaryTotals />
+            <AvgSpentPerMonth />
             {/* Top categories */}
             <ModuleContainer
               heading={getContent('topCategories')}

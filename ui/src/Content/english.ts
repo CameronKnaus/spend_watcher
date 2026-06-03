@@ -14,6 +14,8 @@ const locale = {
     discretionaryTotal: 'Discretionary total',
     recurringTotal: 'Recurring total',
     topCategories: 'Top discretionary categories',
+    avgSpentPerMonth: 'Avg spent · per month',
+    vsYearAvg: 'vs {{0}} avg',
   },
   spendingData: {
     topCombined: 'Combined total',

@@ -17,6 +17,7 @@ import {
   SpendingDetailsRequestParams,
   SpendingHistoryStartV1Response,
   TransactionsRequestParams,
+  YearlyAverageV1Response,
   v1AddRecurringSpendSchema,
   v1AddRecurringTransactionSchema,
   v1DeleteRecurringSpendSchema,
@@ -42,6 +43,7 @@ import {
   fetchRecurringSpendTransactionsList,
   fetchRecurringTransactionHistory,
   fetchRecurringTransactionsSummary,
+  fetchYearlyMonthlyTotals,
   getEarliestDiscretionaryTransactionDate,
   getEarliestRecurringTransactionDate,
   logDiscretionaryTransaction,
@@ -314,6 +316,50 @@ api.get(
         earliestRecurringTransactionDate: formatDbDate(earliestRecurring),
         earliestDiscretionaryTransactionDate: formatDbDate(earliestDiscretionary),
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// Provides the monthly average spend for the current year (completed months only)
+// and a YoY comparison against the prior calendar year's monthly average.
+api.get(
+  '/v1/yearly-average',
+  async (request: Request, response: Response<YearlyAverageV1Response>, next: NextFunction) => {
+    try {
+      const username = getUsernameFromToken(request.cookies.token);
+
+      await updateFixedRecurringMonthlySpendData(username);
+
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const previousYear = currentYear - 1;
+
+      const rows = await fetchYearlyMonthlyTotals(username, currentYear, previousYear);
+
+      const currentRow = rows.find((r) => Number(r.year) === currentYear);
+      const previousRow = rows.find((r) => Number(r.year) === previousYear);
+
+      const currentYtdAvg =
+        currentRow && Number(currentRow.months_with_data) > 0
+          ? Number(currentRow.total_amount) / Number(currentRow.months_with_data)
+          : null;
+
+      const previousYearAvg = previousRow ? Number(previousRow.total_amount) / 12 : null;
+      const previousHasEnoughData = Number(previousRow?.months_with_data ?? 0) >= 6;
+
+      const monthlyAverage = currentYtdAvg ?? previousYearAvg ?? 0;
+
+      const comparison =
+        currentYtdAvg != null && previousYearAvg != null && previousHasEnoughData && previousYearAvg > 0
+          ? {
+              year: previousYear,
+              percentChange: (currentYtdAvg - previousYearAvg) / previousYearAvg,
+            }
+          : null;
+
+      response.status(200).json({ monthlyAverage, comparison });
     } catch (error) {
       next(error);
     }

@@ -326,6 +326,58 @@ export function getTransactionsAvailableRange(username: string): Promise<Transac
   });
 }
 
+export type YearlyTotalsSQLRow = {
+  year: number;
+  total_amount: number;
+  months_with_data: number;
+};
+
+export function fetchYearlyMonthlyTotals(
+  username: string,
+  currentYear: number,
+  previousYear: number,
+): Promise<YearlyTotalsSQLRow[]> {
+  return new Promise((resolve, reject) => {
+    const queryString = `
+      SELECT
+        YEAR(date) AS year,
+        SUM(amount) AS total_amount,
+        COUNT(DISTINCT MONTH(date)) AS months_with_data
+      FROM (
+        SELECT date, amount
+        FROM spend_transactions
+        WHERE username = ?
+          AND (
+            (YEAR(date) = ? AND date < DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01'))
+            OR YEAR(date) = ?
+          )
+        UNION ALL
+        SELECT t.date, t.transaction_amount AS amount
+        FROM user_information.recurring_transactions t
+        JOIN user_information.recurring_spending s
+          ON t.recurring_spend_id = s.recurring_spend_id
+        WHERE s.username = ?
+          AND (
+            (YEAR(t.date) = ? AND t.date < DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01'))
+            OR YEAR(t.date) = ?
+          )
+      ) combined
+      GROUP BY YEAR(date)
+    `;
+    db.query(
+      queryString,
+      [username, currentYear, previousYear, username, currentYear, previousYear],
+      (error, rows) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      },
+    );
+  });
+}
+
 type DiscretionaryMinDateSQLRow = {
   earliest_discretionary_transaction_date: string; // '2024-08-01T04:00:00.000Z'
 };

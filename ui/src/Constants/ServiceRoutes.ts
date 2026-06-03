@@ -17,6 +17,7 @@ const SERVICE_ROUTES: Record<string, string> = {
   postEditRecurringTransaction: domainName + '/spending/v1/recurring/transactions/edit',
   postAddRecurringTransaction: domainName + '/spending/v1/recurring/transactions/add',
   getSpendingHistoryStart: domainName + '/spending/v1/history-start',
+  getYearlyAverage: domainName + '/spending/v1/yearly-average',
   getTransactions: domainName + '/spending/v1/transactions',
   getTripsList: domainName + '/trips/v1/list',
   getTripLinkedExpenses: domainName + '/trips/v1/expenses',

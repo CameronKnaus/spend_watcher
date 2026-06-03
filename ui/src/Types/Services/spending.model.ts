@@ -255,6 +255,18 @@ export type SpendingHistoryStartV1Response = {
 
 // END SPENDING HISTORY START API --------------------------------------------
 
+// YEARLY AVERAGE API --- /api/spending/v1/yearly-average
+
+export type YearlyAverageV1Response = {
+  monthlyAverage: number;
+  comparison: {
+    year: number;
+    percentChange: number;
+  } | null;
+};
+
+// END YEARLY AVERAGE API --------------------------------------------
+
 // TRANSACTIONS API --- /api/spending/v1/transactions
 
 export const v1TransactionsSchema = zod.object({

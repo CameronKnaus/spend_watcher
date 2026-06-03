@@ -4,6 +4,7 @@ import { ComponentProps, ReactNode } from 'react';
 type CurrencyPropTypes = {
   amount?: number;
   isGainLoss?: boolean;
+  compact?: boolean;
   defaultValue?: ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -24,6 +25,7 @@ function getColor(value: number) {
 export default function Currency({
   amount,
   isGainLoss = false,
+  compact = false,
   defaultValue = '',
   className = '',
   style = {},
@@ -42,7 +44,7 @@ export default function Currency({
       }}
       {...props}
     >
-      {formatCurrency(amount, isGainLoss)}
+      {formatCurrency(amount, isGainLoss, compact)}
     </span>
   );
 }

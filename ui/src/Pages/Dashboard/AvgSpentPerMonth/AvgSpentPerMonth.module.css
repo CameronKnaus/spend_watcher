@@ -1,0 +1,19 @@
+.tile {
+  flex-basis: calc(33% - var(--dashboard-column-gap));
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 375px;
+}
+
+.comparisonRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: var(--font-body-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.comparisonSuffix {
+  color: var(--token-color-text-subdued);
+}
