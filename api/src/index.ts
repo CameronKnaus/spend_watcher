@@ -1,56 +1,58 @@
 import 'dotenv/config';
+import { env } from '@lib/env'; // Validates process.env at boot — keep this first.
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import cors from 'cors';
 import routes from '@routes/routes';
 import HttpErrorHandler from '@utils/ErrorHandling/HttpErrorHandler';
 import logRouteList from '@utils/Logging/logRouteList';
 
-const isDevMode = process.env.ENVIRONMENT === 'DEV';
-const allowedOrigin = process.env.DOMAIN;
+const isDevMode = env.ENVIRONMENT === 'DEV';
 
 // Define the express app
 const app = express();
 
-// Provide ability to parse cookies (for JWT tokens)
-app.use(cookieParser());
+// Security headers
+app.use(helmet());
 
-// Cross Origin Resource Sharing (CORS) settings
-app.use((req, res, next) => {
-  res.set('Access-Control-Allow-Origin', allowedOrigin);
-  res.set('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-  res.set('Access-Control-Request-Method: GET, POST');
-  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-token, Authorization');
-  res.set('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    res.end();
-  } else {
-    next();
+// Cors
+app.use(
+  cors({
+    origin: env.DOMAIN,
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'x-token', 'Authorization'],
+  }),
+);
+
+// Parse cookies (for JWT tokens) and JSON request bodies.
+app.use(cookieParser());
+app.use(express.json());
+
+// Application routes
+app.use(routes);
+
+// Error handler — must stay LAST, after all routes, so thrown errors reach it.
+app.use(HttpErrorHandler);
+
+// Start the server.
+const server = app.listen(env.PORT, () => {
+  console.log(`Listening on port ${env.PORT}`);
+
+  if (isDevMode) {
+    console.log('\x1b[35mDevelopment Mode Enabled \x1b[0m');
+    logRouteList(app);
+    console.log(`\x1b[33mListening for requests from ${env.DOMAIN}...\x1b[0m`);
   }
 });
 
-// Equip app with json manipulation capabilities
-app.use(express.json());
-
-// Enhance security of the app with helmet
-app.use(helmet());
-
-// Add routes
-app.use(routes);
-
-// Add error handling
-app.use(HttpErrorHandler);
-
-// Define the port
-const PORT = process.env.PORT || 4000;
-
-// Starting our server.
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+process.on('SIGINT', () => {
+  console.log(`\n'SIGINT' received — shutting down gracefully...`);
+  server.close(() => process.exit(0));
 });
 
-if (isDevMode) {
-  console.log('\x1b[35mDevelopment Mode Enabled \x1b[0m');
-  logRouteList(app);
-  console.log(`\x1b[33mListening for requests from ${allowedOrigin}...\x1b[0m`);
-}
+process.on('SIGTERM', () => {
+  console.log(`\n'SIGTERM' received — shutting down gracefully...`);
+  server.close(() => process.exit(0));
+});
