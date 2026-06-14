@@ -8,6 +8,7 @@
     "baseUrl": "./",
     "paths": {
       "@routes/*": ["src/routes/*"],
+      "@modules/*": ["src/modules/*"],
       "@lib/*": ["src/lib/*"],
       "@utils/*": ["src/utils/*"],
       "@type/*": ["src/type/*"]

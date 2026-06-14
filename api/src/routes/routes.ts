@@ -1,3 +1,4 @@
+import TransactionsController from '@modules/spending/transactions.controller';
 import { Router } from 'express';
 import verifyAuthToken from 'src/middleware/verifyAuthToken';
 import AccountsController from './accounts/accounts.controller';
@@ -9,6 +10,8 @@ const api = Router()
   .use('/user', AuthController)
   // TODO: Verify that the auth token validation is occurring when passing in here
   .use('/accounts', verifyAuthToken, AccountsController)
+  .use('/spending', verifyAuthToken, TransactionsController)
+  // Legacy spending routes
   .use('/spending', verifyAuthToken, SpendingController)
   .use('/trips', verifyAuthToken, TripsController);
 
