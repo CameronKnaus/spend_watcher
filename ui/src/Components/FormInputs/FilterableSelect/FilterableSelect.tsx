@@ -17,9 +17,14 @@ export type FilterableSelectPropTypes<T> = {
   ref?: Ref<HTMLInputElement>;
 } & ComponentProps<'input'>;
 
-function FilterableSelect<T extends string>(
-  { opens = 'down', clearLabel, noSelectionText = '', optionsList, ref, ...props }: FilterableSelectPropTypes<T>,
-) {
+function FilterableSelect<T extends string>({
+  opens = 'down',
+  clearLabel,
+  noSelectionText = '',
+  optionsList,
+  ref,
+  ...props
+}: FilterableSelectPropTypes<T>) {
   const [selectedValue, setSelectedValue] = useState<FilterableSelectOptionType<T> | undefined>();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popOverMenuRef = useRef<HTMLDivElement | null>(null);
