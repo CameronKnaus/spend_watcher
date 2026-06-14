@@ -1,18 +1,17 @@
 import getUsernameFromToken from '@utils/TokenUtils/getUsernameFromToken';
-import zodValidateDbDateFormat from '@utils/zodCustomValidators/zodValidateDbDateFormat';
 import { NextFunction, Request, Response, Router } from 'express';
-import { z as zod } from 'zod';
+import { z } from 'zod';
 import { getTransactions } from './transactions.service';
 
 const api = Router();
 
 // Request validation lives in the HTTP layer — it's the boundary where untrusted input arrives.
-const transactionsSchema = zod.object({
-  startDate: zodValidateDbDateFormat,
-  endDate: zodValidateDbDateFormat,
+const transactionsSchema = z.object({
+  startDate: z.iso.date(),
+  endDate: z.iso.date(),
 });
 
-type TransactionsRequestQuery = zod.infer<typeof transactionsSchema>;
+type TransactionsRequestQuery = z.infer<typeof transactionsSchema>;
 
 // GET /api/spending/transactions — discretionary transactions from the `spend_transactions` table.
 api.get(
