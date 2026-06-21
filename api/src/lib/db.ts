@@ -1,14 +1,13 @@
 import mysql from 'mysql';
 
-// Establish connection with the database
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env.dbHost,
   user: process.env.dbUser,
   database: process.env.dbName,
   password: process.env.dbPass,
-  port: 3306,
+  port: Number(process.env.dbPort) || 3306,
   multipleStatements: true,
+  connectionLimit: 10,
 });
 
-connection.connect();
-export default connection;
+export default pool;

@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { spendCategoryIconMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import { ComponentProps } from 'react';
 import { MdRefresh } from 'react-icons/md';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './CategoryIcon.module.css';
 
 type SpendingCategoryIconPropTypes = {

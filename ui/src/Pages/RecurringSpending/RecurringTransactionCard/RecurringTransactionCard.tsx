@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Currency from 'Components/Currency/Currency';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { ComponentProps } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { RecurringSpendTransaction } from 'Types/Services/spending.model';

@@ -1,6 +1,6 @@
 import AccountForm from 'Components/AddAccountForm/AddAccountForm';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 
 type AddAccountPanelPropTypes = {
   isOpen: boolean;

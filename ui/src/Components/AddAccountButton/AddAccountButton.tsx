@@ -1,5 +1,5 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import styles from './AddAccountButton.module.css';
 import AddAccountPanel from './AddAccountPanel';

@@ -1,5 +1,5 @@
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import TripForm from './TripForm';
 
 type TripFormPanelPropTypes = {

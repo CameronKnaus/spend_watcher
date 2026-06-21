@@ -1,5 +1,5 @@
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
 import { FaInfoCircle } from 'react-icons/fa';
 import TripModuleDataPointLoader from '../TripModuleDataPoint/TripModuleDataPointLoader';
 import styles from './TripModule.module.css';

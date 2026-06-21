@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveRow';
-import TransactionRow from 'Components/TransactionRow';
-import useContent from 'Hooks/useContent';
-import useTripLinkedExpenses from 'Hooks/useTripLinkedExpenses/useTripLinkedExpenses';
+import TransactionRow from 'Components/TransactionRow/TransactionRow';
+import useContent from 'Hooks/useContent/useContent';
+import { tripExpensesQueryOptions } from 'queryOptions/tripExpensesQueryOptions';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import { formatToMonthDay } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './TripExpenseList.module.css';
@@ -14,11 +15,12 @@ type TripExpenseListPropTypes = {
 
 export default function TripExpenseList({ tripId, setTransactionToEdit }: TripExpenseListPropTypes) {
   const getContent = useContent('trips');
-  const { isLoading, expenseList, isError } = useTripLinkedExpenses(tripId);
+  const { data, isLoading, isFetching, isError } = useQuery(tripExpensesQueryOptions(tripId));
+  const expenseList = data?.expenseList ?? [];
 
   const linkedTransactionsLabel = getContent('linkedTransactions');
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div>
         <div className={styles.linkedTransactionsLabel}>{linkedTransactionsLabel}</div>

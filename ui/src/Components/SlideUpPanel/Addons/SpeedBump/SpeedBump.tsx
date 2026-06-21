@@ -1,6 +1,6 @@
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import styles from './SpeedBump.module.css';
 
 type SpeedBumpPropTypes = {

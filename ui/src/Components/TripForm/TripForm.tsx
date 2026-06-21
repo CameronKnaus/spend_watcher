@@ -1,13 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DeleteButton from 'Components/DeleteButton/DeleteButton';
 import DatePicker from 'Components/FormInputs/DatePickerController/DatePickerController';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
 import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { dbDateFormat } from 'Types/dateTypes';
@@ -30,35 +29,20 @@ type EditTripForm = {
 
 type TripFormPropTypes = NewTripForm | EditTripForm;
 
-const addTripQueryKey = 'add-trip';
-const editTripQueryKey = 'edit-trip';
-
 export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: TripFormPropTypes) {
   const queryClient = useQueryClient();
   const getContent = useContent('trips');
   const getGeneralContent = useContent('general');
 
   const editMode = Boolean(tripToEdit);
-  const tripService = useMutation({
-    mutationKey: editMode ? [editTripQueryKey, tripToEdit!.tripId] : [addTripQueryKey],
-    mutationFn: (params: AddTripRequestParams) => {
-      if (editMode) {
-        return axios.post(SERVICE_ROUTES.postEditTrip, {
-          ...params,
-          tripId: tripToEdit?.tripId,
-        });
-      } else {
-        return axios.post(SERVICE_ROUTES.postAddTrip, params);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['trips'],
-      });
 
-      form.reset();
-    },
-  });
+  function onTripSaved() {
+    queryClient.invalidateQueries({ queryKey: orpc.trips.key() });
+    form.reset();
+  }
+
+  const addTripMutation = useMutation(orpc.trips.add.mutationOptions({ onSuccess: onTripSaved }));
+  const editTripMutation = useMutation(orpc.trips.edit.mutationOptions({ onSuccess: onTripSaved }));
 
   const defaultStartDate = format(new Date(), dbDateFormat);
   const form = useForm<AddTripRequestParams>({
@@ -80,8 +64,12 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
     onCancel();
   }
 
-  async function handleSubmission(submission: AddTripRequestParams) {
-    await tripService.mutate(submission);
+  function handleSubmission(submission: AddTripRequestParams) {
+    if (editMode) {
+      editTripMutation.mutate({ ...submission, tripId: tripToEdit!.tripId });
+    } else {
+      addTripMutation.mutate(submission);
+    }
     onSubmit();
   }
 

@@ -1,4 +1,4 @@
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import styles from './TopCategoryLabel.module.css';
 
 type TopCategoryLabelPropTypes = {

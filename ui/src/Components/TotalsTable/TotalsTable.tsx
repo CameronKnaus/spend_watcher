@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import Currency from 'Components/Currency/Currency';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import CategoryTransactionListPanel from 'Pages/Trends/CategoryTransactionListPanel/CategoryTransactionListPanel';
 import { useState } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './TotalsTable.module.css';
 
 export default function TotalsTable() {

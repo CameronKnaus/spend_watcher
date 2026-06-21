@@ -1,7 +1,7 @@
 import AccountCategoryIcon from 'Components/Shared/Icons/AccountCategoryIcon';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useMemo } from 'react';
-import { AccountCategory } from 'Types/accountTypes';
+import { AccountCategory } from '@spend-watcher/contract';
 import styles from './useAccountCategoryList.module.css';
 
 export default function useAccountCategoryList() {

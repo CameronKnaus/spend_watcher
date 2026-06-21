@@ -4,7 +4,7 @@ import { DataPoint } from 'Components/charts/types/dataPointTypes';
 import useCanvasDimensions from 'Components/charts/use/useCanvasDimensions/useCanvasDimensions';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { AccountGrowthOverTimeV1Response } from 'Types/Services/accounts.model';

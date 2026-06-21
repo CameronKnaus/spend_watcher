@@ -1,5 +1,5 @@
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import EditSpendForm from './EditSpendForm';
 import NewSpendForm from './NewSpendForm';

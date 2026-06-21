@@ -1,0 +1,17 @@
+# Throwaway MySQL for e2e runs. Works with Docker or Podman (podman-compose). Published on 3307 so it
+# never clashes with a local MySQL on 3306. scripts/db-up.mjs brings it up and waits until it answers
+# queries; scripts/db-down.mjs (and globalTeardown) tear it down. Schema is auto-loaded once, on first
+# init, from the sanitised dump that scripts/prepare-schema.mjs writes to ./.tmp/schema.sql.
+services:
+  mysql-test:
+    # Fully qualified so Podman doesn't prompt for a registry.
+    image: docker.io/library/mysql:8.0
+    # mysql_native_password keeps the legacy `mysql` node driver (used by the api) able to authenticate
+    # against MySQL 8, which otherwise defaults to caching_sha2_password.
+    command: ['--default-authentication-plugin=mysql_native_password']
+    environment:
+      MYSQL_ROOT_PASSWORD: password1
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./.tmp/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro

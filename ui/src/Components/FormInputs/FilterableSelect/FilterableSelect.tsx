@@ -1,4 +1,4 @@
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import syntheticChangeEvent from 'Util/Events/syntheticChangeEvent';
 import { ComponentProps, ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import styles from './FilterableSelect.module.css';

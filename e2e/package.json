@@ -1,0 +1,24 @@
+{
+  "name": "@spend-watcher/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Playwright end-to-end tests. Drives the real api + ui against a throwaway container MySQL.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "db:prepare": "node scripts/prepare-schema.mjs",
+    "db:up": "node scripts/db-up.mjs",
+    "db:down": "node scripts/db-down.mjs",
+    "install:browsers": "playwright install chromium",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.19.18",
+    "date-fns": "^4.1.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -28,22 +27,16 @@ export default function EditAccountUpdateRow({
   const getContent = useContent('accounts');
 
   const queryClient = useQueryClient();
-  const accountUpdateMutation = useMutation({
-    mutationKey: ['accounts'],
-    mutationFn: (params: EditAccountUpdateV1RequestParams) => {
-      return axios.post(SERVICE_ROUTES.postEditAccountUpdate, {
-        ...params,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['accounts'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const accountUpdateMutation = useMutation(
+    orpc.accounts.updateEdit.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   const form = useForm<EditAccountUpdateV1RequestParams>({
     resolver: zodResolver(editAccountUpdateRequestParamSchema),

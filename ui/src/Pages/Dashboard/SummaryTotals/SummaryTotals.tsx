@@ -1,8 +1,8 @@
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useIsMobile } from 'Util/IsMobileContext';
 import styles from './SummaryTotals.module.css';
 

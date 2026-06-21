@@ -1,16 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  EditRecurringTransactionRequestParams,
-  RecurringTransactionId,
-  v1EditRecurringTransactionSchema,
-} from 'Types/Services/spending.model';
+import { RecurringTransactionId, v1EditRecurringTransactionSchema } from 'Types/Services/spending.model';
 import { z as zod } from 'zod';
 
 const editRecurringFormSchema = v1EditRecurringTransactionSchema.partial({ amountSpent: true });
@@ -28,22 +23,16 @@ export default function EditableRecurringTransactionRow({
   amountSpent,
 }: EditableRecurringTransactionRowPropTypes) {
   const queryClient = useQueryClient();
-  const recurringTransactionMutation = useMutation({
-    mutationKey: [transactionId],
-    mutationFn: (params: EditRecurringTransactionRequestParams) => {
-      return axios.post(SERVICE_ROUTES.postEditRecurringTransaction, {
-        ...params,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['recurring'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const recurringTransactionMutation = useMutation(
+    orpc.spending.recurringTransactionEdit.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   const getContent = useContent('recurringTransactionsList');
   const form = useForm({

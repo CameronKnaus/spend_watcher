@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import { env } from '@lib/env'; // Validates process.env at boot — keep this first.
+import { OpenAPIHandler } from '@orpc/openapi/node';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
-import routes from '@routes/routes';
+import { router } from './orpc/router';
 import HttpErrorHandler from '@utils/ErrorHandling/HttpErrorHandler';
-import logRouteList from '@utils/Logging/logRouteList';
 
 const isDevMode = env.ENVIRONMENT === 'DEV';
 
@@ -30,8 +30,21 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-// Application routes
-app.use(routes);
+// Init orpc with `router` contract
+const orpcHandler = new OpenAPIHandler(router);
+app.use('/api{/*path}', async (request, response, next) => {
+  const { matched } = await orpcHandler.handle(request, response, {
+    prefix: '/api',
+    context: { cookies: request.cookies, response },
+  });
+
+  if (matched) {
+    return;
+  }
+
+  // Nothing in the contract matched — let Express fall through to its default 404.
+  next();
+});
 
 // Error handler — must stay LAST, after all routes, so thrown errors reach it.
 app.use(HttpErrorHandler);
@@ -42,7 +55,6 @@ const server = app.listen(env.PORT, () => {
 
   if (isDevMode) {
     console.log('\x1b[35mDevelopment Mode Enabled \x1b[0m');
-    logRouteList(app);
     console.log(`\x1b[33mListening for requests from ${env.DOMAIN}...\x1b[0m`);
   }
 });

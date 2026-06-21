@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import TripForm from 'Components/TripForm/TripForm';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import { Trip } from 'Types/Services/trips.model';
 import TripDetails from './TripDetails/TripDetails';
@@ -29,20 +28,18 @@ export default function TripDetailsPanel({ trip, isOpen, dateLabel, onClose }: T
   const getContent = useContent('trips');
   const getGeneralContent = useContent('general');
 
-  const deleteMutation = useMutation({
-    mutationFn: () =>
-      axios.post(SERVICE_ROUTES.postDeleteTrip, {
-        tripId: trip.tripId,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['trips'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const deleteMutation = useMutation(
+    orpc.trips.delete.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.trips.key() });
+        // Deleting a trip unlinks its expenses, which affects spending reads too.
+        queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   function getPanelTitle() {
     if (panelState === TripPanelState.deleteTrip) {
@@ -110,7 +107,7 @@ export default function TripDetailsPanel({ trip, isOpen, dateLabel, onClose }: T
             setPanelState(TripPanelState.editTripDetails);
           }}
           onProceed={() => {
-            deleteMutation.mutate();
+            deleteMutation.mutate({ tripId: trip.tripId });
             onClose();
           }}
         />

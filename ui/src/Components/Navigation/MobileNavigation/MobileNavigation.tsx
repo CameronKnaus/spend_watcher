@@ -1,5 +1,5 @@
 import { PAGE_ROUTES } from 'Components/PageRoutes/PageRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { FaChartPie, FaHistory, FaHome, FaPlaneDeparture } from 'react-icons/fa';
 import { MdSavings } from 'react-icons/md';
 import { Outlet } from 'react-router-dom';

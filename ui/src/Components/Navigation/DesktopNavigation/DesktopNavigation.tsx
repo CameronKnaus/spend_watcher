@@ -1,6 +1,6 @@
 import { animated, useChain, useSpring, useSpringRef } from '@react-spring/web';
 import { PAGE_ROUTES } from 'Components/PageRoutes/PageRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useEffect, useRef, useState } from 'react';
 import { FaChartPie, FaHistory, FaHome, FaPlaneDeparture } from 'react-icons/fa';
 import { MdSavings } from 'react-icons/md';

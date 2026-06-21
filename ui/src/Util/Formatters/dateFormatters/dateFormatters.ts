@@ -1,5 +1,5 @@
 import { format, parse } from 'date-fns';
-import { DbDate, dbDateFormat, MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
+import { DbDate, dbDateFormat, monthYearDbDateFormat } from 'Types/dateTypes';
 
 export function parseDbDate(date: DbDate): Date {
   return parse(date, dbDateFormat, new Date());
@@ -15,7 +15,7 @@ export function formatToMonthDay(date: DbDate): string {
   return format(parse(date, dbDateFormat, new Date()), 'MMM do');
 }
 
-export function formatMonthYearDBDateAsReadable(date: MonthYearDbDate) {
+export function formatMonthYearDBDateAsReadable(date: string) {
   return format(parse(date, monthYearDbDateFormat, new Date()), 'MMM yyyy');
 }
 

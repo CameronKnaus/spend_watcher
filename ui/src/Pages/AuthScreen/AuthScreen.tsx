@@ -1,4 +1,4 @@
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import styles from './AuthScreen.module.css';
 import LoginForm from './LoginForm/LoginForm';

@@ -1,6 +1,8 @@
 packages:
   - 'api'
   - 'ui'
+  - 'contract'
+  - 'e2e'
 
 allowBuilds:
   '@parcel/watcher': true

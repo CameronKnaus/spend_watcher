@@ -1,6 +1,6 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import TripFormPanel from 'Components/TripForm/TripFormPanel';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import styles from './AddTripButton.module.css';
 

@@ -1,10 +1,10 @@
 import Currency from 'Components/Currency/Currency';
 import InteractiveRow from 'Components/InteractiveRow/InteractiveRow';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { ComponentProps } from 'react';
 import { DiscretionaryTransactionId } from 'Types/Services/spending.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 
 type TransactionRowPropTypes = {
   transactionId: DiscretionaryTransactionId;

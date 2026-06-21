@@ -1,4 +1,4 @@
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import { ReactNode } from 'react';
 import {
   FaCannabis,

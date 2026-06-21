@@ -1,7 +1,7 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
 import { FieldValues, Path, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { FaPencilAlt } from 'react-icons/fa';
 import styles from './EditableAmountRow.module.css';

@@ -1,17 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import AccountUpdateHistory from 'Components/AccountUpdateHistory/AccountUpdateHistory';
 import EditAccountForm from 'Components/EditAccountForm/EditAccountForm';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useEffect, useState } from 'react';
-import {
-  AccountWithStatus,
-  DeleteAccountRequestParams,
-  SetActiveAccountRequestParams,
-} from 'Types/Services/accounts.model';
+import { AccountWithStatus } from 'Types/Services/accounts.model';
 import ManageAccountBasePanel from './ManageAccountBasePanel';
 
 type ManageAccountPanelPropTypes = {
@@ -41,30 +36,26 @@ export default function ManageAccountPanel({ account, onPanelClose }: ManageAcco
   }, [account]);
 
   function invalidateQueries() {
-    queryClient.invalidateQueries({
-      queryKey: ['accounts'],
-    });
+    queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
   }
 
-  const activeStatusMutation = useMutation({
-    mutationFn: (params: SetActiveAccountRequestParams) => axios.post(SERVICE_ROUTES.postSetActiveAccount, params),
-    onSuccess: () => {
-      invalidateQueries();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const activeStatusMutation = useMutation(
+    orpc.accounts.setActive.mutationOptions({
+      onSuccess: invalidateQueries,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
-  const deleteAccountMutation = useMutation({
-    mutationFn: (params: DeleteAccountRequestParams) => axios.post(SERVICE_ROUTES.postDeleteAccount, params),
-    onSuccess: () => {
-      invalidateQueries();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const deleteAccountMutation = useMutation(
+    orpc.accounts.delete.mutationOptions({
+      onSuccess: invalidateQueries,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   function onClose() {
     setSelectedTab(PanelTabs.BASE);

@@ -1,15 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
 import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
-import { AddRecurringTransactionRequestParams, v1AddRecurringTransactionSchema } from 'Types/Services/spending.model';
+import { v1AddRecurringTransactionSchema } from 'Types/Services/spending.model';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import { z as zod } from 'zod';
 import styles from './RecurringTransactionRow.module.css';
@@ -34,22 +33,16 @@ export default function AddRecurringTransactionRow({
 
   const getContent = useContent('recurringTransactionsList');
   const queryClient = useQueryClient();
-  const recurringTransactionMutation = useMutation({
-    mutationKey: ['recurring', date],
-    mutationFn: (params: AddRecurringTransactionRequestParams) => {
-      return axios.post(SERVICE_ROUTES.postAddRecurringTransaction, {
-        ...params,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['recurring'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const recurringTransactionMutation = useMutation(
+    orpc.spending.recurringTransactionAdd.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   const form = useForm({
     resolver: zodResolver(addRecurringFormSchema),

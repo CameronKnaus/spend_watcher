@@ -1,10 +1,10 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import CategoryTransactionListPanel from 'Pages/Trends/CategoryTransactionListPanel/CategoryTransactionListPanel';
 import { useEffect, useRef, useState } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import TopCategoryLabel from './TopCategoryLabel/TopCategoryLabel';
 import TopCategoryLabelLoader from './TopCategoryLabel/TopCategoryLabelLoader';
 import styles from './TopDiscretionaryCategories.module.css';

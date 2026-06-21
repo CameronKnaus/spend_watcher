@@ -1,13 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
+import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useForm } from 'react-hook-form';
-import { LoginRequestParams, loginRequestParamsSchema } from 'Types/Services/auth.model';
 import styles from '../AuthScreen.module.css';
-axios.defaults.withCredentials = true;
 
 type LoginFormPropTypes = {
   switchToRegister: () => void;
@@ -16,23 +14,23 @@ type LoginFormPropTypes = {
 export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
   const queryClient = useQueryClient();
   const getContent = useContent('authScreen');
-  const form = useForm<LoginRequestParams>({
-    resolver: zodResolver(loginRequestParamsSchema),
+  const form = useForm({
+    resolver: zodResolver(loginInputSchema),
   });
 
-  const loginService = useMutation({
-    mutationFn: (params: LoginRequestParams) => axios.post(SERVICE_ROUTES.postLogin, params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['verify-auth'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const loginService = useMutation(
+    orpc.auth.login.mutationOptions({
+      onSuccess: () => {
+        // Refresh the auth-status query so the app re-renders as signed in (the cookie is now set).
+        queryClient.invalidateQueries({ queryKey: orpc.auth.key() });
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
-  async function handleSubmission(params: LoginRequestParams) {
+  async function handleSubmission(params: LoginInput) {
     await loginService.mutate(params);
   }
 

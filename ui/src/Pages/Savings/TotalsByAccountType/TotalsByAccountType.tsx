@@ -1,16 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import AccountCategoryIcon from 'Components/Shared/Icons/AccountCategoryIcon';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useAccountSummaryService from 'Hooks/useAccountSummaryService/useAccountSummaryService';
-import useContent from 'Hooks/useContent';
-import { AccountCategory } from 'Types/accountTypes';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
+import { accountsSummaryQueryOptions } from 'queryOptions/accountsSummaryQueryOptions';
+import { AccountCategory } from '@spend-watcher/contract';
 import styles from './TotalsByAccountType.module.css';
 
 export default function TotalsByAccountType() {
   const getContent = useContent('savings');
   const getCategoryLabel = useContent('ACCOUNT_CATEGORIES');
-  const { isLoading, data: accountsSummary } = useAccountSummaryService();
+  const { isLoading, data: accountsSummary } = useQuery(accountsSummaryQueryOptions);
 
   const headerLabel = getContent('accountTotalByType');
   if (isLoading || !accountsSummary) {

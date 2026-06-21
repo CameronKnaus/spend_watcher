@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import { format, parse } from 'date-fns';
-import useAccountHistory from 'Hooks/useAccountHistory/useAccountHistory';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
+import { accountHistoryQueryOptions } from 'queryOptions/accountHistoryQueryOptions';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { Account } from 'Types/Services/accounts.model';
 import AddAccountUpdateRow from './AddAccountUpdateRow/AddAccountUpdateRow';
@@ -17,7 +18,7 @@ type AccountUpdateHistoryPropTypes = {
 
 export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdateHistoryPropTypes) {
   const getContent = useContent('accounts');
-  const { data: accountHistory, isLoading } = useAccountHistory(accountId);
+  const { data: accountHistory, isLoading } = useQuery(accountHistoryQueryOptions(accountId));
 
   if (isLoading || !accountHistory) {
     // TODO:

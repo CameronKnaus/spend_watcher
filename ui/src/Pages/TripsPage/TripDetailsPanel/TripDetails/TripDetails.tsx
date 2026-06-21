@@ -2,7 +2,7 @@ import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditSpendForm from 'Components/DiscretionarySpendForm/EditSpendForm';
 import TripExpenseList from 'Components/TripExpenseList/TripExpenseList';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import { Trip } from 'Types/Services/trips.model';

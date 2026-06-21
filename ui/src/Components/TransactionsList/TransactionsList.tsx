@@ -2,10 +2,10 @@ import Currency from 'Components/Currency/Currency';
 import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/DiscretionarySpendPanel';
 import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveRow';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import TransactionRow from 'Components/TransactionRow';
+import TransactionRow from 'Components/TransactionRow/TransactionRow';
 import { format, parseISO } from 'date-fns';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import useContent from 'Hooks/useContent/useContent';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useState } from 'react';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowIdType';
@@ -41,6 +41,10 @@ export default function TransactionsList() {
                           .filter(isDiscretionaryTransactionId)
                           .map((transactionId) => {
                             const transaction = spendingData.transactionDictionary[transactionId];
+                            // Ids were filtered to discretionary, so narrow the union value to match.
+                            if (transaction.isRecurring) {
+                              return null;
+                            }
                             return (
                               <TransactionRow
                                 key={transactionId}

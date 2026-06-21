@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { orpc } from 'api/orpc';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
@@ -9,13 +9,12 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import LoadingSpinner from 'Components/LoadingSpinner/LoadingSpinner';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
-import useTripsList from 'Hooks/useTripsList/useTripsList';
+import useContent from 'Hooks/useContent/useContent';
+import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './DiscretionarySpendForm.module.css';
 import { SpendFormAttributes } from './EditSpendForm';
 
@@ -29,7 +28,9 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
   const getGeneralContent = useContent('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
-  const { tripsList, activeTrip } = useTripsList();
+  const { data: tripsListData } = useQuery(tripsListQueryOptions);
+  const tripsList = tripsListData?.tripsList;
+  const activeTrip = tripsListData?.activeTrip;
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
@@ -40,25 +41,20 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
     },
   });
 
-  const transactionService = useMutation({
-    mutationKey: ['add-discretionary'],
-    mutationFn: (params: SpendFormAttributes) => axios.post(SERVICE_ROUTES.postAddDiscretionarySpending, params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['spending'],
-      });
+  const transactionService = useMutation(
+    orpc.spending.discretionaryAdd.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+        queryClient.invalidateQueries({ queryKey: orpc.trips.key() });
 
-      queryClient.invalidateQueries({
-        queryKey: ['trips'],
-      });
-
-      form.reset();
-      onSubmit();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+        form.reset();
+        onSubmit();
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   useEffect(() => {
     if (activeTrip) {

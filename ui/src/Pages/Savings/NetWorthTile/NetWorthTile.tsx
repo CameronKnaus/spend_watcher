@@ -1,14 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useAccountGrowthOverTimeService from 'Hooks/useAccountGrowthOverTimeService/useAccountGrowthOverTimeService';
-import useContent from 'Hooks/useContent';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import useContent from 'Hooks/useContent/useContent';
+import { accountsGrowthOverTimeQueryOptions } from 'queryOptions/accountsGrowthOverTimeQueryOptions';
 import { useMeasure } from 'react-use';
 import AccountGrowthOverTime from '../AccountGrowthOverTime/AccountGrowthOverTime';
 import styles from './NetWorthTile.module.css';
 
 export default function NetWorthTile() {
   const getContent = useContent('savings');
-  const { isLoading, data: dataset } = useAccountGrowthOverTimeService();
+  const { isLoading, data: dataset } = useQuery(accountsGrowthOverTimeQueryOptions);
   const [tileRef, tileMeasurement] = useMeasure<HTMLDivElement>();
 
   if (isLoading || !dataset) {

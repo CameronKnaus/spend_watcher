@@ -1,5 +1,5 @@
 import { DateRangeType } from 'Contexts/SelectedTimeFrame.context';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
 import { useLayoutEffect, useRef } from 'react';
 import { FaFilter } from 'react-icons/fa';

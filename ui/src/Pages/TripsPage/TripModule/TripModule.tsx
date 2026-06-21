@@ -1,10 +1,10 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import { spendCategoryColorMapper, spendCategoryIconMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import { FaInfoCircle, FaMoneyBillWave } from 'react-icons/fa';
 import { Trip, TripCostTotals } from 'Types/Services/trips.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import { formatToMonthDay, formatToMonthDayYear } from 'Util/Formatters/dateFormatters/dateFormatters';
 import TripDetailsPanel from '../TripDetailsPanel/TripDetailsPanel';
 import { TripModuleDataPoint } from '../TripModuleDataPoint/TripModuleDataPoint';

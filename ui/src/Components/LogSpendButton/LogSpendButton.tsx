@@ -1,6 +1,6 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/DiscretionarySpendPanel';
-import useContent from 'Hooks/useContent';
+import useContent from 'Hooks/useContent/useContent';
 import { useState } from 'react';
 import styles from './LogSpendButton.module.css';
 
