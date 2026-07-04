@@ -1,14 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { DateRangeType } from 'Contexts/SelectedTimeFrame.context';
 import { isSameMonth, isSameYear } from 'date-fns';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
-import useTransactionHistoryStart from 'Hooks/useTransactionHistoryStart/useTransactionHistoryStart';
+import { spendingHistoryStartQueryOptions } from 'queryOptions/spendingHistoryStartQueryOptions';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { parseDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './TimeFrameButton.module.css';
 
 export default function TimeFrameButton() {
-  const { data: earliestStartDate } = useTransactionHistoryStart();
+  const { data: earliestStartDate } = useQuery(spendingHistoryStartQueryOptions);
   const {
     startDate,
     forwardOneMonth,

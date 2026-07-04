@@ -1,11 +1,11 @@
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import styles from './AuthScreen.module.css';
 import LoginForm from './LoginForm/LoginForm';
 import RegisterForm from './RegisterForm/RegisterForm';
 
 export default function AuthScreen() {
-  const getContent = useContent('authScreen');
+  const getContent = createContentGetter('authScreen');
   const [isRegistering, setIsRegistering] = useState(false);
 
   return (

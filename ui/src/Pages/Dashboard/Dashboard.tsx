@@ -1,24 +1,24 @@
 import AccountsList from 'Components/AccountsList/AccountsList';
 import AccountsNeedUpdateBanner from 'Components/AccountsNeedUpdateBanner/AccountsNeedUpdateBanner';
 import AddAccountButton from 'Components/AddAccountButton/AddAccountButton';
-import LogSpendButton from 'Components/LogSpendButton';
+import LogSpendButton from 'Components/LogSpendButton/LogSpendButton';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import PageContainer from 'Components/PageContainer/PageContainer';
 import RecurringSpendNeedsUpdateBanner from 'Components/RecurringSpendNeedsUpdateBanner/RecurringSpendNeedsUpdateBanner';
 import { format } from 'date-fns';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AvgSpentPerMonth from './AvgSpentPerMonth/AvgSpentPerMonth';
 import styles from './Dashboard.module.css';
-import RecentTransactions from './RecentTransactions';
+import RecentTransactions from './RecentTransactions/RecentTransactions';
 import SummaryTotals from './SummaryTotals/SummaryTotals';
-import TopDiscretionaryCategories from './TopDiscretionaryCategories';
+import TopDiscretionaryCategories from './TopDiscretionaryCategories/TopDiscretionaryCategories';
 
 export default function Dashboard() {
   const { setToCurrentMonth } = useSelectedTimeFrame();
-  const getContent = useContent('dashboard');
-  const currentMonth = format(new Date(), 'LLLL');
+  const getContent = createContentGetter('dashboard');
+  const [currentMonth] = useState(() => format(new Date(), 'LLLL'));
   const pageTitle = getContent('monthOverview', [currentMonth]);
 
   useEffect(() => {

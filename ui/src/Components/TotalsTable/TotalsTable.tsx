@@ -1,24 +1,25 @@
 import clsx from 'clsx';
 import Currency from 'Components/Currency/Currency';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import createContentGetter from 'Content/createContentGetter';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import CategoryTransactionListPanel from 'Pages/Trends/CategoryTransactionListPanel/CategoryTransactionListPanel';
 import { useState } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './TotalsTable.module.css';
+
+// Static keys for the fixed-size loading placeholder list (it never reorders).
+const SKELETON_KEYS = Array.from({ length: 10 }, (_, i) => `totals-skeleton-${i}`);
 
 export default function TotalsTable() {
   const [selectedCategoryForTransactions, setSelectedCategoryForTransactions] = useState<SpendingCategory>();
   const { isLoading, data: spendingData } = useSpendingDetailsService();
-  const getContent = useContent('trends');
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('trends');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
 
   if (isLoading || !spendingData) {
-    return Array.from({ length: 10 }).map((_, index) => (
-      <SkeletonLoader key={index} className={styles.placeholder_skeleton} />
-    ));
+    return SKELETON_KEYS.map((key) => <SkeletonLoader key={key} className={styles.placeholder_skeleton} />);
   }
 
   // Sort by total amount spent descending

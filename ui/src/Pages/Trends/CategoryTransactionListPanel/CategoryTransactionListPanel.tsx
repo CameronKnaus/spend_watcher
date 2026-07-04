@@ -5,10 +5,10 @@ import EditSpendForm from 'Components/DiscretionarySpendForm/EditSpendForm';
 import InteractiveRow from 'Components/InteractiveRow/InteractiveRow';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent';
-import { useEffect, useState } from 'react';
+import createContentGetter from 'Content/createContentGetter';
+import { useState } from 'react';
 import { DiscretionarySpendTransaction, RecurringSpendTransaction } from 'Types/Services/spending.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import { formatToMonthDayYear } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './CategoryTransactionListPanel.module.css';
 
@@ -24,13 +24,14 @@ export default function CategoryTransactionListPanel({
   transactionDictionary,
   onPanelClose,
 }: CategoryTransactionListPanelPropTypes) {
-  const getContent = useContent('general');
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('general');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
   const [transactionToEdit, setTransactionToEdit] = useState<DiscretionarySpendTransaction>();
-
-  useEffect(() => {
+  const [prevCategory, setPrevCategory] = useState(category);
+  if (category !== prevCategory) {
+    setPrevCategory(category);
     setTransactionToEdit(undefined);
-  }, [category]);
+  }
 
   return (
     <SlideUpPanel

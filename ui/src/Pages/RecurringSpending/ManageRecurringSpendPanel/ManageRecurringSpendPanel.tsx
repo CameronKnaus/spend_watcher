@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import RecurringExpenseForm from 'Components/RecurringExpenseForm/RecurringExpenseForm';
@@ -8,16 +8,11 @@ import PanelOptionButton from 'Components/SlideUpPanel/Addons/PanelOptionButton/
 import PanelOptionButtonContainer from 'Components/SlideUpPanel/Addons/PanelOptionButtonContainer/PanelOptionButtonContainer';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
-import { useEffect, useState } from 'react';
+import createContentGetter from 'Content/createContentGetter';
+import { useState } from 'react';
 import { FaEdit, FaHistory, FaTrashAlt } from 'react-icons/fa';
 import { MdUpdate, MdUpdateDisabled } from 'react-icons/md';
-import {
-  DeleteRecurringSpendRequestParams,
-  RecurringSpendTransaction,
-  SetActiveRecurringSpendRequestParams,
-} from 'Types/Services/spending.model';
+import { RecurringSpendTransaction } from 'Types/Services/spending.model';
 import styles from './ManageRecurringSpendPanel.module.css';
 
 type ManageRecurringSpendPanelPropTypes = {
@@ -38,49 +33,46 @@ export default function ManageRecurringSpendPanel({
   recurringSpendTransaction,
   closePanel,
 }: ManageRecurringSpendPanelPropTypes) {
-  const getContent = useContent('recurringSpending');
-  const getGeneralContent = useContent('general');
-  const [currentPanelContents, setCurrentPanelContents] = useState(ManageRecurringSpendPanels.base);
+  const getContent = createContentGetter('recurringSpending');
+  const getGeneralContent = createContentGetter('general');
+  const [currentPanelContents, setCurrentPanelContents] = useState(
+    // Open straight to the history page to update transaction for the month
+    recurringSpendTransaction?.requiresMonthlyUpdate
+      ? ManageRecurringSpendPanels.history
+      : ManageRecurringSpendPanels.base,
+  );
   const queryClient = useQueryClient();
 
-  function invalidateRecurring() {
-    queryClient.invalidateQueries({
-      queryKey: ['recurring'],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['spending'],
-    });
+  const [prevTransaction, setPrevTransaction] = useState(recurringSpendTransaction);
+  if (recurringSpendTransaction !== prevTransaction) {
+    setPrevTransaction(recurringSpendTransaction);
+    setCurrentPanelContents(
+      recurringSpendTransaction?.requiresMonthlyUpdate
+        ? ManageRecurringSpendPanels.history
+        : ManageRecurringSpendPanels.base,
+    );
   }
 
-  const deleteMutation = useMutation({
-    mutationFn: (params: DeleteRecurringSpendRequestParams) =>
-      axios.post(SERVICE_ROUTES.postDeleteRecurringSpend, params),
-    onSuccess: () => {
-      invalidateRecurring();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
-  const activeStatusMutation = useMutation({
-    mutationFn: (params: SetActiveRecurringSpendRequestParams) =>
-      axios.post(SERVICE_ROUTES.postUpdateRecurringSpendStatus, params),
-    onSuccess: () => {
-      invalidateRecurring();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  function invalidateRecurring() {
+    queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+  }
 
-  useEffect(() => {
-    if (recurringSpendTransaction?.requiresMonthlyUpdate) {
-      // Open straight to the history page to update transaction for the month
-      setCurrentPanelContents(ManageRecurringSpendPanels.history);
-    } else {
-      returnToBase();
-    }
-  }, [recurringSpendTransaction]);
+  const deleteMutation = useMutation(
+    orpc.spending.recurringSpendDelete.mutationOptions({
+      onSuccess: invalidateRecurring,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
+  const activeStatusMutation = useMutation(
+    orpc.spending.recurringSpendSetActive.mutationOptions({
+      onSuccess: invalidateRecurring,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   function returnToBase() {
     setCurrentPanelContents(ManageRecurringSpendPanels.base);

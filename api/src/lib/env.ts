@@ -15,7 +15,7 @@ const envSchema = z.object({
   // number; fall back to 4000 when unset.
   PORT: z.coerce.number().int().positive().default(4000),
 
-  // JWT signing + verification config (see middleware/verifyAuthToken.ts).
+  // JWT signing + verification config (see orpc/base.ts + modules/auth/auth.token.ts).
   SECRET_KEY: z.string().min(1),
   JWT_ALGORITHM: z.string().min(1),
   JWT_EXPIRY: z.string().min(1),
@@ -27,6 +27,7 @@ const envSchema = z.object({
   dbUser: z.string().min(1),
   dbName: z.string().min(1),
   dbPass: z.string().optional(),
+  dbPort: z.coerce.number().int().positive().default(3306),
 });
 
 const parsed = envSchema.safeParse(process.env);

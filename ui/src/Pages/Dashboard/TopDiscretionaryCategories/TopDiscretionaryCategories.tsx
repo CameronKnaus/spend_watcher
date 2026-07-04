@@ -1,10 +1,10 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import createContentGetter from 'Content/createContentGetter';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import CategoryTransactionListPanel from 'Pages/Trends/CategoryTransactionListPanel/CategoryTransactionListPanel';
 import { useEffect, useRef, useState } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import TopCategoryLabel from './TopCategoryLabel/TopCategoryLabel';
 import TopCategoryLabelLoader from './TopCategoryLabel/TopCategoryLabelLoader';
 import styles from './TopDiscretionaryCategories.module.css';
@@ -12,8 +12,8 @@ import styles from './TopDiscretionaryCategories.module.css';
 export default function TopDiscretionaryCategories() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { data: spendingData, isLoading } = useSpendingDetailsService();
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
-  const getContent = useContent('spendingData');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('spendingData');
   const [isVerticalList, setIsVerticalList] = useState(false);
   const [selectedCategoryForTransactions, setSelectedCategoryForTransactions] = useState<SpendingCategory>();
 

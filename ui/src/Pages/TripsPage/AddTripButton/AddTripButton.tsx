@@ -1,11 +1,11 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import TripFormPanel from 'Components/TripForm/TripFormPanel';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import styles from './AddTripButton.module.css';
 
 export default function AddTripButton() {
-  const getContent = useContent('trips');
+  const getContent = createContentGetter('trips');
   const [panelOpen, setPanelOpen] = useState(false);
 
   return (

@@ -1,17 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import AccountUpdateHistory from 'Components/AccountUpdateHistory/AccountUpdateHistory';
 import EditAccountForm from 'Components/EditAccountForm/EditAccountForm';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
-import { useEffect, useState } from 'react';
-import {
-  AccountWithStatus,
-  DeleteAccountRequestParams,
-  SetActiveAccountRequestParams,
-} from 'Types/Services/accounts.model';
+import createContentGetter from 'Content/createContentGetter';
+import { useState } from 'react';
+import { AccountWithStatus } from 'Types/Services/accounts.model';
 import ManageAccountBasePanel from './ManageAccountBasePanel';
 
 type ManageAccountPanelPropTypes = {
@@ -29,42 +24,39 @@ export enum PanelTabs {
 
 export default function ManageAccountPanel({ account, onPanelClose }: ManageAccountPanelPropTypes) {
   const queryClient = useQueryClient();
-  const [selectedTab, setSelectedTab] = useState<PanelTabs>(PanelTabs.BASE);
-  const getContent = useContent('accounts');
-
-  useEffect(() => {
-    if (!account) {
-      return;
+  const [selectedTab, setSelectedTab] = useState<PanelTabs>(
+    account?.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE,
+  );
+  const getContent = createContentGetter('accounts');
+  const [prevAccount, setPrevAccount] = useState(account);
+  if (account !== prevAccount) {
+    setPrevAccount(account);
+    if (account) {
+      setSelectedTab(account.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE);
     }
-
-    setSelectedTab(account.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE);
-  }, [account]);
-
-  function invalidateQueries() {
-    queryClient.invalidateQueries({
-      queryKey: ['accounts'],
-    });
   }
 
-  const activeStatusMutation = useMutation({
-    mutationFn: (params: SetActiveAccountRequestParams) => axios.post(SERVICE_ROUTES.postSetActiveAccount, params),
-    onSuccess: () => {
-      invalidateQueries();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  function invalidateQueries() {
+    queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
+  }
 
-  const deleteAccountMutation = useMutation({
-    mutationFn: (params: DeleteAccountRequestParams) => axios.post(SERVICE_ROUTES.postDeleteAccount, params),
-    onSuccess: () => {
-      invalidateQueries();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const activeStatusMutation = useMutation(
+    orpc.accounts.setActive.mutationOptions({
+      onSuccess: invalidateQueries,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
+
+  const deleteAccountMutation = useMutation(
+    orpc.accounts.delete.mutationOptions({
+      onSuccess: invalidateQueries,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   function onClose() {
     setSelectedTab(PanelTabs.BASE);

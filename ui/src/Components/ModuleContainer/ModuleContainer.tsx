@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import { ComponentProps, ReactNode } from 'react';
 import { UseMeasureRef } from 'react-use/lib/useMeasure';
 import styles from './ModuleContainer.module.css';

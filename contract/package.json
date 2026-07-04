@@ -1,0 +1,21 @@
+{
+  "name": "@spend-watcher/contract",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Shared oRPC contract (zod schemas + REST routes) consumed by the api and ui packages.",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@orpc/contract": "^1.14.6",
+    "zod": "^4.4.3"
+  }
+}

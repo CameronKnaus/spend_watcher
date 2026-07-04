@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import { ComponentProps } from 'react';
-import { AccountCategory } from 'Types/accountTypes';
+import { AccountCategory } from '@spend-watcher/contract';
 import accountCategoryIconMapper from './accountCategoryIconMapper';
 import styles from './CategoryIcon.module.css';
 

@@ -1,18 +1,20 @@
+import { useQuery } from '@tanstack/react-query';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import PageContainer from 'Components/PageContainer/PageContainer';
-import useContent from 'Hooks/useContent';
-import useTripsList from 'Hooks/useTripsList/useTripsList';
+import createContentGetter from 'Content/createContentGetter';
+import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import AddTripButton from './AddTripButton/AddTripButton';
 import TripModule from './TripModule/TripModule';
 import TripModuleLoader from './TripModule/TripModuleLoader';
 import styles from './TripsPage.module.css';
 
 export default function TripsPage() {
-  const { tripsList, isLoading, isError } = useTripsList();
-  const getContent = useContent('trips');
+  const { data, isLoading, isFetching, isError } = useQuery(tripsListQueryOptions);
+  const tripsList = data?.tripsList;
+  const getContent = createContentGetter('trips');
   const pageTitle = getContent('pageTitle');
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <PageContainer pageTitle={pageTitle}>
         <span className="accessible-text">{getContent('pageLoadingAccessibleText')}</span>

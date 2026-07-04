@@ -1,7 +1,7 @@
 import Currency from 'Components/Currency/Currency';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import { CSSProperties } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './TopCategoryLabel.module.css';
 
 type TopCategoryLabelPropTypes = {

@@ -3,6 +3,7 @@
   "description": "This project is for personal spending tracking. It is a monolith encompassing a react frontend and node backend.",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.14.0",
   "engines": {
     "node": ">=22"
   },
@@ -13,9 +14,12 @@
     "lint": "pnpm -r run lint",
     "lint:fix": "pnpm -r run lint:fix",
     "format": "pnpm -r run format",
-    "test": "pnpm --filter @spend-watcher/ui run test"
+    "test": "pnpm --filter @spend-watcher/ui run test",
+    "test:e2e": "pnpm --filter @spend-watcher/e2e run test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/node": "^22.19.18",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
     "eslint": "^10.3.0",

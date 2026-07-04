@@ -1,4 +1,4 @@
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import syntheticChangeEvent from 'Util/Events/syntheticChangeEvent';
 import { ComponentProps, ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import styles from './FilterableSelect.module.css';
@@ -17,13 +17,18 @@ export type FilterableSelectPropTypes<T> = {
   ref?: Ref<HTMLInputElement>;
 } & ComponentProps<'input'>;
 
-function FilterableSelect<T extends string>(
-  { opens = 'down', clearLabel, noSelectionText = '', optionsList, ref, ...props }: FilterableSelectPropTypes<T>,
-) {
+function FilterableSelect<T extends string>({
+  opens = 'down',
+  clearLabel,
+  noSelectionText = '',
+  optionsList,
+  ref,
+  ...props
+}: FilterableSelectPropTypes<T>) {
   const [selectedValue, setSelectedValue] = useState<FilterableSelectOptionType<T> | undefined>();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popOverMenuRef = useRef<HTMLDivElement | null>(null);
-  const getContent = useContent('general');
+  const getContent = createContentGetter('general');
   const [isOpen, setIsOpen] = useState(false);
   const [filterText, setFilterText] = useState('');
 
@@ -100,8 +105,10 @@ function FilterableSelect<T extends string>(
             <div
               className={styles.option}
               onClick={() => {
-                // @ts-expect-error What have I done....
-                props.onChange?.(syntheticChangeEvent(undefined));
+                // Clear by setting the field to '' rather than `undefined`. react-hook-form's Controller
+                // falls back to its defaultValue when a field is set to a nullish value,
+                // which would leave the previously-selected option still displayed.
+                props.onChange?.(syntheticChangeEvent(''));
                 setSelectedValue(undefined);
                 setFilterText('');
                 setIsOpen(false);

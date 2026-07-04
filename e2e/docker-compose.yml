@@ -1,0 +1,34 @@
+# Throwaway MySQL for e2e runs. Works with Docker or Podman (podman-compose). Published on 3307 so it
+# never clashes with a local MySQL on 3306. scripts/db-up.mjs brings it up and waits until it answers
+# queries; scripts/db-down.mjs (and globalTeardown) tear it down. Schema is auto-loaded once, on first
+# init, from the sanitised dump that scripts/prepare-schema.mjs writes to ./.tmp/schema.sql.
+services:
+  mysql-test:
+    # Fully qualified so Podman doesn't prompt for a registry.
+    image: docker.io/library/mysql:8.0
+    # mysql_native_password keeps the legacy `mysql` node driver (used by the api) able to authenticate
+    # against MySQL 8, which otherwise defaults to caching_sha2_password.
+    #
+    # The rest of these flags trade durability for speed — safe because this DB is recreated from
+    # scratch (`down -v && up`) on every run and never recovered:
+    #   - innodb-flush-log-at-trx-commit=0 / flush-method=nosync / doublewrite=0: stop fsync-ing every
+    #     commit (the seed step does ~7 writes per test, so this dominates a heavily-parallel run).
+    #   - innodb-buffer-pool-size=1G + max-connections=300: headroom for many workers hitting the DB at
+    #     once without queueing/eviction (the VM has 12G, so 1G is comfortable).
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --innodb-flush-log-at-trx-commit=0
+      - --innodb-flush-method=nosync
+      - --innodb-doublewrite=0
+      - --innodb-buffer-pool-size=1G
+      - --max-connections=300
+    environment:
+      MYSQL_ROOT_PASSWORD: password1
+    ports:
+      - '3307:3306'
+    # Put the whole data dir in RAM. initdb still loads the schema on every fresh container (the data
+    # dir starts empty either way), so this is pure upside for a throwaway DB: zero disk I/O.
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ./.tmp/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro

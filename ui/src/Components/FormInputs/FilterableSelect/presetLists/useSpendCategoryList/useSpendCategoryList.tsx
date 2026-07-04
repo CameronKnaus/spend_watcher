@@ -1,11 +1,11 @@
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useMemo } from 'react';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './useSpendCategoryList.module.css';
 
 export default function useSpendCategoryList() {
-  const getContent = useContent('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('SPENDING_CATEGORIES');
 
   return useMemo(() => {
     const { RESTAURANTS, GROCERIES, DRINKS, OTHER, ...rest } = SpendingCategory;

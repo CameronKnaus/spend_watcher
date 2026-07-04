@@ -1,10 +1,10 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import { spendCategoryColorMapper, spendCategoryIconMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { FaInfoCircle, FaMoneyBillWave } from 'react-icons/fa';
 import { Trip, TripCostTotals } from 'Types/Services/trips.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import { formatToMonthDay, formatToMonthDayYear } from 'Util/Formatters/dateFormatters/dateFormatters';
 import TripDetailsPanel from '../TripDetailsPanel/TripDetailsPanel';
 import { TripModuleDataPoint } from '../TripModuleDataPoint/TripModuleDataPoint';
@@ -17,8 +17,8 @@ type TripModulePropTypes = {
 
 export default function TripModule({ trip, tripCostTotals }: TripModulePropTypes) {
   const [detailPanelOpen, setDetailPanelOpen] = useState(false);
-  const getContent = useContent('trips');
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('trips');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
   const isSameYear = trip.startDate.slice(0, 4) === trip.endDate.slice(0, 4);
 
   const dateLabel = isSameYear

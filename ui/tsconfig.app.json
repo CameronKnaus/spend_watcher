@@ -9,6 +9,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
+      "@msw/*": ["../msw/*"],
       "@type/*": ["src/Types/*"],
       "@components/*": ["src/Components/*"],
       "@pages/*": ["src/Pages/*"],

@@ -1,16 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
 import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useAccountCategoryList/useAccountCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
-import { AccountCategory, AddAccountRequestParams, addAccountRequestParamSchema } from 'Types/Services/accounts.model';
+import { AccountCategory } from '@spend-watcher/contract';
+import { AddAccountRequestParams, addAccountRequestParamSchema } from 'Types/Services/accounts.model';
 import styles from './AddAccountForm.module.css';
 
 type AddAccountFormPropTypes = {
@@ -21,17 +21,15 @@ type AddAccountFormPropTypes = {
 export default function AddAccountForm({ onSubmit, onCancel }: AddAccountFormPropTypes) {
   const queryClient = useQueryClient();
   const accountCategoryList = useAccountCategoryList();
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
-  const addAccountService = useMutation({
-    mutationKey: ['add-account'],
-    mutationFn: (params: AddAccountRequestParams) => axios.post(SERVICE_ROUTES.postAddAccount, params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['accounts'],
-      });
-    },
-  });
+  const addAccountService = useMutation(
+    orpc.accounts.add.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
+      },
+    }),
+  );
 
   const form = useForm<AddAccountRequestParams>({
     resolver: zodResolver(addAccountRequestParamSchema),

@@ -1,0 +1,7 @@
+# Keeps the action versions in .github/workflows current so CI never rots on a deprecated runner API.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -1,15 +1,16 @@
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
-import useYearlyAverageService from 'Hooks/useYearlyAverageService';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import createContentGetter from 'Content/createContentGetter';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import styles from './AvgSpentPerMonth.module.css';
+import { useQuery } from '@tanstack/react-query';
+import { yearlyAverageQueryOptions } from 'queryOptions/yearlyAverageQueryOptions';
 
 export default function AvgSpentPerMonth() {
-  const { isLoading, isFetching, data } = useYearlyAverageService();
-  const getContent = useContent('dashboard');
+  const { isLoading, isFetching, data } = useQuery(yearlyAverageQueryOptions);
+  const getContent = createContentGetter('dashboard');
   const pageLoading = isLoading || isFetching || !data;
 
   if (pageLoading) {

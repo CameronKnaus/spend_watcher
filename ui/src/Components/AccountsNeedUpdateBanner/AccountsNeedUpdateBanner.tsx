@@ -1,11 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
-import useAccountSummaryService from 'Hooks/useAccountSummaryService/useAccountSummaryService';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
+import { accountsSummaryQueryOptions } from 'queryOptions/accountsSummaryQueryOptions';
 import styles from './AccountsNeedUpdateBanner.module.css';
 
 export default function AccountsNeedUpdateBanner() {
-  const getContent = useContent('accounts');
-  const { data: accountsSummary } = useAccountSummaryService();
+  const getContent = createContentGetter('accounts');
+  const { data: accountsSummary } = useQuery(accountsSummaryQueryOptions);
 
   if (!accountsSummary?.accountsList) {
     return null;

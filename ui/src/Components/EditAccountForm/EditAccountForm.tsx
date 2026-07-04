@@ -1,17 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
 import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useAccountCategoryList/useAccountCategoryList';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
+import { AccountCategory } from '@spend-watcher/contract';
 import {
   Account,
-  AccountCategory,
   EditAccountDetailsRequestParams,
   editAccountDetailsRequestParamsSchema,
 } from 'Types/Services/accounts.model';
@@ -26,15 +25,9 @@ type EditAccountFormPropTypes = {
 export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: EditAccountFormPropTypes) {
   const queryClient = useQueryClient();
   const accountCategoryList = useAccountCategoryList();
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
-  const editAccountService = useMutation({
-    mutationKey: ['edit-account'],
-    mutationFn: (params: EditAccountDetailsRequestParams) =>
-      axios.post(SERVICE_ROUTES.postEditAccount, {
-        ...params,
-      }),
-  });
+  const editAccountService = useMutation(orpc.accounts.edit.mutationOptions());
 
   const form = useForm<EditAccountDetailsRequestParams>({
     resolver: zodResolver(editAccountDetailsRequestParamsSchema),
@@ -55,9 +48,7 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
 
   async function handleSubmission(submission: EditAccountDetailsRequestParams) {
     await editAccountService.mutateAsync(submission);
-    queryClient.invalidateQueries({
-      queryKey: ['accounts'],
-    });
+    queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
     onSubmit();
   }
 

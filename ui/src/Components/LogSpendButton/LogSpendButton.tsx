@@ -1,12 +1,12 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/DiscretionarySpendPanel';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import styles from './LogSpendButton.module.css';
 
 export default function LogSpendButton() {
   const [logExpensePanelOpen, setLogExpensePanelOpen] = useState(false);
-  const getTransactionContent = useContent('transactions');
+  const getTransactionContent = createContentGetter('transactions');
 
   return (
     <>

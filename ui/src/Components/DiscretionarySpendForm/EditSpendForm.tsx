@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DeleteButton from 'Components/DeleteButton/DeleteButton';
@@ -9,16 +9,11 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import LoadingSpinner from 'Components/LoadingSpinner/LoadingSpinner';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
-import useTripsList from 'Hooks/useTripsList/useTripsList';
+import createContentGetter from 'Content/createContentGetter';
+import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useForm } from 'react-hook-form';
-import {
-  DiscretionarySpendTransaction,
-  DiscretionaryTransactionId,
-  v1DiscretionaryAddSchema,
-} from 'Types/Services/spending.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { DiscretionarySpendTransaction, v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './DiscretionarySpendForm.module.css';
 
 export type SpendFormAttributes = Omit<DiscretionarySpendTransaction, 'transactionId' | 'isRecurring'>;
@@ -30,39 +25,31 @@ type EditSpendFormPropTypes = {
 };
 
 export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }: EditSpendFormPropTypes) {
-  const getContent = useContent('transactions');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('transactions');
+  const getGeneralContent = createContentGetter('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
-  const { tripsList } = useTripsList();
+  const { data: tripsListData } = useQuery(tripsListQueryOptions);
+  const tripsList = tripsListData?.tripsList;
 
   function invalidateRelevantQueries() {
-    queryClient.invalidateQueries({
-      queryKey: ['spending'],
-    });
-
-    queryClient.invalidateQueries({
-      queryKey: ['trips'],
-    });
+    queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+    queryClient.invalidateQueries({ queryKey: orpc.trips.key() });
   }
 
-  const editTransactionService = useMutation({
-    mutationKey: ['edit-discretionary', transactionToEdit!.transactionId],
-    mutationFn: (params: SpendFormAttributes) =>
-      axios.post(SERVICE_ROUTES.postEditDiscretionarySpending, {
-        ...params,
-        transactionId: transactionToEdit.transactionId,
-      }),
-    onSuccess: () => {
-      invalidateRelevantQueries();
+  const editTransactionService = useMutation(
+    orpc.spending.discretionaryEdit.mutationOptions({
+      onSuccess: () => {
+        invalidateRelevantQueries();
 
-      form.reset();
-      onSubmit();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+        form.reset();
+        onSubmit();
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
@@ -81,37 +68,27 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
       return;
     }
 
-    editTransactionService.mutate(submission);
+    editTransactionService.mutate({ ...submission, transactionId: transactionToEdit.transactionId });
   }
 
-  const deleteTransaction = useMutation({
-    mutationKey: ['delete-discretionary'],
-    mutationFn: (transactionId: DiscretionaryTransactionId) =>
-      axios.post(SERVICE_ROUTES.postDeleteDiscretionarySpending, {
-        transactionId: transactionId,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['spending'],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ['trips'],
-      });
-
-      onCancel();
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const deleteTransaction = useMutation(
+    orpc.spending.discretionaryDelete.mutationOptions({
+      onSuccess: () => {
+        invalidateRelevantQueries();
+        onCancel();
+      },
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   function handleDelete() {
     if (!transactionToEdit || deleteTransaction.isPending) {
       return;
     }
 
-    deleteTransaction.mutate(transactionToEdit.transactionId);
+    deleteTransaction.mutate({ transactionId: transactionToEdit.transactionId });
   }
 
   return (
@@ -144,7 +121,7 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
           className={styles.textInput}
           placeholder={getContent('notesPlaceholder')}
           autoComplete="off"
-          {...form.register('note', { maxLength: 100 })}
+          {...form.register('note', { maxLength: 60 })}
         />
 
         {/* Date of the transaction */}

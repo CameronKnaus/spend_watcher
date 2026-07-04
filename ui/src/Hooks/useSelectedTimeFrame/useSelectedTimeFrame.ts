@@ -1,8 +1,8 @@
 import { SelectedTimeFrameContext, SelectedTimeFrameContextAPI } from 'Contexts/SelectedTimeFrame.context';
-import { useContext } from 'react';
+import { use } from 'react';
 
 export default function useSelectedTimeFrame(): SelectedTimeFrameContextAPI {
-  const context = useContext(SelectedTimeFrameContext);
+  const context = use(SelectedTimeFrameContext);
 
   if (context === null) {
     throw new Error('useSelectedTimeFrame must be used within a SelectedTimeFrameProvider');

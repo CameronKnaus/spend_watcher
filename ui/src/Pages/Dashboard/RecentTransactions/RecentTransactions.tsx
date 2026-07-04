@@ -1,10 +1,10 @@
 import Currency from 'Components/Currency/Currency';
 import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/DiscretionarySpendPanel';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import TransactionRow from 'Components/TransactionRow';
+import TransactionRow from 'Components/TransactionRow/TransactionRow';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import createContentGetter from 'Content/createContentGetter';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useMemo, useState } from 'react';
 import { DbDate } from 'Types/dateTypes';
 import { DiscretionarySpendTransaction, TransactionsByDate } from 'Types/Services/spending.model';
@@ -12,7 +12,7 @@ import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowI
 import styles from './RecentTransactions.module.css';
 
 export default function RecentTransactions() {
-  const getContent = useContent('transactions');
+  const getContent = createContentGetter('transactions');
   const { data: spendingData } = useSpendingDetailsService();
   const [transactionToEdit, setTransactionToEdit] = useState<DiscretionarySpendTransaction>();
 
@@ -91,6 +91,10 @@ export default function RecentTransactions() {
                   {/* Loop through each transaction associated with the given date */}
                   {dateSpendSummary.includedTransactions.filter(isDiscretionaryTransactionId).map((transactionId) => {
                     const transaction = spendingData.transactionDictionary[transactionId];
+                    // Ids were filtered to discretionary, so narrow the union value to match.
+                    if (transaction.isRecurring) {
+                      return null;
+                    }
 
                     return (
                       <TransactionRow

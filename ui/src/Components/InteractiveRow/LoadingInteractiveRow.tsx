@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import InteractiveRow from 'Components/InteractiveRow/InteractiveRow';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import { ComponentProps } from 'react';
 import styles from './InteractiveRow.module.css';
 

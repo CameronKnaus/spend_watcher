@@ -1,10 +1,10 @@
 import NumberFlow from '@number-flow/react';
 import HoverHitBox from 'Components/charts/components/HoverHitBox';
 import { DataPoint } from 'Components/charts/types/dataPointTypes';
-import useCanvasDimensions from 'Components/charts/use/useCanvasDimensions/useCanvasDimensions';
+import getCanvasDimensions from 'Components/charts/utils/getCanvasDimensions/getCanvasDimensions';
 import * as d3 from 'd3';
 import { format } from 'date-fns';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
 import { AccountGrowthOverTimeV1Response } from 'Types/Services/accounts.model';
@@ -28,11 +28,11 @@ export default function AccountGrowthOverTime({ dataset, containerMeasurement }:
 
   // Hooks
   const [hoveredData, setHoveredData] = useState<DataPoint>(totalsArray[totalsArray.length - 1]);
-  const getContent = useContent('savings');
+  const getContent = createContentGetter('savings');
   const isMobile = useIsMobile();
 
   const maxNumber = d3.max(totalsArray, (d) => d.amount) ?? 0;
-  const canvasDimensions = useCanvasDimensions({
+  const canvasDimensions = getCanvasDimensions({
     width: containerMeasurement.width,
     height: 400,
     margin: {
@@ -112,7 +112,7 @@ export default function AccountGrowthOverTime({ dataset, containerMeasurement }:
             transformTiming={{ duration: 60, easing: 'ease-in-out' }}
             spinTiming={{ duration: 60, easing: 'ease-in-out' }}
           />
-          <span className={styles.date}>{format(new Date(hoveredData.date), 'MMMM yyyy')}</span>
+          <span className={styles.date}>{format(xAccessor(hoveredData), 'MMMM yyyy')}</span>
         </div>
       </div>
       <svg width={canvasDimensions.width} height={canvasDimensions.height}>

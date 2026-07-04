@@ -1,10 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import EditableRecurringTransactionRow from 'Components/RecurringTransactionRow';
+import EditableRecurringTransactionRow from 'Components/RecurringTransactionRow/EditableRecurringTransactionRow';
 import AddRecurringTransactionRow from 'Components/RecurringTransactionRow/AddRecurringTransactionRow';
 import { format, parse, subMonths } from 'date-fns';
-import useContent from 'Hooks/useContent';
-import useRecurringTransactionsList from 'Hooks/useRecurringTransactionsList/useRecurringTransactionsList';
+import createContentGetter from 'Content/createContentGetter';
+import { recurringTransactionsQueryOptions } from 'queryOptions/recurringTransactionsQueryOptions';
+import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { RecurringSpendTransaction } from 'Types/Services/spending.model';
 
@@ -19,10 +21,10 @@ export default function RecurringTransactionsList({
   recurringSpendTransaction,
   onBack,
 }: RecurringTransactionsListPropTypes) {
-  const { recurringTransactionsList, isLoading } = useRecurringTransactionsList(
-    recurringSpendTransaction.recurringSpendId,
-  );
-  const getContent = useContent('recurringTransactionsList');
+  const { data, isLoading } = useQuery(recurringTransactionsQueryOptions(recurringSpendTransaction.recurringSpendId));
+  const recurringTransactionsList = data?.transactions;
+  const getContent = createContentGetter('recurringTransactionsList');
+  const [now] = useState(() => new Date());
 
   if (!recurringTransactionsList || isLoading) {
     // TODO:
@@ -31,7 +33,7 @@ export default function RecurringTransactionsList({
 
   const oldestTransactionDate = recurringTransactionsList[recurringTransactionsList.length - 1].date;
   // Starting with the current date, we will iterate backwards until we reach the oldest transaction date
-  let currentDate = new Date();
+  let currentDate = now;
   const applicableMonths: MonthYearDbDate[] = [];
   let lastTransactionDateReached = false;
   while (!lastTransactionDateReached) {

@@ -1,12 +1,13 @@
+import eslintReact from '@eslint-react/eslint-plugin';
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 export default [
   js.configs.recommended,
   ...tsPlugin.configs['flat/recommended'],
+  eslintReact.configs['recommended-typescript'],
   {
     languageOptions: {
       globals: globals.browser,
@@ -17,20 +18,15 @@ export default [
       },
     },
     plugins: {
-      react: reactPlugin,
       'react-hooks': reactHooksPlugin,
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
     rules: {
-      ...reactPlugin.configs.recommended.rules,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
+      // eslint-plugin-react-hooks (the React team's implementation) is the authority on hooks;
+      // turn off @eslint-react's overlapping copies so each issue reports once.
+      '@eslint-react/rules-of-hooks': 'off',
+      '@eslint-react/exhaustive-deps': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',

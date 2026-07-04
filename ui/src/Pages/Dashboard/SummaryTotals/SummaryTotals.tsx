@@ -1,15 +1,15 @@
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import SkeletonLoader from 'Components/Shared/SkeletonLoader';
-import useContent from 'Hooks/useContent';
-import useSpendingDetailsService from 'Hooks/useSpendingService';
+import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
+import createContentGetter from 'Content/createContentGetter';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useIsMobile } from 'Util/IsMobileContext';
 import styles from './SummaryTotals.module.css';
 
 export default function SummaryTotals() {
   const { isLoading, isFetching, data: spendingData } = useSpendingDetailsService();
   const pageLoading = isLoading || isFetching || !spendingData;
-  const getContent = useContent('dashboard');
+  const getContent = createContentGetter('dashboard');
   const isMobile = useIsMobile();
 
   if (isMobile) {

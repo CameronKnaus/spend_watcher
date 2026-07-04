@@ -1,22 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { orpc } from 'api/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
-import SERVICE_ROUTES from 'Constants/ServiceRoutes';
-import useContent from 'Hooks/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   AddRecurringSpendRequestParams,
-  EditRecurringSpendRequestParams,
   RecurringSpendTransaction,
   v1AddRecurringSpendSchema,
 } from 'Types/Services/spending.model';
-import { SpendingCategory } from 'Types/SpendingCategory';
+import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './RecurringExpenseForm.module.css';
 
 type RecurringExpenseFormPropTypes = {
@@ -26,8 +24,8 @@ type RecurringExpenseFormPropTypes = {
 };
 
 export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit }: RecurringExpenseFormPropTypes) {
-  const getContent = useContent('recurringSpending');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('recurringSpending');
+  const getGeneralContent = createContentGetter('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
 
@@ -40,34 +38,27 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
     },
   });
 
-  const editRecurringMutation = useMutation({
-    mutationFn: (params: EditRecurringSpendRequestParams) => {
-      return axios.post(SERVICE_ROUTES.postEditRecurringSpend, params);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['recurring'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  function invalidateRecurring() {
+    queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
+  }
 
-  const addRecurringMutation = useMutation({
-    mutationFn: (params: AddRecurringSpendRequestParams) => axios.post(SERVICE_ROUTES.postAddRecurringSpend, params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['recurring'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['spending'],
-      });
-    },
-    onError: () => {
-      // TODO: Error handling
-    },
-  });
+  const editRecurringMutation = useMutation(
+    orpc.spending.recurringSpendEdit.mutationOptions({
+      onSuccess: invalidateRecurring,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
+
+  const addRecurringMutation = useMutation(
+    orpc.spending.recurringSpendAdd.mutationOptions({
+      onSuccess: invalidateRecurring,
+      onError: () => {
+        // TODO: Error handling
+      },
+    }),
+  );
 
   useEffect(() => {
     form.reset(expenseToEdit);
