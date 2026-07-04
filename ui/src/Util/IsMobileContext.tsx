@@ -1,5 +1,5 @@
 // Context for returning getting if the screen is mobile screen sized. Returns true if screen is 768px+
-import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import { useState, useEffect, use, createContext, ReactNode } from 'react';
 
 export const MOBILE_BREAKPOINT = 768;
 const mobileMatchMedia = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
@@ -21,10 +21,10 @@ export function IsMobileContextProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return <IsMobileContext.Provider value={isMobile}>{children}</IsMobileContext.Provider>;
+  return <IsMobileContext value={isMobile}>{children}</IsMobileContext>;
 }
 
 // Custom hook for getting mobile screen status
 export function useIsMobile() {
-  return useContext(IsMobileContext);
+  return use(IsMobileContext);
 }

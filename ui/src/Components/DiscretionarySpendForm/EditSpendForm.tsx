@@ -9,7 +9,7 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import LoadingSpinner from 'Components/LoadingSpinner/LoadingSpinner';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useForm } from 'react-hook-form';
 import { DiscretionarySpendTransaction, v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
@@ -25,8 +25,8 @@ type EditSpendFormPropTypes = {
 };
 
 export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }: EditSpendFormPropTypes) {
-  const getContent = useContent('transactions');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('transactions');
+  const getGeneralContent = createContentGetter('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
   const { data: tripsListData } = useQuery(tripsListQueryOptions);

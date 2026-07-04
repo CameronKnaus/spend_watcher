@@ -5,12 +5,13 @@ import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DeleteButton from 'Components/DeleteButton/DeleteButton';
 import DatePicker from 'Components/FormInputs/DatePickerController/DatePickerController';
-import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
-import { useEffect } from 'react';
+import { format } from 'date-fns';
+import createContentGetter from 'Content/createContentGetter';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dbDateFormat } from 'Types/dateTypes';
 import { AddTripRequestParams, Trip, v1AddTripSchema } from 'Types/Services/trips.model';
+import getDateFromDBDateString from 'Util/Time/getDateFromDBDateString';
 import styles from './TripForm.module.css';
 
 type NewTripForm = {
@@ -31,8 +32,8 @@ type TripFormPropTypes = NewTripForm | EditTripForm;
 
 export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: TripFormPropTypes) {
   const queryClient = useQueryClient();
-  const getContent = useContent('trips');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('trips');
+  const getGeneralContent = createContentGetter('general');
 
   const editMode = Boolean(tripToEdit);
 
@@ -44,7 +45,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
   const addTripMutation = useMutation(orpc.trips.add.mutationOptions({ onSuccess: onTripSaved }));
   const editTripMutation = useMutation(orpc.trips.edit.mutationOptions({ onSuccess: onTripSaved }));
 
-  const defaultStartDate = format(new Date(), dbDateFormat);
+  const [defaultStartDate] = useState(() => format(new Date(), dbDateFormat));
   const form = useForm<AddTripRequestParams>({
     resolver: zodResolver(v1AddTripSchema),
     mode: 'onChange', // Least performant but not a concern here
@@ -73,8 +74,8 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
     onSubmit();
   }
 
-  const startDate = parse(form.watch('startDate'), dbDateFormat, new Date());
-  const endDate = parse(form.watch('endDate'), dbDateFormat, new Date());
+  const startDate = getDateFromDBDateString(form.watch('startDate'));
+  const endDate = getDateFromDBDateString(form.watch('endDate'));
 
   return (
     <>

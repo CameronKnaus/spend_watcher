@@ -6,9 +6,9 @@ import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import PageContainer from 'Components/PageContainer/PageContainer';
 import RecurringSpendNeedsUpdateBanner from 'Components/RecurringSpendNeedsUpdateBanner/RecurringSpendNeedsUpdateBanner';
 import { format } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AvgSpentPerMonth from './AvgSpentPerMonth/AvgSpentPerMonth';
 import styles from './Dashboard.module.css';
 import RecentTransactions from './RecentTransactions/RecentTransactions';
@@ -17,8 +17,8 @@ import TopDiscretionaryCategories from './TopDiscretionaryCategories/TopDiscreti
 
 export default function Dashboard() {
   const { setToCurrentMonth } = useSelectedTimeFrame();
-  const getContent = useContent('dashboard');
-  const currentMonth = format(new Date(), 'LLLL');
+  const getContent = createContentGetter('dashboard');
+  const [currentMonth] = useState(() => format(new Date(), 'LLLL'));
   const pageTitle = getContent('monthOverview', [currentMonth]);
 
   useEffect(() => {

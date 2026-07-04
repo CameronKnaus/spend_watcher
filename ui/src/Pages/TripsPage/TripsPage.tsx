@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import PageContainer from 'Components/PageContainer/PageContainer';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import AddTripButton from './AddTripButton/AddTripButton';
 import TripModule from './TripModule/TripModule';
@@ -11,7 +11,7 @@ import styles from './TripsPage.module.css';
 export default function TripsPage() {
   const { data, isLoading, isFetching, isError } = useQuery(tripsListQueryOptions);
   const tripsList = data?.tripsList;
-  const getContent = useContent('trips');
+  const getContent = createContentGetter('trips');
   const pageTitle = getContent('pageTitle');
 
   if (isLoading || isFetching) {

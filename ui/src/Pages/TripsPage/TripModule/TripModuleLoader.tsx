@@ -1,11 +1,11 @@
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { FaInfoCircle } from 'react-icons/fa';
 import TripModuleDataPointLoader from '../TripModuleDataPoint/TripModuleDataPointLoader';
 import styles from './TripModule.module.css';
 
 export default function TripModuleLoader() {
-  const getContent = useContent('trips');
+  const getContent = createContentGetter('trips');
 
   return (
     <div className={styles.module} aria-hidden>

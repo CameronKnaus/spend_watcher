@@ -1,4 +1,4 @@
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import syntheticChangeEvent from 'Util/Events/syntheticChangeEvent';
 import { ComponentProps, ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import styles from './FilterableSelect.module.css';
@@ -28,7 +28,7 @@ function FilterableSelect<T extends string>({
   const [selectedValue, setSelectedValue] = useState<FilterableSelectOptionType<T> | undefined>();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const popOverMenuRef = useRef<HTMLDivElement | null>(null);
-  const getContent = useContent('general');
+  const getContent = createContentGetter('general');
   const [isOpen, setIsOpen] = useState(false);
   const [filterText, setFilterText] = useState('');
 

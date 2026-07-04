@@ -2,7 +2,7 @@ import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import PanelOptionButton from 'Components/SlideUpPanel/Addons/PanelOptionButton/PanelOptionButton';
 import PanelOptionButtonContainer from 'Components/SlideUpPanel/Addons/PanelOptionButtonContainer/PanelOptionButtonContainer';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { FaEdit, FaHistory, FaTrashAlt } from 'react-icons/fa';
 import { MdUpdateDisabled } from 'react-icons/md';
 import { PanelTabs } from './ManageAccountPanel';
@@ -13,7 +13,7 @@ type ManageAccountBasePanelPropTypes = {
 };
 
 export default function ManageAccountBasePanel({ setSelectedTab, onClose }: ManageAccountBasePanelPropTypes) {
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
   return (
     <>

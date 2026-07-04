@@ -3,14 +3,14 @@ import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import AccountCategoryIcon from 'Components/Shared/Icons/AccountCategoryIcon';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { accountsSummaryQueryOptions } from 'queryOptions/accountsSummaryQueryOptions';
 import { AccountCategory } from '@spend-watcher/contract';
 import styles from './TotalsByAccountType.module.css';
 
 export default function TotalsByAccountType() {
-  const getContent = useContent('savings');
-  const getCategoryLabel = useContent('ACCOUNT_CATEGORIES');
+  const getContent = createContentGetter('savings');
+  const getCategoryLabel = createContentGetter('ACCOUNT_CATEGORIES');
   const { isLoading, data: accountsSummary } = useQuery(accountsSummaryQueryOptions);
 
   const headerLabel = getContent('accountTotalByType');

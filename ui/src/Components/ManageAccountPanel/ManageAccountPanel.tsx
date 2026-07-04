@@ -4,8 +4,8 @@ import AccountUpdateHistory from 'Components/AccountUpdateHistory/AccountUpdateH
 import EditAccountForm from 'Components/EditAccountForm/EditAccountForm';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent/useContent';
-import { useEffect, useState } from 'react';
+import createContentGetter from 'Content/createContentGetter';
+import { useState } from 'react';
 import { AccountWithStatus } from 'Types/Services/accounts.model';
 import ManageAccountBasePanel from './ManageAccountBasePanel';
 
@@ -24,16 +24,17 @@ export enum PanelTabs {
 
 export default function ManageAccountPanel({ account, onPanelClose }: ManageAccountPanelPropTypes) {
   const queryClient = useQueryClient();
-  const [selectedTab, setSelectedTab] = useState<PanelTabs>(PanelTabs.BASE);
-  const getContent = useContent('accounts');
-
-  useEffect(() => {
-    if (!account) {
-      return;
+  const [selectedTab, setSelectedTab] = useState<PanelTabs>(
+    account?.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE,
+  );
+  const getContent = createContentGetter('accounts');
+  const [prevAccount, setPrevAccount] = useState(account);
+  if (account !== prevAccount) {
+    setPrevAccount(account);
+    if (account) {
+      setSelectedTab(account.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE);
     }
-
-    setSelectedTab(account.requiresNewUpdate ? PanelTabs.HISTORY : PanelTabs.BASE);
-  }, [account]);
+  }
 
   function invalidateQueries() {
     queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });

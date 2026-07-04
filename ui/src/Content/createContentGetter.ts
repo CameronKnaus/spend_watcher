@@ -7,7 +7,7 @@ export type ContentGroupKey = keyof ContentStructure;
 const CONTENT_MISSING = 'MISSING_CONTENT';
 
 // If a default Group key is given, then the consumer needs only to provide the content key or injections
-export default function useContent<T extends ContentGroupKey>(contentGroup: T) {
+export default function createContentGetter<T extends ContentGroupKey>(contentGroup: T) {
   function getContent(key: keyof ContentStructure[T], injections?: (string | number)[]): string {
     /* injections is an optional array to fill content keys with variable text
      *   Example, given the following key:

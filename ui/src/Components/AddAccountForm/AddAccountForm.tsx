@@ -7,7 +7,7 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useAccountCategoryList/useAccountCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
 import { AccountCategory } from '@spend-watcher/contract';
 import { AddAccountRequestParams, addAccountRequestParamSchema } from 'Types/Services/accounts.model';
@@ -21,7 +21,7 @@ type AddAccountFormPropTypes = {
 export default function AddAccountForm({ onSubmit, onCancel }: AddAccountFormPropTypes) {
   const queryClient = useQueryClient();
   const accountCategoryList = useAccountCategoryList();
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
   const addAccountService = useMutation(
     orpc.accounts.add.mutationOptions({

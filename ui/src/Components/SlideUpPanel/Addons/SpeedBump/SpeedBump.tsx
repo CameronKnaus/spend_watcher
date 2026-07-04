@@ -1,6 +1,6 @@
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import styles from './SpeedBump.module.css';
 
 type SpeedBumpPropTypes = {
@@ -20,7 +20,7 @@ export default function SpeedBump({
   warningDescription,
   finalWarningText,
 }: SpeedBumpPropTypes) {
-  const getGeneralContent = useContent('general');
+  const getGeneralContent = createContentGetter('general');
 
   function handleProceed() {
     onProceed();

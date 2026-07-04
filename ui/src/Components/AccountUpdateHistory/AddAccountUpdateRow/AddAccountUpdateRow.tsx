@@ -4,7 +4,7 @@ import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
@@ -21,7 +21,7 @@ type AddAccountUpdateRowPropTypes = {
 };
 
 export default function AddAccountUpdateRow({ accountId, date }: AddAccountUpdateRowPropTypes) {
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
   const [isActive, setIsActive] = useState(false);
 
   const queryClient = useQueryClient();
@@ -44,7 +44,7 @@ export default function AddAccountUpdateRow({ accountId, date }: AddAccountUpdat
     },
   });
 
-  const formattedDate = format(parse(date, monthYearDbDateFormat, new Date()), 'MMMM yyyy');
+  const formattedDate = format(parse(date, monthYearDbDateFormat, new Date(0)), 'MMMM yyyy');
   if (!isActive) {
     return (
       <CustomButton

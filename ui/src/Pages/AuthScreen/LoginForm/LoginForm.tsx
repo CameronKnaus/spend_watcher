@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
 import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthScreen.module.css';
 
@@ -13,7 +13,7 @@ type LoginFormPropTypes = {
 
 export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
   const queryClient = useQueryClient();
-  const getContent = useContent('authScreen');
+  const getContent = createContentGetter('authScreen');
   const form = useForm({
     resolver: zodResolver(loginInputSchema),
   });

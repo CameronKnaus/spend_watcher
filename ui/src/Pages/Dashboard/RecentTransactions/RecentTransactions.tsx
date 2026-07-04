@@ -3,7 +3,7 @@ import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/Discretio
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import TransactionRow from 'Components/TransactionRow/TransactionRow';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useMemo, useState } from 'react';
 import { DbDate } from 'Types/dateTypes';
@@ -12,7 +12,7 @@ import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowI
 import styles from './RecentTransactions.module.css';
 
 export default function RecentTransactions() {
-  const getContent = useContent('transactions');
+  const getContent = createContentGetter('transactions');
   const { data: spendingData } = useSpendingDetailsService();
   const [transactionToEdit, setTransactionToEdit] = useState<DiscretionarySpendTransaction>();
 

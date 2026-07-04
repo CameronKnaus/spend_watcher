@@ -50,11 +50,13 @@ const formatDate = (date: Date) => {
 export default function SelectedTimeFrameProvider({ children }: { children: ReactNode }) {
   const [dateRangeType, setDateRangeType] = useState<DateRangeType>(DateRangeType.MONTH);
   // Default start date to first day of this month
-  const [startDate, setStartDate] = useState<DbDate>(formatDate(startOfMonth(new Date())));
+  const [startDate, setStartDate] = useState<DbDate>(() => formatDate(startOfMonth(new Date())));
   // Default end date to today
-  const [endDate, setEndDate] = useState<DbDate>(formatDate(new Date()));
+  const [endDate, setEndDate] = useState<DbDate>(() => formatDate(new Date()));
 
-  const presentDate = new Date();
+  // Snapshotted at mount so render stays pure; handlers that write dates read it the same way
+  // render-time computation did (fresh as of the last committed render).
+  const [presentDate] = useState(() => new Date());
   const isPresentYear = getYear(endDate) === getYear(presentDate);
   const isSameMonth = getMonth(endDate) === getMonth(presentDate);
 
@@ -185,5 +187,5 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
     setToCurrentMonth,
   };
 
-  return <SelectedTimeFrameContext.Provider value={selectedTimeFrameAPI}>{children}</SelectedTimeFrameContext.Provider>;
+  return <SelectedTimeFrameContext value={selectedTimeFrameAPI}>{children}</SelectedTimeFrameContext>;
 }

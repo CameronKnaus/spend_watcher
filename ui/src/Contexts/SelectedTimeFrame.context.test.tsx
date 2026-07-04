@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
-import { useContext, type ReactNode } from 'react';
+import { use, type ReactNode } from 'react';
 import SelectedTimeFrameProvider, { DateRangeType, SelectedTimeFrameContext } from './SelectedTimeFrame.context';
 
 function useTimeFrame() {
-  const context = useContext(SelectedTimeFrameContext);
+  const context = use(SelectedTimeFrameContext);
   if (!context) {
     throw new Error('missing provider');
   }

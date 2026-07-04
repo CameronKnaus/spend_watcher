@@ -11,7 +11,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? '50%' : 10,
-  reporter: 'html',
+  // On CI, the github reporter adds failure annotations inline on the PR diff alongside the report.
+  reporter: process.env.CI ? [['html'], ['github']] : 'html',
   globalTeardown: './global-teardown.ts',
   use: {
     baseURL: UI_URL,

@@ -3,7 +3,7 @@ import { orpc } from 'api/orpc';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import TripForm from 'Components/TripForm/TripForm';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { Trip } from 'Types/Services/trips.model';
 import TripDetails from './TripDetails/TripDetails';
@@ -25,8 +25,8 @@ export enum TripPanelState {
 export default function TripDetailsPanel({ trip, isOpen, dateLabel, onClose }: TripDetailsPanelPropTypes) {
   const queryClient = useQueryClient();
   const [panelState, setPanelState] = useState(TripPanelState.base);
-  const getContent = useContent('trips');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('trips');
+  const getGeneralContent = createContentGetter('general');
 
   const deleteMutation = useMutation(
     orpc.trips.delete.mutationOptions({

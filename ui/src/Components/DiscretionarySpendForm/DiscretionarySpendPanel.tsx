@@ -1,5 +1,5 @@
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import EditSpendForm from './EditSpendForm';
 import NewSpendForm from './NewSpendForm';
@@ -17,7 +17,7 @@ export default function DiscretionarySpendPanel({
   transactionToEdit,
 }: DiscretionarySpendPanelPropTypes) {
   const editMode = Boolean(transactionToEdit);
-  const getContent = useContent('transactions');
+  const getContent = createContentGetter('transactions');
 
   return (
     <SlideUpPanel

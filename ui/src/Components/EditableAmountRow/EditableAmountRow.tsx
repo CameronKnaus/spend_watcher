@@ -1,13 +1,13 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { FieldValues, Path, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { FaPencilAlt } from 'react-icons/fa';
 import styles from './EditableAmountRow.module.css';
 
 type EditableAmountRowPropTypes<TFieldValues extends FieldValues, TTransformedValues = TFieldValues> = {
-  form: UseFormReturn<TFieldValues, any, TTransformedValues>;
+  form: UseFormReturn<TFieldValues, unknown, TTransformedValues>;
   label: string;
   amountLabel: string;
   showConfirmButton: boolean;
@@ -27,7 +27,7 @@ export default function EditableAmountRow<TFieldValues extends FieldValues, TTra
   amountPlaceholder = '',
   onSubmission,
 }: EditableAmountRowPropTypes<TFieldValues, TTransformedValues>) {
-  const getContent = useContent('general');
+  const getContent = createContentGetter('general');
 
   return (
     <div className={styles.rowContainer}>

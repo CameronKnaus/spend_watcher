@@ -8,8 +8,8 @@ import PanelOptionButton from 'Components/SlideUpPanel/Addons/PanelOptionButton/
 import PanelOptionButtonContainer from 'Components/SlideUpPanel/Addons/PanelOptionButtonContainer/PanelOptionButtonContainer';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
-import useContent from 'Hooks/useContent/useContent';
-import { useEffect, useState } from 'react';
+import createContentGetter from 'Content/createContentGetter';
+import { useState } from 'react';
 import { FaEdit, FaHistory, FaTrashAlt } from 'react-icons/fa';
 import { MdUpdate, MdUpdateDisabled } from 'react-icons/md';
 import { RecurringSpendTransaction } from 'Types/Services/spending.model';
@@ -33,10 +33,25 @@ export default function ManageRecurringSpendPanel({
   recurringSpendTransaction,
   closePanel,
 }: ManageRecurringSpendPanelPropTypes) {
-  const getContent = useContent('recurringSpending');
-  const getGeneralContent = useContent('general');
-  const [currentPanelContents, setCurrentPanelContents] = useState(ManageRecurringSpendPanels.base);
+  const getContent = createContentGetter('recurringSpending');
+  const getGeneralContent = createContentGetter('general');
+  const [currentPanelContents, setCurrentPanelContents] = useState(
+    // Open straight to the history page to update transaction for the month
+    recurringSpendTransaction?.requiresMonthlyUpdate
+      ? ManageRecurringSpendPanels.history
+      : ManageRecurringSpendPanels.base,
+  );
   const queryClient = useQueryClient();
+
+  const [prevTransaction, setPrevTransaction] = useState(recurringSpendTransaction);
+  if (recurringSpendTransaction !== prevTransaction) {
+    setPrevTransaction(recurringSpendTransaction);
+    setCurrentPanelContents(
+      recurringSpendTransaction?.requiresMonthlyUpdate
+        ? ManageRecurringSpendPanels.history
+        : ManageRecurringSpendPanels.base,
+    );
+  }
 
   function invalidateRecurring() {
     queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
@@ -58,15 +73,6 @@ export default function ManageRecurringSpendPanel({
       },
     }),
   );
-
-  useEffect(() => {
-    if (recurringSpendTransaction?.requiresMonthlyUpdate) {
-      // Open straight to the history page to update transaction for the month
-      setCurrentPanelContents(ManageRecurringSpendPanels.history);
-    } else {
-      returnToBase();
-    }
-  }, [recurringSpendTransaction]);
 
   function returnToBase() {
     setCurrentPanelContents(ManageRecurringSpendPanels.base);

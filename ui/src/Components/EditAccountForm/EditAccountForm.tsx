@@ -6,7 +6,7 @@ import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
 import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useAccountCategoryList/useAccountCategoryList';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
 import { AccountCategory } from '@spend-watcher/contract';
 import {
@@ -25,7 +25,7 @@ type EditAccountFormPropTypes = {
 export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: EditAccountFormPropTypes) {
   const queryClient = useQueryClient();
   const accountCategoryList = useAccountCategoryList();
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
   const editAccountService = useMutation(orpc.accounts.edit.mutationOptions());
 

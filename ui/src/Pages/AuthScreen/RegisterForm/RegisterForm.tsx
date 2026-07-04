@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerInputSchema } from '@spend-watcher/contract';
 import CustomButton from 'Components/CustomButton/CustomButton';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthScreen.module.css';
 
@@ -10,7 +10,7 @@ type RegisterFormPropTypes = {
 };
 
 export default function RegisterForm({ switchToLogin }: RegisterFormPropTypes) {
-  const getContent = useContent('authScreen');
+  const getContent = createContentGetter('authScreen');
   const form = useForm({
     resolver: zodResolver(registerInputSchema),
   });

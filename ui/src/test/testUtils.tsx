@@ -54,7 +54,7 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
 
   function Wrapper({ children }: { children: ReactNode }) {
     const timeFrameLayer = timeFrame ? (
-      <SelectedTimeFrameContext.Provider value={timeFrame}>{children}</SelectedTimeFrameContext.Provider>
+      <SelectedTimeFrameContext value={timeFrame}>{children}</SelectedTimeFrameContext>
     ) : (
       <SelectedTimeFrameProvider>{children}</SelectedTimeFrameProvider>
     );
@@ -63,9 +63,9 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <QueryClientProvider client={queryClient}>
-            <IsMobileContext.Provider value={isMobile}>
+            <IsMobileContext value={isMobile}>
               <MemoryRouter initialEntries={[route]}>{timeFrameLayer}</MemoryRouter>
-            </IsMobileContext.Provider>
+            </IsMobileContext>
           </QueryClientProvider>
         </LocalizationProvider>
       </ThemeProvider>

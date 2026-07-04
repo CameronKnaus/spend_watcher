@@ -1,4 +1,4 @@
-import { CanvasDimensions } from 'Components/charts/use/useCanvasDimensions/useCanvasDimensions';
+import { CanvasDimensions } from 'Components/charts/utils/getCanvasDimensions/getCanvasDimensions';
 import * as d3 from 'd3';
 
 interface AxisBottomProps {
@@ -50,10 +50,10 @@ export default function AxisLeft({
 
   return (
     <g transform={transform}>
-      {ticks.map((tick, index) => {
+      {ticks.map((tick) => {
         const y = scale(tick);
         return (
-          <g key={index} transform={`translate(${dimensions.margin.left}, ${y})`}>
+          <g key={tick} transform={`translate(${dimensions.margin.left}, ${y})`}>
             {/* Tick line */}
             {y < dimensions.boundedHeight && (
               <line x1={6} x2={dimensions.boundedWidth} stroke={lineColor} strokeDasharray="4" />

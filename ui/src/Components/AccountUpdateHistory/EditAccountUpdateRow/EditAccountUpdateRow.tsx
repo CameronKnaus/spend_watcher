@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orpc } from 'api/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -24,7 +24,7 @@ export default function EditAccountUpdateRow({
   dateLabel,
   currentAmount,
 }: EditAccountUpdateRowPropTypes) {
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
 
   const queryClient = useQueryClient();
   const accountUpdateMutation = useMutation(

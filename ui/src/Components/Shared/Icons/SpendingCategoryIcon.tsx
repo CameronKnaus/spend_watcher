@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import { spendCategoryIconMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
-import { ComponentProps } from 'react';
+import { ComponentProps, useState } from 'react';
 import { MdRefresh } from 'react-icons/md';
 import { SpendingCategory } from '@spend-watcher/contract';
 import styles from './CategoryIcon.module.css';
@@ -20,6 +20,8 @@ export default function SpendingCategoryIcon({
   showRevolvingIcon = false,
   style,
 }: SpendingCategoryIconPropTypes) {
+  // Randomized once per mount so the stagger doesn't jump on re-renders and render stays pure.
+  const [revolveDelay] = useState(() => (Math.random() * 8).toFixed(2));
   const containerStyle = {
     height: size,
     width: size,
@@ -33,7 +35,7 @@ export default function SpendingCategoryIcon({
       {showRevolvingIcon ? (
         <>
           {spendCategoryIconMapper[category]}
-          <div className={styles.revolvingIcon} style={{ animationDelay: `${(Math.random() * 8).toFixed(2)}s` }}>
+          <div className={styles.revolvingIcon} style={{ animationDelay: `${revolveDelay}s` }}>
             <MdRefresh />
           </div>
         </>

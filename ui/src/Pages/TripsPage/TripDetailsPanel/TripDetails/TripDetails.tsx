@@ -2,7 +2,7 @@ import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditSpendForm from 'Components/DiscretionarySpendForm/EditSpendForm';
 import TripExpenseList from 'Components/TripExpenseList/TripExpenseList';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
 import { Trip } from 'Types/Services/trips.model';
@@ -18,7 +18,7 @@ type TripDetailsPropTypes = {
 
 export default function TripDetails({ trip, dateLabel, setPanelState, onClose }: TripDetailsPropTypes) {
   const [transactionToEdit, setTransactionToEdit] = useState<DiscretionarySpendTransaction>();
-  const getContent = useContent('trips');
+  const getContent = createContentGetter('trips');
 
   if (transactionToEdit) {
     return (

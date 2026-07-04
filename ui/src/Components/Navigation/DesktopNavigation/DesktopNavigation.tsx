@@ -1,7 +1,7 @@
 import { animated, useChain, useSpring, useSpringRef } from '@react-spring/web';
 import { PAGE_ROUTES } from 'Components/PageRoutes/PageRoutes';
-import useContent from 'Hooks/useContent/useContent';
-import { useEffect, useRef, useState } from 'react';
+import createContentGetter from 'Content/createContentGetter';
+import { useRef, useState } from 'react';
 import { FaChartPie, FaHistory, FaHome, FaPlaneDeparture } from 'react-icons/fa';
 import { MdSavings } from 'react-icons/md';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -20,7 +20,7 @@ export default function DesktopNavigation() {
   const paddingOffset = 40;
   const expandedWidth = menuListRef.current ? menuListRef.current.scrollWidth + paddingOffset : DEFAULT_WIDTH;
   const location = useLocation();
-  const getContent = useContent('navigation');
+  const getContent = createContentGetter('navigation');
 
   const containerSpringRef = useSpringRef();
   const containerSprings = useSpring({
@@ -46,9 +46,11 @@ export default function DesktopNavigation() {
   });
 
   // Close menu if the routing changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname);
     setMenuExpanded(false);
-  }, [location.pathname]);
+  }
 
   useChain(
     menuExpanded ? [containerSpringRef, textSpringRef] : [textSpringRef, containerSpringRef],

@@ -3,6 +3,7 @@
   "description": "This project is for personal spending tracking. It is a monolith encompassing a react frontend and node backend.",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.14.0",
   "engines": {
     "node": ">=22"
   },

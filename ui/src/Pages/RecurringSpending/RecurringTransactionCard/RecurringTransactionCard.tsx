@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Currency from 'Components/Currency/Currency';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { ComponentProps } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { RecurringSpendTransaction } from 'Types/Services/spending.model';
@@ -22,8 +22,8 @@ export default function RecurringTransactionCard({
   isInactive,
   ...attributes
 }: RecurringTransactionCardPropTypes & Omit<ComponentProps<'button'>, 'className' | 'onClick'>) {
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
-  const getContent = useContent('recurringSpending');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
+  const getContent = createContentGetter('recurringSpending');
 
   return (
     <button className={clsx(styles.card, className)} {...attributes} onClick={() => onClick(transaction)}>

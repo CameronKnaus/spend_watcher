@@ -6,7 +6,7 @@ import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -24,8 +24,8 @@ type RecurringExpenseFormPropTypes = {
 };
 
 export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit }: RecurringExpenseFormPropTypes) {
-  const getContent = useContent('recurringSpending');
-  const getGeneralContent = useContent('general');
+  const getContent = createContentGetter('recurringSpending');
+  const getGeneralContent = createContentGetter('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
 

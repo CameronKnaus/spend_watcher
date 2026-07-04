@@ -1,7 +1,7 @@
 import Currency from 'Components/Currency/Currency';
 import InteractiveRow from 'Components/InteractiveRow/InteractiveRow';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { ComponentProps } from 'react';
 import { DiscretionaryTransactionId } from 'Types/Services/spending.model';
 import { SpendingCategory } from '@spend-watcher/contract';
@@ -26,7 +26,7 @@ export default function TransactionRow({
   onClick,
   ...attributes
 }: TransactionRowPropTypes & Omit<ComponentProps<'button'>, 'onClick' | 'className'>) {
-  const getCategoryLabel = useContent('SPENDING_CATEGORIES');
+  const getCategoryLabel = createContentGetter('SPENDING_CATEGORIES');
 
   return (
     <InteractiveRow

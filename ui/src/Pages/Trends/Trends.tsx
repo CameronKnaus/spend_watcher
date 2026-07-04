@@ -6,7 +6,7 @@ import PageContainer from 'Components/PageContainer/PageContainer';
 import RecurringSpendNeedsUpdateBanner from 'Components/RecurringSpendNeedsUpdateBanner/RecurringSpendNeedsUpdateBanner';
 import TotalsTable from 'Components/TotalsTable/TotalsTable';
 import TransactionsList from 'Components/TransactionsList/TransactionsList';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import SummaryTotals from 'Pages/Dashboard/SummaryTotals/SummaryTotals';
 import TopDiscretionaryCategories from 'Pages/Dashboard/TopDiscretionaryCategories/TopDiscretionaryCategories';
 import BarChartModule from './BarChartModule/BarChartModule';
@@ -14,7 +14,7 @@ import styles from './Trends.module.css';
 import TrendsMobileNavigation from './TrendsMobileNavigation/TrendsMobileNavigation';
 
 export default function Trends() {
-  const getContent = useContent('trends');
+  const getContent = createContentGetter('trends');
 
   return (
     <PageContainer pageTitle={getContent('pageTitle')} className={styles.pageContainer}>

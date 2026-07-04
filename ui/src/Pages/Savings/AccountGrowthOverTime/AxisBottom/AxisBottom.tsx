@@ -18,10 +18,10 @@ export default function AxisBottom({ scale, transform, tickCount = 5, tickFormat
   return (
     <g transform={transform}>
       {/* Render tick marks and labels */}
-      {ticks.map((tick, index) => {
+      {ticks.map((tick) => {
         const x = scale(tick);
         return (
-          <g key={index} transform={`translate(${x}, 0)`}>
+          <g key={tick.getTime()} transform={`translate(${x}, 0)`}>
             {/* Tick mark */}
             <line y2={5} stroke="var(--theme-color-primary-800)" />
             {/* Tick label */}

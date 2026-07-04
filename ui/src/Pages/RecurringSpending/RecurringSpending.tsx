@@ -7,7 +7,7 @@ import RecurringSpendNeedsUpdateBanner from 'Components/RecurringSpendNeedsUpdat
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { recurringSummaryQueryOptions } from 'queryOptions/recurringSummaryQueryOptions';
 import { useState } from 'react';
 import { RecurringSpendTransaction } from 'Types/Services/spending.model';
@@ -18,8 +18,8 @@ import RecurringTransactionCard from './RecurringTransactionCard/RecurringTransa
 export default function RecurringSpending() {
   const [recurringSpendToEdit, setRecurringSpendToEdit] = useState<RecurringSpendTransaction>();
   const [newSpendFormOpen, setNewSpendFormOpen] = useState(false);
-  const getContent = useContent('recurringSpending');
-  const currentMonth = format(new Date(), 'LLLL');
+  const getContent = createContentGetter('recurringSpending');
+  const [currentMonth] = useState(() => format(new Date(), 'LLLL'));
   const { data: summaryData } = useQuery(recurringSummaryQueryOptions);
   const pageTitle = getContent('pageTitle');
 

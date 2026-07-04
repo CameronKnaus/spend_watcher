@@ -1,5 +1,5 @@
 import { DateRangeType } from 'Contexts/SelectedTimeFrame.context';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
 import { useLayoutEffect, useRef } from 'react';
 import { FaFilter } from 'react-icons/fa';
@@ -11,7 +11,7 @@ import styles from './TrendsMobileNavigation.module.css';
 export default function TrendsMobileNavigation() {
   const navRef = useRef<HTMLDivElement>(null);
   const { dateRangeType, updateDateRangeType } = useSelectedTimeFrame();
-  const getContent = useContent('trends');
+  const getContent = createContentGetter('trends');
   const isMobile = useIsMobile();
 
   useLayoutEffect(() => {

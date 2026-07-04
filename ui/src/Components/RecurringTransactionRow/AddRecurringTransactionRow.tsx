@@ -4,7 +4,7 @@ import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
@@ -31,7 +31,7 @@ export default function AddRecurringTransactionRow({
 }: AddRecurringTransactionRowPropTypes) {
   const [isActive, setIsActive] = useState(false);
 
-  const getContent = useContent('recurringTransactionsList');
+  const getContent = createContentGetter('recurringTransactionsList');
   const queryClient = useQueryClient();
   const recurringTransactionMutation = useMutation(
     orpc.spending.recurringTransactionAdd.mutationOptions({
@@ -52,7 +52,7 @@ export default function AddRecurringTransactionRow({
     },
   });
 
-  const formattedDate = format(parse(date, monthYearDbDateFormat, new Date()), 'MMMM yyyy');
+  const formattedDate = format(parse(date, monthYearDbDateFormat, new Date(0)), 'MMMM yyyy');
   if (!isActive) {
     return (
       <CustomButton

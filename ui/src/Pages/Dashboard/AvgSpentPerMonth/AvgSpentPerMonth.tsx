@@ -1,7 +1,7 @@
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import styles from './AvgSpentPerMonth.module.css';
@@ -10,7 +10,7 @@ import { yearlyAverageQueryOptions } from 'queryOptions/yearlyAverageQueryOption
 
 export default function AvgSpentPerMonth() {
   const { isLoading, isFetching, data } = useQuery(yearlyAverageQueryOptions);
-  const getContent = useContent('dashboard');
+  const getContent = createContentGetter('dashboard');
   const pageLoading = isLoading || isFetching || !data;
 
   if (pageLoading) {

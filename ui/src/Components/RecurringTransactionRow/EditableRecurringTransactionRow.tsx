@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orpc } from 'api/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { RecurringTransactionId, v1EditRecurringTransactionSchema } from 'Types/Services/spending.model';
@@ -34,7 +34,7 @@ export default function EditableRecurringTransactionRow({
     }),
   );
 
-  const getContent = useContent('recurringTransactionsList');
+  const getContent = createContentGetter('recurringTransactionsList');
   const form = useForm({
     resolver: zodResolver(editRecurringFormSchema),
     defaultValues: {

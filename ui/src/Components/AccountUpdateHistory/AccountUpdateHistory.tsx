@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import { format, parse } from 'date-fns';
-import useContent from 'Hooks/useContent/useContent';
+import createContentGetter from 'Content/createContentGetter';
 import { accountHistoryQueryOptions } from 'queryOptions/accountHistoryQueryOptions';
+import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { Account } from 'Types/Services/accounts.model';
 import AddAccountUpdateRow from './AddAccountUpdateRow/AddAccountUpdateRow';
@@ -17,8 +18,9 @@ type AccountUpdateHistoryPropTypes = {
 };
 
 export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdateHistoryPropTypes) {
-  const getContent = useContent('accounts');
+  const getContent = createContentGetter('accounts');
   const { data: accountHistory, isLoading } = useQuery(accountHistoryQueryOptions(accountId));
+  const [now] = useState(() => new Date());
 
   if (isLoading || !accountHistory) {
     // TODO:
@@ -27,8 +29,9 @@ export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdat
 
   const { updateHistory } = accountHistory;
   const oldestAccountUpdateDate = updateHistory[updateHistory.length - 1].date;
-  // Starting with the current date, iterate backwards until we reach the oldest account update date
-  const currentDate = new Date();
+  // Starting with the current date, iterate backwards until we reach the oldest account update date.
+  // Copied from the mount snapshot because the loop below mutates it, and state must stay untouched.
+  const currentDate = new Date(now);
   const applicableMonths: MonthYearDbDate[] = [];
   let lastUpdateDateReached = false;
   while (!lastUpdateDateReached) {
