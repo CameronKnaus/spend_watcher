@@ -30,3 +30,5 @@ coverage/
 # Build/scratch
 **/.tanstack/
 **/testQuery
+.playwright-mcp/
+playwright-report
