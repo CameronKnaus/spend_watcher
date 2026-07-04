@@ -1,5 +1,6 @@
 import { SpendingDetailsResponse } from '@spend-watcher/contract';
-import { DiscretionaryHistoryRow, RecurringHistoryRow, TotalsByCategory } from '../details.types';
+import { DiscretionaryHistoryRow, TotalsByCategory } from '../details.types';
+import { RecurringSpendWithTransactionRow } from '../recurring.types';
 import addToCategoryTotals from './addToCategoryTotals';
 import { ratioOf } from './calcHelpers';
 import formatTransactions from './formatTransactions';
@@ -11,7 +12,7 @@ import initSummaryTotals from './initSummaryTotals';
 // Builds the rich spending-details payload from raw discretionary + recurring history rows.
 export default function spendingDetailsTransform(
   discretionaryTransactions: DiscretionaryHistoryRow[],
-  recurringTransactions: RecurringHistoryRow[],
+  recurringTransactions: RecurringSpendWithTransactionRow[],
 ): SpendingDetailsResponse {
   const { discretionaryTransactionIdList, recurringTransactionIdList, transactionDataList, transactionDictionary } =
     formatTransactions(discretionaryTransactions, recurringTransactions);

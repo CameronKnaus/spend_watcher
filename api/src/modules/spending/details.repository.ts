@@ -1,6 +1,7 @@
 import { queryAsync } from '@lib/queryAsync';
 import { DbDate } from '@type/dateTypes';
-import { DiscretionaryHistoryRow, RecurringHistoryRow } from './details.types';
+import { DiscretionaryHistoryRow } from './details.types';
+import { RecurringSpendWithTransactionRow } from './recurring.types';
 
 // All discretionary transactions in the range, as raw rows for the details transform.
 export function findDiscretionaryHistory(
@@ -19,8 +20,8 @@ export function findRecurringHistory(
   username: string,
   startDate: DbDate,
   endDate: DbDate,
-): Promise<RecurringHistoryRow[]> {
-  return queryAsync<RecurringHistoryRow[]>(
+): Promise<RecurringSpendWithTransactionRow[]> {
+  return queryAsync<RecurringSpendWithTransactionRow[]>(
     `SELECT spending.recurring_spend_id, category, spend_name, amount, is_variable_recurring, is_active, transaction_amount, date, transaction_id
         FROM user_information.recurring_spending AS spending
         JOIN user_information.recurring_transactions AS transactions

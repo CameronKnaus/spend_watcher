@@ -1,26 +1,25 @@
 import { queryAsync } from '@lib/queryAsync';
-import { AppInputs, RecurringTransactionsListResponse } from '@spend-watcher/contract';
+import { AppInputs, RecurringSpendTransaction, RecurringTransactionsListResponse } from '@spend-watcher/contract';
 import { DbDate, MonthYearDbDate } from '@type/dateTypes';
 import { format, formatISO } from 'date-fns';
 import { v4 as uuid4 } from 'uuid';
 import {
-  RecurringSpendTransaction,
   RecurringSpendTransactionRow,
-  RecurringSummaryRow,
+  RecurringSpendWithTransactionRow,
   RecurringTransactionId,
 } from './recurring.types';
 
 type RecurringSpendAddInput = AppInputs['spending']['recurringSpendAdd'];
 type RecurringSpendEditInput = AppInputs['spending']['recurringSpendEdit'];
 
-function formatRecurringTransactionId(transactionId: number): RecurringTransactionId {
+export function formatRecurringTransactionId(transactionId: number): RecurringTransactionId {
   return `Recurring-${transactionId}`;
 }
 
-// Maps a raw recurring summary row to the camelCase recurring-spend domain shape. Ported from the
-// legacy `formatRecurringSpend` helper so snake_case never leaks past the repository. A spend
-// "requires a monthly update" when its most recent transaction isn't in the current month.
-function toRecurringSpendTransaction(row: RecurringSummaryRow): RecurringSpendTransaction {
+// Maps a raw recurring spend+transaction row to the camelCase domain shape, so snake_case never
+// leaks past the repository. Also used by the details transform, whose repo returns the same row
+// shape. A spend "requires a monthly update" when its most recent transaction isn't in the current month.
+export function toRecurringSpendTransaction(row: RecurringSpendWithTransactionRow): RecurringSpendTransaction {
   const currentMonth = format(new Date(), 'MM-yyyy');
   const lastUpdatedMonth = format(new Date(row.date), 'MM-yyyy');
   const requiresMonthlyUpdate = currentMonth !== lastUpdatedMonth;
@@ -49,8 +48,8 @@ export async function backfillRecurringTransactions(username: string): Promise<v
 // Recurring spend summary: each recurring spend joined to its single most-recent transaction.
 // Ported from the legacy `fetchRecurringTransactionsSummary`.
 export async function findRecurringSummary(username: string): Promise<RecurringSpendTransaction[]> {
-  const rows = await queryAsync<RecurringSummaryRow[]>(
-    `SELECT RecurringExpenses.recurring_spend_id, username, category, spend_name, amount, is_variable_recurring, is_active, transaction_amount, date, transaction_id
+  const rows = await queryAsync<RecurringSpendWithTransactionRow[]>(
+    `SELECT RecurringExpenses.recurring_spend_id, category, spend_name, amount, is_variable_recurring, is_active, transaction_amount, date, transaction_id
         FROM ( SELECT * FROM user_information.recurring_spending WHERE username=?) AS RecurringExpenses
         JOIN (
             SELECT * FROM user_information.recurring_transactions AS A

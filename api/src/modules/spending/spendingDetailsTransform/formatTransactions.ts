@@ -1,17 +1,22 @@
 import { DiscretionarySpendTransaction, SpendingDetailsResponse, SpendTransaction } from '@spend-watcher/contract';
 import { DbDate } from '@type/dateTypes';
 import { formatISO } from 'date-fns';
-import { DiscretionaryHistoryRow, RecurringHistoryRow } from '../details.types';
-import { formatDiscretionaryTransactionId, formatRecurringSpend } from './formatHelpers';
+import { DiscretionaryHistoryRow } from '../details.types';
+import { toRecurringSpendTransaction } from '../recurring.repository';
+import { RecurringSpendWithTransactionRow } from '../recurring.types';
 
 type TransactionDictionary = SpendingDetailsResponse['transactionDictionary'];
+
+function formatDiscretionaryTransactionId(transactionId: number): `Discretionary-${number}` {
+  return `Discretionary-${transactionId}`;
+}
 
 /* Builds the transactionId -> transaction lookup map (so the rest of the response can reference
    transactions by id instead of duplicating them), plus the discretionary/recurring id lists and a
    flat list of all transaction data for further aggregation. */
 export default function formatTransactions(
   discretionaryTransactions: DiscretionaryHistoryRow[],
-  recurringTransactions: RecurringHistoryRow[],
+  recurringTransactions: RecurringSpendWithTransactionRow[],
 ) {
   const transactionDictionary: TransactionDictionary = {};
   const discretionaryTransactionIdList: SpendingDetailsResponse['discretionaryTransactionIdList'] = [];
@@ -39,7 +44,7 @@ export default function formatTransactions(
   });
 
   recurringTransactions.forEach((transaction) => {
-    const formattedTransaction = formatRecurringSpend(transaction);
+    const formattedTransaction = toRecurringSpendTransaction(transaction);
     transactionDictionary[formattedTransaction.transactionId] = formattedTransaction;
     recurringTransactionIdList.push(formattedTransaction.transactionId);
     transactionDataList.push(formattedTransaction);

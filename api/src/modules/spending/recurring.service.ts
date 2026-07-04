@@ -1,4 +1,9 @@
-import { AppInputs, RecurringSummaryResponse, RecurringTransactionsListResponse } from '@spend-watcher/contract';
+import {
+  AppInputs,
+  RecurringSpendTransaction,
+  RecurringSummaryResponse,
+  RecurringTransactionsListResponse,
+} from '@spend-watcher/contract';
 import { parseTransactionIdNumber } from './parseTransactionId';
 import {
   backfillRecurringTransactions,
@@ -11,7 +16,6 @@ import {
   updateRecurringSpend,
   updateRecurringTransaction,
 } from './recurring.repository';
-import { RecurringSpendTransaction } from './recurring.types';
 
 // Wrapped here so the auth controller composes a spending service
 // rather than reaching into the repository layer.
