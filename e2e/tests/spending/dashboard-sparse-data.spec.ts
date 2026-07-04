@@ -1,12 +1,3 @@
-// Regression: /api/spending/details built its percentage/ratio fields with unguarded divisions, so
-// any month missing one kind of transaction produced NaN and the contract's output validation
-// rejected the whole response ("Output validation failed", 500). Three distinct zero-denominators:
-//   1. no transactions at all            -> spendTypeRatio = 0/0
-//   2. recurring only (fresh month)      -> per-category discretionary percentages = 0/0
-//   3. discretionary only (no recurring) -> per-category recurring percentages = 0/0
-// The baseline-seeded fixture always creates BOTH kinds, which is why no other spec ever hit these
-// paths — these journeys deliberately start from an unseeded user.
-
 import type { Page } from '@playwright/test';
 import { unseededTest as test, expect } from '../../src/fixtures';
 import { post, SEEDED_RECURRING, ymd } from '../../src/seed';

@@ -1,6 +1,5 @@
 import { formatDbDate } from '@utils/DateUtils/dateUtils';
 import { isBefore } from 'date-fns';
-import { backfillRecurringTransactions } from './recurring.repository';
 import {
   findEarliestDiscretionaryDate,
   findEarliestRecurringDate,
@@ -29,10 +28,8 @@ export async function getHistoryStart(username: string): Promise<HistoryStartRes
 }
 
 // Current-year monthly average (completed months only) plus a YoY comparison against the prior
-// calendar year. The backfill stored-proc write runs first so recurring totals are up to date.
+// calendar year.
 export async function getYearlyAverage(username: string): Promise<YearlyAverageResponse> {
-  await backfillRecurringTransactions(username);
-
   const now = new Date();
   const currentYear = now.getFullYear();
   const previousYear = currentYear - 1;

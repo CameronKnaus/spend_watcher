@@ -13,12 +13,15 @@ import {
 } from './recurring.repository';
 import { RecurringSpendTransaction } from './recurring.types';
 
-// Builds the recurring summary. The backfill stored-proc write must run first — the summary read
-// depends on this month's fixed recurring transactions having been materialized. The aggregation
-// mirrors the legacy `recurringSummaryTransform` (kept here since it operated on legacy row types).
-export async function getRecurringSummary(username: string): Promise<RecurringSummaryResponse> {
-  await backfillRecurringTransactions(username);
+// Wrapped here so the auth controller composes a spending service
+// rather than reaching into the repository layer.
+export function ensureRecurringTransactionsBackfilled(username: string): Promise<void> {
+  return backfillRecurringTransactions(username);
+}
 
+// Builds the recurring summary. The aggregation mirrors the legacy `recurringSummaryTransform`
+// (kept here since it operated on legacy row types).
+export async function getRecurringSummary(username: string): Promise<RecurringSummaryResponse> {
   const recurringSpends = await findRecurringSummary(username);
 
   let averageEstimatedMonthlyTotal = 0;

@@ -1,4 +1,5 @@
 import { env } from '@lib/env';
+import { ensureRecurringTransactionsBackfilled } from '@modules/spending/recurring.service';
 import { CookieOptions } from 'express';
 import { authed, pub } from '../../orpc/base';
 import { authenticate, register as registerAccount } from './auth.service';
@@ -33,7 +34,11 @@ export const register = pub.auth.register.handler(async ({ input, context }) => 
 
 // GET /api/auth/verify — built from `authed`, so reaching the handler means the token cookie passed
 // verification. Replaces the legacy `verifyAuthToken`-guarded endpoint.
-export const verify = authed.auth.verify.handler(() => ({
-  authenticated: true,
-  message: 'Token is valid',
-}));
+export const verify = authed.auth.verify.handler(async ({ context }) => {
+  await ensureRecurringTransactionsBackfilled(context.username);
+
+  return {
+    authenticated: true,
+    message: 'Token is valid',
+  };
+});

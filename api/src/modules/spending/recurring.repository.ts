@@ -40,8 +40,8 @@ function toRecurringSpendTransaction(row: RecurringSummaryRow): RecurringSpendTr
   };
 }
 
-// Stored-proc write-on-read: backfills fixed recurring transactions for the current month so the
-// summary/yearly-average reads see up-to-date data. Ported from `updateFixedRecurringMonthlySpendData`.
+// Stored-proc write: fills in any missing fixed-recurring transactions from each spend's first
+// transaction month through the current month.
 export async function backfillRecurringTransactions(username: string): Promise<void> {
   await queryAsync('CALL BackfillRecurringTransactions(?)', [username]);
 }
