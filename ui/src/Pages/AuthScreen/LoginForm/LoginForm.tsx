@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
 import { orpc } from 'api/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
@@ -13,6 +14,7 @@ type LoginFormPropTypes = {
 
 export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const getContent = createContentGetter('authScreen');
   const form = useForm({
     resolver: zodResolver(loginInputSchema),
@@ -20,9 +22,9 @@ export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
 
   const loginService = useMutation(
     orpc.auth.login.mutationOptions({
-      onSuccess: () => {
-        // Refresh the auth-status query so the app re-renders as signed in (the cookie is now set).
-        queryClient.invalidateQueries({ queryKey: orpc.auth.key() });
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: orpc.auth.key() });
+        await navigate({ to: '/dashboard' });
       },
       onError: () => {
         // TODO: Error handling

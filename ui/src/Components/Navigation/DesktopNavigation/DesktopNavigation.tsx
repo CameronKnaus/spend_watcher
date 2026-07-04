@@ -1,10 +1,9 @@
 import { animated, useChain, useSpring, useSpringRef } from '@react-spring/web';
-import { PAGE_ROUTES } from 'Components/PageRoutes/PageRoutes';
+import { Outlet, useLocation } from '@tanstack/react-router';
 import createContentGetter from 'Content/createContentGetter';
 import { useRef, useState } from 'react';
 import { FaChartPie, FaHistory, FaHome, FaPlaneDeparture } from 'react-icons/fa';
 import { MdSavings } from 'react-icons/md';
-import { Outlet, useLocation } from 'react-router-dom';
 import styles from './DesktopNavigation.module.css';
 import DesktopNavItem from './DesktopNavItem';
 
@@ -19,7 +18,7 @@ export default function DesktopNavigation() {
   const menuListRef = useRef<HTMLDivElement>(null);
   const paddingOffset = 40;
   const expandedWidth = menuListRef.current ? menuListRef.current.scrollWidth + paddingOffset : DEFAULT_WIDTH;
-  const location = useLocation();
+  const pathname = useLocation({ select: (location) => location.pathname });
   const getContent = createContentGetter('navigation');
 
   const containerSpringRef = useSpringRef();
@@ -46,9 +45,9 @@ export default function DesktopNavigation() {
   });
 
   // Close menu if the routing changes
-  const [prevPathname, setPrevPathname] = useState(location.pathname);
-  if (location.pathname !== prevPathname) {
-    setPrevPathname(location.pathname);
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setMenuExpanded(false);
   }
 
@@ -101,7 +100,7 @@ export default function DesktopNavigation() {
           onMouseEnter={openMenu}
         >
           <DesktopNavItem
-            to={PAGE_ROUTES.dashboard}
+            to="/dashboard"
             icon={<FaHome />}
             text={getContent('dashboard')}
             openMenu={openMenu}
@@ -109,7 +108,7 @@ export default function DesktopNavigation() {
             textSprings={textSprings}
           />
           <DesktopNavItem
-            to={PAGE_ROUTES.savings}
+            to="/savings"
             icon={<MdSavings />}
             text={getContent('savings')}
             openMenu={openMenu}
@@ -117,7 +116,7 @@ export default function DesktopNavigation() {
             textSprings={textSprings}
           />
           <DesktopNavItem
-            to={PAGE_ROUTES.recurring_spending}
+            to="/recurring_spending"
             icon={<FaHistory />}
             text={getContent('recurringDesktop')}
             openMenu={openMenu}
@@ -125,7 +124,7 @@ export default function DesktopNavigation() {
             textSprings={textSprings}
           />
           <DesktopNavItem
-            to={PAGE_ROUTES.trends}
+            to="/trends"
             icon={<FaChartPie />}
             text={getContent('trends')}
             openMenu={openMenu}
@@ -133,7 +132,7 @@ export default function DesktopNavigation() {
             textSprings={textSprings}
           />
           <DesktopNavItem
-            to={PAGE_ROUTES.trips}
+            to="/trips"
             icon={<FaPlaneDeparture />}
             text={getContent('trips')}
             openMenu={openMenu}
