@@ -15,7 +15,7 @@ test.describe('Account Update History', () => {
 
     // The seeded account already has a value for the current month ($5,000.00 from initial seed).
     // Current month row is in edit mode — no "Add for [month]" button.
-    await expect(page.getByText(currentMonthLabel)).toBeVisible();
+    await expect(page.getByRole('dialog').getByText(currentMonthLabel)).toBeVisible();
     await expect(page.locator('input[name="amount"]')).toHaveValue('$5,000.00');
     await expect(page.getByRole('button', { name: 'Confirm change' })).not.toBeVisible();
 

@@ -112,7 +112,7 @@ export default function AccountGrowthOverTime({ dataset, containerMeasurement }:
             transformTiming={{ duration: 60, easing: 'ease-in-out' }}
             spinTiming={{ duration: 60, easing: 'ease-in-out' }}
           />
-          <span className={styles.date}>{format(new Date(hoveredData.date), 'MMMM yyyy')}</span>
+          <span className={styles.date}>{format(xAccessor(hoveredData), 'MMMM yyyy')}</span>
         </div>
       </div>
       <svg width={canvasDimensions.width} height={canvasDimensions.height}>

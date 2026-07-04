@@ -21,7 +21,7 @@ test.describe('Account Update History', () => {
     await page.getByRole('button', { name: 'History' }).click();
 
     await expect(page.getByRole('heading', { name: '"Test Checking" history' })).toBeVisible();
-    await expect(page.getByText(currentMonthLabel)).toBeVisible();
+    await expect(page.getByRole('dialog').getByText(currentMonthLabel)).toBeVisible();
     // The seeded account was created this month, so the current month already has a value —
     // it shows as an editable input ($5,000.00), not an "Add for …" button.
     await expect(page.locator('input[name="amount"]')).toHaveValue('$5,000.00');
