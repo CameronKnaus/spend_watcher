@@ -60,16 +60,19 @@ export type RecurringSpendTransaction = {
 // Discretionary add — used for client-side form validation (zodResolver).
 export const v1DiscretionaryAddSchema = zod.object({
   category: zod.nativeEnum(SpendingCategory),
-  amountSpent: zod.number().safe().positive(),
+  amountSpent: zod.number().positive(),
   spentDate: zodValidateDbDateFormat,
-  note: zod.string().trim().max(100),
-  linkedTripId: zod.string().uuid().optional(),
+  note: zod.string().trim().max(60),
+  linkedTripId: zod
+    .uuid()
+    .optional()
+    .or(zod.literal('').transform(() => undefined)),
 });
 
 // Recurring spend add — used for client-side form validation (zodResolver).
 export const v1AddRecurringSpendSchema = zod.object({
   category: zod.nativeEnum(SpendingCategory),
-  recurringSpendName: zod.string().trim().max(60),
+  recurringSpendName: zod.string().trim().min(1).max(60),
   expectedMonthlyAmount: zod.number().safe().positive(),
   isVariableRecurring: zod.boolean(),
 });

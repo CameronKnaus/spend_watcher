@@ -17,7 +17,11 @@ export function prepareSchema() {
   const sanitised = raw
     .split('\n')
     .filter((line) => !/GTID_PURGED|SQL_LOG_BIN/i.test(line))
-    .join('\n');
+    .join('\n')
+    // Routines/triggers/views dumped with `--routines` carry a `DEFINER=`user`@`host`` clause. That
+    // user doesn't exist on the throwaway container, so a SQL SECURITY DEFINER routine would fail at
+    // CALL time ("definer does not exist"). Strip it so routines are owned by the importing root user.
+    .replace(/DEFINER=`[^`]*`@`[^`]*`\s*/gi, '');
 
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(outputFile, sanitised);

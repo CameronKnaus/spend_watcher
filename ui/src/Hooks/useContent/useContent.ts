@@ -17,13 +17,16 @@ export default function useContent<T extends ContentGroupKey>(contentGroup: T) {
      *   So $0 will be replaced with the first element of the injections array, $1 with the second, and so on.
      * */
 
-    // Create a new string as not to mutate the original
-    let contentString = `${englishContent[contentGroup][key]}`;
+    const rawContent = englishContent[contentGroup][key];
 
-    // Not found
-    if (!contentString) {
+    // Not found — check before template-stringifying, which would turn undefined into the truthy
+    // string "undefined" and render that in the UI.
+    if (rawContent === undefined || rawContent === null) {
       return CONTENT_MISSING;
     }
+
+    // Create a new string as not to mutate the original
+    let contentString = `${rawContent}`;
 
     // Injections have been provided, find and replace:
     if (injections?.length) {

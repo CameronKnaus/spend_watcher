@@ -41,3 +41,4 @@ export type TripsListResponse = AppOutputs['trips']['list'];
 export type TripLinkedExpensesResponse = AppOutputs['trips']['expenses'];
 
 export type LoginInput = AppInputs['auth']['login'];
+export type AuthVerifyResponse = AppOutputs['auth']['verify'];

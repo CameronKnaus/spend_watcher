@@ -115,6 +115,59 @@ CREATE TABLE `trips` (
   PRIMARY KEY (`trip_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Stored routines (mysqldump --routines). The spending read path
+-- (details / recurring summary / yearly average) calls this as a write-on-read via
+-- backfillRecurringTransactions() — without it those endpoints 500. The DEFINER clause is
+-- stripped by e2e/scripts/prepare-schema.mjs so the throwaway test DB can load it.
+--
+DELIMITER ;;
+CREATE DEFINER=`admin`@`%` PROCEDURE `BackfillRecurringTransactions`(IN input_username VARCHAR(20))
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE recurring_id VARCHAR(36);
+    DECLARE recurring_amount DECIMAL(10, 2);
+    DECLARE transaction_date DATE;
+    DECLARE recurring_start_date DATE;
+    DECLARE cur CURSOR FOR
+        SELECT recurring_spend_id, amount
+        FROM recurring_spending
+        WHERE is_active = TRUE
+        AND is_variable_recurring = FALSE
+        AND username = input_username;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO recurring_id, recurring_amount;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SELECT MIN(date)
+        INTO recurring_start_date
+        FROM recurring_transactions
+        WHERE recurring_spend_id = recurring_id;
+        IF recurring_start_date IS NULL THEN
+            SET recurring_start_date = DATE_FORMAT(CURDATE(), '%Y-%m-01');
+        END IF;
+        SET transaction_date = recurring_start_date;
+        WHILE transaction_date <= CURDATE() DO
+            IF NOT EXISTS (
+                SELECT 1
+                FROM recurring_transactions
+                WHERE recurring_spend_id = recurring_id
+                AND date = transaction_date
+            ) THEN
+                INSERT INTO recurring_transactions (recurring_spend_id, transaction_amount, date)
+                VALUES (recurring_id, recurring_amount, transaction_date);
+            END IF;
+            SET transaction_date = DATE_ADD(transaction_date, INTERVAL 1 MONTH);
+        END WHILE;
+    END LOOP;
+    CLOSE cur;
+END ;;
+DELIMITER ;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

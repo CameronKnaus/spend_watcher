@@ -112,7 +112,7 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
           className={styles.textInput}
           placeholder={getContent('notesPlaceholder')}
           autoComplete="off"
-          {...form.register('note', { maxLength: 100 })}
+          {...form.register('note', { maxLength: 60 })}
         />
 
         {/* Date of the transaction */}

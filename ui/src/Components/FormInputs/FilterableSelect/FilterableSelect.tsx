@@ -105,8 +105,10 @@ function FilterableSelect<T extends string>({
             <div
               className={styles.option}
               onClick={() => {
-                // @ts-expect-error What have I done....
-                props.onChange?.(syntheticChangeEvent(undefined));
+                // Clear by setting the field to '' rather than `undefined`. react-hook-form's Controller
+                // falls back to its defaultValue when a field is set to a nullish value,
+                // which would leave the previously-selected option still displayed.
+                props.onChange?.(syntheticChangeEvent(''));
                 setSelectedValue(undefined);
                 setFilterText('');
                 setIsOpen(false);

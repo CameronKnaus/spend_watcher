@@ -10,6 +10,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? '50%' : 10,
   reporter: 'html',
   globalTeardown: './global-teardown.ts',
   use: {
@@ -18,7 +19,7 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile-chrome', use: { ...devices['iPhone 17 Pro'] } },
+    { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
   ],
   // Two servers, started fresh for the run. The api command also owns the test-DB lifecycle: it
   // generates the schema, brings up the Docker MySQL and waits for it to be healthy *before* the api

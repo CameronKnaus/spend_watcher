@@ -1,5 +1,6 @@
 import type { APIRequestContext } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
+import { format, startOfMonth, subDays } from 'date-fns';
 
 export type TestUser = {
   username: string;
@@ -7,24 +8,104 @@ export type TestUser = {
   password: string;
 };
 
-// --- date helpers (kept dependency-free; the contract wants `yyyy-MM-dd`) ----------------------
+// --- date helpers -------------------------------------------------------------------------------
 
-function ymd(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+/** The contract wants `yyyy-MM-dd`. */
+export function ymd(date: Date): string {
+  return format(date, 'yyyy-MM-dd');
 }
 
-function daysAgo(amount: number): Date {
-  const date = new Date();
-  date.setDate(date.getDate() - amount);
-  return date;
+/**
+ * `days` ago, but never earlier than the 1st of the current month.
+ *
+ * Specs assert against the CURRENT month view (dashboard "July overview", trends month totals), so
+ * every seeded transaction must land inside it. A plain `daysAgo(6)` straddles the previous month
+ * whenever a run happens on the 1st–6th — that exact bug broke 36 tests on 2026-07-01. Clamping
+ * keeps the whole baseline in-month on every day of every month; early in a month several seeded
+ * transactions simply share the 1st, which specs must tolerate (derive date expectations from
+ * SEEDED_DISCRETIONARY rather than re-doing date math).
+ */
+export function daysAgoInCurrentMonth(days: number): Date {
+  const candidate = subDays(new Date(), days);
+  const monthStart = startOfMonth(new Date());
+  return candidate < monthStart ? monthStart : candidate;
 }
+
+// --- baseline data ------------------------------------------------------------------------------
+
+export type SeededDiscretionary = {
+  category: string;
+  /** How the category renders in the UI (differs from the enum for RESTAURANTS). */
+  categoryLabel: string;
+  amountSpent: number;
+  spentDate: Date;
+  note: string;
+};
+
+/**
+ * The discretionary transactions `seedBaselineData` creates, exposed so specs can derive
+ * expectations (dates, date-group headers, totals) from the same source instead of duplicating the
+ * seed's date math. Recomputed per call because the dates depend on "now".
+ *
+ * Stable facts specs may hardcode: amounts 25 + 86 + 15 = $126 discretionary in the current month.
+ */
+export function seededDiscretionary(): SeededDiscretionary[] {
+  return [
+    {
+      category: 'RESTAURANTS',
+      categoryLabel: 'Dining out',
+      amountSpent: 25,
+      spentDate: daysAgoInCurrentMonth(0),
+      note: 'Lunch',
+    },
+    {
+      category: 'GROCERIES',
+      categoryLabel: 'Groceries',
+      amountSpent: 86,
+      spentDate: daysAgoInCurrentMonth(3),
+      note: 'Weekly groceries',
+    },
+    {
+      category: 'ENTERTAINMENT',
+      categoryLabel: 'Entertainment',
+      amountSpent: 15,
+      spentDate: daysAgoInCurrentMonth(6),
+      note: 'Streaming',
+    },
+  ];
+}
+
+/**
+ * Baseline amounts the seed guarantees for the current month. The recurring $60 relies on the api
+ * auto-backfilling a fixed-rate recurring spend's current month at creation — several specs'
+ * totals (e.g. -$186.00) are load-bearing on that behavior, so if the seed's recurring shape ever
+ * changes, re-verify those.
+ */
+export const SEED_TOTALS = {
+  discretionary: 126,
+  recurring: 60,
+  total: 186,
+} as const;
+
+export const SEEDED_ACCOUNT = {
+  accountName: 'Test Checking',
+  startingAccountValue: 5000,
+  accountCategory: 'CHECKING',
+} as const;
+
+export const SEEDED_RECURRING = {
+  recurringSpendName: 'Internet',
+  expectedMonthlyAmount: 60,
+  category: 'UTILITIES',
+} as const;
+
+export const SEEDED_TRIP = {
+  tripName: 'Test Trip',
+} as const;
 
 // POSTs through the real api and throws with the server's body on any non-2xx, so a broken fixture
 // fails loudly instead of silently leaving a page empty.
-async function post(api: APIRequestContext, path: string, data: unknown): Promise<void> {
+export async function post(api: APIRequestContext, path: string, data: unknown): Promise<void> {
   const response = await api.post(path, { data });
   if (!response.ok()) {
     throw new Error(`POST ${path} failed (${response.status()}): ${await response.text()}`);
@@ -50,34 +131,30 @@ export async function registerUser(api: APIRequestContext): Promise<TestUser> {
 // to render. Intentionally only uses endpoints that don't need a server-generated id handed back.
 export async function seedBaselineData(api: APIRequestContext): Promise<void> {
   await post(api, '/api/accounts/add', {
-    accountName: 'Test Checking',
-    startingAccountValue: 5000,
-    accountCategory: 'CHECKING',
+    ...SEEDED_ACCOUNT,
     isFixedRate: true,
     annualPercentageRate: 0,
   });
 
   // Amounts are whole numbers on purpose: the contract types discretionary `amountSpent` (and
   // recurring `expectedMonthlyAmount`) as a safe integer, so a float like 24.5 fails validation.
-  const discretionary = [
-    { category: 'RESTAURANTS', amountSpent: 25, spentDate: ymd(daysAgo(0)), note: 'Lunch' },
-    { category: 'GROCERIES', amountSpent: 86, spentDate: ymd(daysAgo(3)), note: 'Weekly groceries' },
-    { category: 'ENTERTAINMENT', amountSpent: 15, spentDate: ymd(daysAgo(6)), note: 'Streaming' },
-  ];
-  for (const transaction of discretionary) {
-    await post(api, '/api/spending/discretionary/add', transaction);
+  for (const transaction of seededDiscretionary()) {
+    await post(api, '/api/spending/discretionary/add', {
+      category: transaction.category,
+      amountSpent: transaction.amountSpent,
+      spentDate: ymd(transaction.spentDate),
+      note: transaction.note,
+    });
   }
 
   await post(api, '/api/spending/recurring/add', {
-    category: 'UTILITIES',
-    recurringSpendName: 'Internet',
-    expectedMonthlyAmount: 60,
+    ...SEEDED_RECURRING,
     isVariableRecurring: false,
   });
 
   await post(api, '/api/trips/add', {
-    tripName: 'Test Trip',
-    startDate: ymd(daysAgo(14)),
-    endDate: ymd(daysAgo(10)),
+    ...SEEDED_TRIP,
+    startDate: ymd(subDays(new Date(), 14)),
+    endDate: ymd(subDays(new Date(), 10)),
   });
 }

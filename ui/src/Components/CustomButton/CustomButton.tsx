@@ -31,11 +31,13 @@ export default function CustomButton({
 
   return (
     <button
+      type="button"
       {...props}
       className={classList}
       style={{
         width: layout === 'full-width' ? '100%' : 'fit-content',
       }}
+      disabled={isDisabled}
       onClick={handleClick}
     >
       {children}

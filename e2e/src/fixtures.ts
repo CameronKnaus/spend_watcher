@@ -1,10 +1,13 @@
-import { test as base, expect } from '@playwright/test';
-import { API_URL } from './config';
+import { test as base, expect, type APIRequestContext } from '@playwright/test';
+import { API_URL, UI_URL } from './config';
 import { registerUser, seedBaselineData, type TestUser } from './seed';
 
 type Fixtures = {
   // The unique, seeded account this test runs as — exposed in case a test needs the credentials.
   testUser: TestUser;
+  // Authenticated request context for this test's user. Use it (with `post` from seed.ts) to seed
+  // data beyond the baseline — e.g. a prior-month transaction — instead of clicking through the UI.
+  api: APIRequestContext;
 };
 
 // `test` exported here is pre-authenticated: every test gets its own freshly-registered user, a
@@ -12,11 +15,22 @@ type Fixtures = {
 // anything that should start "signed in". (For the sign-in / redirect flows, use the plain `test` from
 // '@playwright/test' instead, so the context starts clean.)
 export const test = base.extend<Fixtures>({
+  // Override the built-in baseURL fixture so that page.goto('/path') works even when the playwright
+  // config's use.baseURL is not applied (e.g. the MCP Playwright test server runs from the repo root
+  // and does not load the e2e/playwright.config.ts use-section settings). When the playwright config
+  // DOES set use.baseURL (normal `pnpm test:e2e` run), that value overrides this default.
+  // @ts-ignore — baseURL is a PlaywrightTestOption that can be shadowed as a test-scoped fixture
+  baseURL: [UI_URL, { option: true }],
+  api: async ({ playwright }, use) => {
+    // This request context has its own cookie jar, so the `token` cookie set by /auth/register is
+    // captured here and every later call through it is authenticated as this test's user.
+    const api = await playwright.request.newContext({ baseURL: API_URL });
+    await use(api);
+    await api.dispose();
+  },
   testUser: [
-    async ({ playwright, context }, use) => {
-      // Drive the api directly to register + seed. This request context has its own cookie jar, so the
-      // `token` cookie set by /auth/register is captured here.
-      const api = await playwright.request.newContext({ baseURL: API_URL });
+    async ({ api, context }, use) => {
+      // Drive the api directly to register + seed.
       const user = await registerUser(api);
       await seedBaselineData(api);
 
@@ -26,7 +40,6 @@ export const test = base.extend<Fixtures>({
       await context.addCookies(cookies);
 
       await use(user);
-      await api.dispose();
     },
     // auto so every test using this `test` is seeded + authenticated without having to ask for it.
     { auto: true },
