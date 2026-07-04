@@ -1,16 +1,16 @@
+import { CategoryDetails } from '@spend-watcher/contract';
 import getCanvasDimensions from 'Components/charts/utils/getCanvasDimensions/getCanvasDimensions';
 import { spendCategoryIconMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import * as d3 from 'd3';
 import AxisLeft from 'Pages/Savings/AccountGrowthOverTime/AxisLeft/AxisLeft';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
-import { Transaction, TransactionsV1Response } from 'Types/Services/spending.model';
 
 type BarChartPropTypes = {
-  transactionResponse: TransactionsV1Response;
+  categoryDetailsList: CategoryDetails[];
   containerMeasurement: UseMeasureRect;
 };
 
-export default function BarChart({ transactionResponse, containerMeasurement }: BarChartPropTypes) {
+export default function BarChart({ categoryDetailsList, containerMeasurement }: BarChartPropTypes) {
   const dimensions = getCanvasDimensions({
     width: containerMeasurement.width,
     height: 400,
@@ -22,16 +22,9 @@ export default function BarChart({ transactionResponse, containerMeasurement }: 
     },
   });
 
-  const aggregatedData = Array.from(
-    d3.rollup(
-      transactionResponse.transactions,
-      (v) => d3.sum(v, (d) => d.amount),
-      (d) => d.category,
-    ),
-    ([category, total]) => ({ category, total }),
-  ).sort((a, b) => a.total - b.total);
-
-  const metricAccessor = (d: Transaction) => d.amount;
+  const aggregatedData = categoryDetailsList
+    .map(({ category, combinedTotals }) => ({ category, total: combinedTotals.amount }))
+    .sort((a, b) => a.total - b.total);
 
   const xScale = d3
     .scaleBand()
@@ -40,7 +33,7 @@ export default function BarChart({ transactionResponse, containerMeasurement }: 
 
   const yScale = d3
     .scaleLinear()
-    .domain([0, d3.max(transactionResponse.transactions, metricAccessor) as number])
+    .domain([0, d3.max(aggregatedData, (d) => d.total) as number])
     .range([dimensions.boundedHeight, 0]);
 
   return (

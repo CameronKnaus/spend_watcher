@@ -7,7 +7,7 @@ import { appContract } from '@spend-watcher/contract';
 
 // OpenAPILink needs the contract at runtime so it knows each procedure's REST method + path.
 // `VITE_DOMAIN` already ends in `/api`, which is also the server-side handler prefix, so the
-// contract's relative paths (e.g. `/spending/transactions`) resolve to `…/api/spending/transactions`.
+// contract's relative paths (e.g. `/spending/details`) resolve to `…/api/spending/details`.
 const link = new OpenAPILink(appContract, {
   url: import.meta.env.VITE_DOMAIN,
   // Send the auth cookie with every request (the api derives identity from the `token` cookie).

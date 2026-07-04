@@ -91,16 +91,3 @@ export const v1AddRecurringTransactionSchema = zod.object({
   amountSpent: zod.number().safe().nonnegative(),
   date: zodValidateMonthYear,
 });
-
-// Legacy transaction shape still consumed by the Trends bar chart.
-export type Transaction = {
-  transactionId: number;
-  category: SpendingCategory;
-  amount: number;
-  date: DbDate;
-  isRecurring: boolean;
-};
-
-export type TransactionsV1Response = {
-  transactions: Transaction[];
-};

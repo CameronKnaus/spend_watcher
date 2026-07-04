@@ -9,25 +9,6 @@ export const detailsContract = oc
   .input(z.object({ startDate: z.iso.date(), endDate: z.iso.date() }))
   .output(spendingDetailsOutputSchema);
 
-// GET /spending/transactions — combined discretionary + recurring flat list over a date range.
-const combinedTransactionSchema = z.object({
-  transactionId: z.number(),
-  category: zSpendingCategory,
-  amount: z.number(),
-  date: z.iso.date(),
-  isRecurring: z.boolean(),
-});
-
-export const transactionsContract = oc
-  .route({ method: 'GET', path: '/spending/transactions' })
-  .input(z.object({ startDate: z.iso.date(), endDate: z.iso.date() }))
-  .output(
-    z.object({
-      presentCategories: z.array(zSpendingCategory),
-      transactions: z.array(combinedTransactionSchema),
-    }),
-  );
-
 // A single recurring spend group as surfaced in the summary.
 const recurringSpendTransactionSchema = z.object({
   transactionId: zRecurringTransactionId,
@@ -158,7 +139,6 @@ export const recurringTransactionEditContract = oc
   .input(z.object({ transactionId: zRecurringTransactionId, amountSpent: z.number().safe().positive() }));
 
 export const spendingContract = {
-  transactions: transactionsContract,
   details: detailsContract,
   recurringSummary: recurringSummaryContract,
   recurringTransactions: recurringTransactionsContract,

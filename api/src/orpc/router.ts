@@ -23,7 +23,6 @@ import {
   recurringTransactionEdit,
   recurringTransactions,
 } from '@modules/spending/recurring.controller';
-import { transactions } from '@modules/spending/transactions.controller';
 import {
   add as tripAdd,
   edit as tripEdit,
@@ -35,7 +34,6 @@ import { pub } from './base';
 
 export const router = pub.router({
   spending: {
-    transactions,
     details,
     recurringSummary,
     recurringTransactions,

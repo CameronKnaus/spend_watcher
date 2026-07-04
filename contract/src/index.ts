@@ -27,7 +27,6 @@ export type AppOutputs = InferContractRouterOutputs<AppContract>;
 
 // Named response types, re-derived from the contract, so the api can keep its existing type names
 // (`*.types.ts` re-exports these instead of hand-maintaining the response shapes).
-export type CombinedTransactionsResponse = AppOutputs['spending']['transactions'];
 export type RecurringSummaryResponse = AppOutputs['spending']['recurringSummary'];
 export type RecurringTransactionsListResponse = AppOutputs['spending']['recurringTransactions'];
 export type HistoryStartResponse = AppOutputs['spending']['historyStart'];
