@@ -62,7 +62,7 @@ export async function findRecurringSummary(username: string): Promise<RecurringS
             ON A.recurring_spend_id = B.recurringSpendMaxId AND A.date = B.maxDate
         ) AS RecentTransactions
         ON RecurringExpenses.recurring_spend_id = RecentTransactions.recurring_spend_id ORDER BY amount DESC`,
-    [username, username],
+    [username],
   );
 
   return rows.map(toRecurringSpendTransaction);

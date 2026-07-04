@@ -9,7 +9,7 @@ export type DiscretionaryHistoryRow = {
   linked_trip_id: string | null;
 };
 
-// Raw recurring history row: each recurring spend joined to its most-recent transaction.
+// Raw recurring history row: a recurring transaction joined to its parent spend's metadata.
 export type RecurringHistoryRow = {
   amount: number; // expected/average monthly amount of the recurring spend
   category: SpendingCategory;
@@ -18,7 +18,7 @@ export type RecurringHistoryRow = {
   is_variable_recurring: 0 | 1;
   recurring_spend_id: string;
   spend_name: string;
-  transaction_amount: number; // actual amount of the most-recent transaction
+  transaction_amount: number; // actual amount of this transaction
   transaction_id: number;
 };
 

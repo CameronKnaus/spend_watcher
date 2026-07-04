@@ -14,25 +14,19 @@ export function findDiscretionaryHistory(
   );
 }
 
-// Each recurring spend joined to its most-recent transaction, filtered to the range.
+// Every recurring transaction in the range, joined to its parent spend's metadata.
 export function findRecurringHistory(
   username: string,
   startDate: DbDate,
   endDate: DbDate,
 ): Promise<RecurringHistoryRow[]> {
   return queryAsync<RecurringHistoryRow[]>(
-    `SELECT RecurringExpenses.recurring_spend_id, username, category, spend_name, amount, is_variable_recurring, is_active, transaction_amount, date, transaction_id
-        FROM ( SELECT * FROM user_information.recurring_spending WHERE username=?) AS RecurringExpenses
-        JOIN (
-            SELECT * FROM user_information.recurring_transactions AS A
-            INNER JOIN (
-                SELECT recurring_spend_id AS recurringSpendMaxId
-                FROM user_information.recurring_transactions
-                GROUP BY recurring_spend_id
-            ) AS B
-            ON A.recurring_spend_id = B.recurringSpendMaxId
-        ) AS RecentTransactions
-        ON RecurringExpenses.recurring_spend_id = RecentTransactions.recurring_spend_id WHERE date BETWEEN ? AND ? ORDER BY amount DESC`,
+    `SELECT spending.recurring_spend_id, category, spend_name, amount, is_variable_recurring, is_active, transaction_amount, date, transaction_id
+        FROM user_information.recurring_spending AS spending
+        JOIN user_information.recurring_transactions AS transactions
+            ON spending.recurring_spend_id = transactions.recurring_spend_id
+        WHERE spending.username = ? AND transactions.date BETWEEN ? AND ?
+        ORDER BY amount DESC`,
     [username, startDate, endDate],
   );
 }
