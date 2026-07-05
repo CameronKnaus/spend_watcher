@@ -1,17 +1,12 @@
 import { queryAsync } from '@lib/queryAsync';
 import { AppInputs, SpendingCategory } from '@spend-watcher/contract';
 import { dbDateFormat } from '@type/dateTypes';
+import { formatDiscretionaryTransactionId } from '@utils/transactionId';
 import { format } from 'date-fns';
 import { v4 as uuid4 } from 'uuid';
 
 type TripAddInput = AppInputs['trips']['add'];
 type TripEditInput = AppInputs['trips']['edit'];
-
-// Builds the user-facing `Discretionary-<id>` transaction id. Kept local to the module so we
-// don't import across module boundaries.
-function formatDiscretionaryTransactionId(transactionId: number): `Discretionary-${number}` {
-  return `Discretionary-${transactionId}`;
-}
 
 type TripRow = {
   trip_id: string; // uuid

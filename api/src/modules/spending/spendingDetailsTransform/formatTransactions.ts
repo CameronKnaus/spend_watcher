@@ -1,15 +1,12 @@
 import { DiscretionarySpendTransaction, SpendingDetailsResponse, SpendTransaction } from '@spend-watcher/contract';
 import { DbDate } from '@type/dateTypes';
+import { formatDiscretionaryTransactionId } from '@utils/transactionId';
 import { formatISO } from 'date-fns';
 import { DiscretionaryHistoryRow } from '../details.types';
 import { toRecurringSpendTransaction } from '../recurring.repository';
 import { RecurringSpendWithTransactionRow } from '../recurring.types';
 
 type TransactionDictionary = SpendingDetailsResponse['transactionDictionary'];
-
-function formatDiscretionaryTransactionId(transactionId: number): `Discretionary-${number}` {
-  return `Discretionary-${transactionId}`;
-}
 
 /* Builds the transactionId -> transaction lookup map (so the rest of the response can reference
    transactions by id instead of duplicating them), plus the discretionary/recurring id lists and a

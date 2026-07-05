@@ -4,7 +4,7 @@ import {
   RecurringSummaryResponse,
   RecurringTransactionsListResponse,
 } from '@spend-watcher/contract';
-import { parseTransactionIdNumber } from './parseTransactionId';
+import { parseTransactionIdNumber } from '@utils/transactionId';
 import {
   backfillRecurringTransactions,
   deleteRecurringSpend,

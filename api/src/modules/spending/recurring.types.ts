@@ -1,6 +1,4 @@
-import { RecurringSpendTransaction, SpendingCategory } from '@spend-watcher/contract';
-
-export type RecurringTransactionId = RecurringSpendTransaction['transactionId'];
+import { SpendingCategory } from '@spend-watcher/contract';
 
 // A recurring transaction joined to its parent spend's metadata. The summary query returns one per
 // spend (its most recent transaction); the details history query returns every transaction in range.

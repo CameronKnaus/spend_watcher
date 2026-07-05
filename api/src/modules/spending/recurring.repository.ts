@@ -1,20 +1,13 @@
 import { queryAsync } from '@lib/queryAsync';
 import { AppInputs, RecurringSpendTransaction, RecurringTransactionsListResponse } from '@spend-watcher/contract';
 import { DbDate, MonthYearDbDate } from '@type/dateTypes';
+import { formatRecurringTransactionId } from '@utils/transactionId';
 import { format, formatISO } from 'date-fns';
 import { v4 as uuid4 } from 'uuid';
-import {
-  RecurringSpendTransactionRow,
-  RecurringSpendWithTransactionRow,
-  RecurringTransactionId,
-} from './recurring.types';
+import { RecurringSpendTransactionRow, RecurringSpendWithTransactionRow } from './recurring.types';
 
 type RecurringSpendAddInput = AppInputs['spending']['recurringSpendAdd'];
 type RecurringSpendEditInput = AppInputs['spending']['recurringSpendEdit'];
-
-export function formatRecurringTransactionId(transactionId: number): RecurringTransactionId {
-  return `Recurring-${transactionId}`;
-}
 
 // Maps a raw recurring spend+transaction row to the camelCase domain shape, so snake_case never
 // leaks past the repository. Also used by the details transform, whose repo returns the same row
