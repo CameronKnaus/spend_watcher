@@ -1,4 +1,4 @@
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 
 // Single definition of the auth-verify query so the router's beforeLoad guards (ensureQueryData)
 // and useSessionStatus (useQuery) share one cache entry and one freshness policy.

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DeleteButton from 'Components/DeleteButton/DeleteButton';

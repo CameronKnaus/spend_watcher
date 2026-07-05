@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import AccountUpdateHistory from 'Components/AccountUpdateHistory/AccountUpdateHistory';
 import EditAccountForm from 'Components/EditAccountForm/EditAccountForm';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';

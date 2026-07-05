@@ -1,4 +1,4 @@
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import { DbDate } from 'Types/dateTypes';
 
 export const spendingDetailsQueryOptions = ({ startDate, endDate }: { startDate: DbDate; endDate: DbDate }) =>

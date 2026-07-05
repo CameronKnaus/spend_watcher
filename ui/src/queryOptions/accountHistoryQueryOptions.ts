@@ -1,4 +1,4 @@
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 
 export const accountHistoryQueryOptions = (accountId: string) =>
   orpc.accounts.history.queryOptions({
