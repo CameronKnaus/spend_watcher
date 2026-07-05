@@ -1,4 +1,4 @@
-import { queryAsync } from '@lib/queryAsync';
+import { queryAsync, queryTransactionAsync } from '@lib/queryAsync';
 import { AppInputs, RecurringSpendTransaction, RecurringTransactionsListResponse } from '@spend-watcher/contract';
 import { DbDate, MonthYearDbDate } from '@type/dateTypes';
 import { formatRecurringTransactionId } from '@utils/transactionId';
@@ -84,25 +84,27 @@ export async function findRecurringTransactionsList(recurringSpendId: string): P
 
 // --- Writes ------------------------------------------------------------------------------------
 
-// Creates a recurring spend plus its first transaction for the current month. Two statements run
-// as one multi-statement query (the connection enables `multipleStatements`), mirroring the legacy
-// `addRecurringSpend` transaction.
+// Creates a recurring spend plus its first transaction for the current month, in one transaction
+// so a failed second insert can't leave a spend with no transactions.
 export async function insertRecurringSpend(username: string, input: RecurringSpendAddInput): Promise<void> {
   const newSpendId = uuid4();
-  await queryAsync(
-    `INSERT INTO recurring_spending (recurring_spend_id, username, category, spend_name, amount, is_variable_recurring, is_active) VALUES (?, ?, ?, ?, ?, ?, TRUE);
-     INSERT INTO recurring_transactions (recurring_spend_id, transaction_amount, date) VALUES (?, ?, DATE_SUB(NOW(), INTERVAL DAYOFMONTH(NOW())-1 DAY));`,
-    [
-      newSpendId,
-      username,
-      input.category,
-      input.recurringSpendName,
-      input.expectedMonthlyAmount,
-      input.isVariableRecurring,
-      newSpendId,
-      input.expectedMonthlyAmount,
-    ],
-  );
+  await queryTransactionAsync([
+    {
+      sql: 'INSERT INTO recurring_spending (recurring_spend_id, username, category, spend_name, amount, is_variable_recurring, is_active) VALUES (?, ?, ?, ?, ?, ?, TRUE)',
+      params: [
+        newSpendId,
+        username,
+        input.category,
+        input.recurringSpendName,
+        input.expectedMonthlyAmount,
+        input.isVariableRecurring,
+      ],
+    },
+    {
+      sql: 'INSERT INTO recurring_transactions (recurring_spend_id, transaction_amount, date) VALUES (?, ?, DATE_SUB(NOW(), INTERVAL DAYOFMONTH(NOW())-1 DAY))',
+      params: [newSpendId, input.expectedMonthlyAmount],
+    },
+  ]);
 }
 
 export async function updateRecurringSpend(username: string, input: RecurringSpendEditInput): Promise<void> {

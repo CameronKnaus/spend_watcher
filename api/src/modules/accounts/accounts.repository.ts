@@ -1,4 +1,4 @@
-import { queryAsync } from '@lib/queryAsync';
+import { queryAsync, queryTransactionAsync } from '@lib/queryAsync';
 import { AccountCategory, AppInputs } from '@spend-watcher/contract';
 import { v4 as uuid4 } from 'uuid';
 import { AccountUpdate, AccountValueDataPoint, AccountWithLatestUpdate } from './accounts.types';
@@ -113,24 +113,27 @@ export async function findAccountUpdates(accountId: string): Promise<AccountUpda
   return rows.map(toAccountUpdate);
 }
 
-// Creates the account plus its starting-balance update for the current month. Two statements run as
-// one multi-statement query (the connection enables `multipleStatements`), mirroring legacy `addAccount`.
+// Creates the account plus its starting-balance update for the current month, in one transaction
+// so a failed second insert can't leave an account with no updates.
 export async function insertAccount(username: string, input: AccountAddInput): Promise<void> {
   const accountId = uuid4();
-  await queryAsync(
-    `INSERT INTO user_information.money_accounts (account_id, username, account_name, is_fixed, type, growth_rate, is_active) VALUES (?, ?, ?, ?, ?, ?, 1);
-     INSERT INTO user_information.money_account_updates (account_id, date, amount) VALUES (?, DATE_SUB(CURRENT_DATE(), INTERVAL DAYOFMONTH(NOW())-1 DAY), ?);`,
-    [
-      accountId,
-      username,
-      input.accountName,
-      input.isFixedRate,
-      input.accountCategory,
-      input.annualPercentageRate ?? 0,
-      accountId,
-      input.startingAccountValue,
-    ],
-  );
+  await queryTransactionAsync([
+    {
+      sql: 'INSERT INTO user_information.money_accounts (account_id, username, account_name, is_fixed, type, growth_rate, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)',
+      params: [
+        accountId,
+        username,
+        input.accountName,
+        input.isFixedRate,
+        input.accountCategory,
+        input.annualPercentageRate ?? 0,
+      ],
+    },
+    {
+      sql: 'INSERT INTO user_information.money_account_updates (account_id, date, amount) VALUES (?, DATE_SUB(CURRENT_DATE(), INTERVAL DAYOFMONTH(NOW())-1 DAY), ?)',
+      params: [accountId, input.startingAccountValue],
+    },
+  ]);
 }
 
 export async function updateAccount(username: string, input: AccountEditInput): Promise<void> {

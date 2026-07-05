@@ -1,4 +1,4 @@
-import { queryAsync } from '@lib/queryAsync';
+import { queryAsync, queryTransactionAsync } from '@lib/queryAsync';
 import { AppInputs, SpendingCategory } from '@spend-watcher/contract';
 import { dbDateFormat } from '@type/dateTypes';
 import { formatDiscretionaryTransactionId } from '@utils/transactionId';
@@ -142,11 +142,11 @@ export async function updateTrip(username: string, input: TripEditInput): Promis
   ]);
 }
 
-// Deletes the trip and unlinks it from any spend transactions. Two statements run as one
-// multi-statement query (the connection enables `multipleStatements`), mirroring the legacy delete.
+// Deletes the trip and unlinks it from any spend transactions, in one transaction so a failed
+// unlink can't leave transactions pointing at a deleted trip.
 export async function deleteTrip(username: string, tripId: string): Promise<void> {
-  await queryAsync(
-    'DELETE FROM trips WHERE username=? AND trip_id=?;UPDATE spend_transactions SET linked_trip_id=NULL WHERE linked_trip_id=?;',
-    [username, tripId, tripId],
-  );
+  await queryTransactionAsync([
+    { sql: 'DELETE FROM trips WHERE username=? AND trip_id=?', params: [username, tripId] },
+    { sql: 'UPDATE spend_transactions SET linked_trip_id=NULL WHERE linked_trip_id=?', params: [tripId] },
+  ]);
 }
