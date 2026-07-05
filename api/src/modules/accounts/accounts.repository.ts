@@ -15,13 +15,14 @@ type AccountWithLatestUpdateRow = {
   is_fixed: 1 | 0;
   type: AccountCategory;
   growth_rate: number;
-  date: string;
+  // The mysql driver maps DATE columns to Date objects.
+  date: Date;
   amount: number;
 };
 
 type AccountUpdateRow = {
   account_id: string;
-  date: string;
+  date: Date;
   amount: number;
   update_id: number;
 };
@@ -29,7 +30,7 @@ type AccountUpdateRow = {
 type AccountGrowthRow = {
   account_id: string;
   account_name: string;
-  date: string;
+  date: Date;
   amount: number;
 };
 

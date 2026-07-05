@@ -1,9 +1,4 @@
-import {
-  AccountCategory,
-  AccountGrowthOverTimeResponse,
-  AccountsSummaryResponse,
-  AppInputs,
-} from '@spend-watcher/contract';
+import { AccountCategory, AccountsSummaryResponse, AppInputs } from '@spend-watcher/contract';
 import { MonthYearDbDate, monthYearDbDateFormat } from '@type/dateTypes';
 import { format, isBefore } from 'date-fns';
 import {
@@ -17,7 +12,7 @@ import {
   updateAccountActiveStatus,
   updateAccountUpdate,
 } from './accounts.repository';
-import { AccountUpdate, AccountWithStatus } from './accounts.types';
+import { AccountUpdate, AccountValueDataPoint, AccountWithStatus } from './accounts.types';
 
 function emptyCategoryRecord(): Record<AccountCategory, number> {
   return {
@@ -69,7 +64,8 @@ export async function getAccountsSummary(username: string): Promise<AccountsSumm
   };
 }
 
-export function getAccountGrowthOverTime(username: string): Promise<AccountGrowthOverTimeResponse> {
+// Raw domain points — the controller owns shaping `date` into the response's yyyy-MM-dd string.
+export function getAccountGrowthOverTime(username: string): Promise<AccountValueDataPoint[]> {
   return findAccountGrowthOverTime(username);
 }
 

@@ -30,7 +30,7 @@ type TripLinkedExpenseRow = {
   amount: number;
   category: string;
   note: string;
-  date: string; // ISO, e.g. '2023-12-27T05:00:00.000Z'
+  date: Date; // the mysql driver maps DATE columns to Date objects
   username: string;
   uncommon: number; // 1 | 0
   linked_trip_id: string; // uuid

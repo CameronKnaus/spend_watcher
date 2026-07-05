@@ -14,7 +14,7 @@ type RecurringSpendEditInput = AppInputs['spending']['recurringSpendEdit'];
 // shape. A spend "requires a monthly update" when its most recent transaction isn't in the current month.
 export function toRecurringSpendTransaction(row: RecurringSpendWithTransactionRow): RecurringSpendTransaction {
   const currentMonth = format(new Date(), 'MM-yyyy');
-  const lastUpdatedMonth = format(new Date(row.date), 'MM-yyyy');
+  const lastUpdatedMonth = format(row.date, 'MM-yyyy');
   const requiresMonthlyUpdate = currentMonth !== lastUpdatedMonth;
 
   return {
@@ -22,7 +22,7 @@ export function toRecurringSpendTransaction(row: RecurringSpendWithTransactionRo
     transactionId: formatRecurringTransactionId(row.transaction_id),
     category: row.category,
     amountSpent: row.transaction_amount,
-    spentDate: formatISO(new Date(row.date), { representation: 'date' }) as DbDate,
+    spentDate: formatISO(row.date, { representation: 'date' }) as DbDate,
     expectedMonthlyAmount: row.amount,
     recurringSpendName: row.spend_name,
     recurringSpendId: row.recurring_spend_id,
@@ -67,7 +67,7 @@ type RecurringTransactionListItem = RecurringTransactionsListResponse['transacti
 function toRecurringTransactionListItem(row: RecurringSpendTransactionRow): RecurringTransactionListItem {
   return {
     transactionId: formatRecurringTransactionId(row.transaction_id),
-    date: format(new Date(row.date), 'yyyy-MM') as MonthYearDbDate,
+    date: format(row.date, 'yyyy-MM') as MonthYearDbDate,
     amountSpent: row.transaction_amount,
   };
 }

@@ -5,7 +5,7 @@ import { SpendingCategory } from '@spend-watcher/contract';
 export type RecurringSpendWithTransactionRow = {
   amount: number; // expected / average monthly amount of the recurring spend
   category: SpendingCategory;
-  date: string; // e.g. '2024-08-01T04:00:00.000Z' — date of this transaction
+  date: Date; // the mysql driver maps DATE columns to Date objects
   is_active: 0 | 1;
   is_variable_recurring: 0 | 1;
   recurring_spend_id: string;
@@ -17,6 +17,5 @@ export type RecurringSpendWithTransactionRow = {
 export type RecurringSpendTransactionRow = {
   transaction_id: number;
   transaction_amount: number;
-  // YYYY-MM-DD
-  date: string;
+  date: Date;
 };

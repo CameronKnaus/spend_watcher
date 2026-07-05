@@ -27,7 +27,7 @@ export default function formatTransactions(
       transactionId: identifier,
       category: transaction.category,
       amountSpent: transaction.amount,
-      spentDate: formatISO(new Date(transaction.date), { representation: 'date' }) as DbDate,
+      spentDate: formatISO(transaction.date, { representation: 'date' }) as DbDate,
       note: transaction.note ?? '',
     };
 

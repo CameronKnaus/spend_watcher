@@ -10,8 +10,7 @@ export type AccountWithLatestUpdate = {
   category: AccountCategory;
   isFixedRate: boolean;
   annualPercentageRate: number;
-  // YYYY-MM-DD
-  date: string;
+  date: Date;
   amount: number;
 };
 
@@ -29,15 +28,13 @@ export type AccountWithStatus = {
 export type AccountValueDataPoint = {
   accountId: string;
   accountName: string;
-  // YYYY-MM-DD
-  date: string;
+  date: Date;
   amount: number;
 };
 
 export type AccountUpdate = {
   accountId: string;
-  // YYYY-MM-DD
-  date: string;
+  date: Date;
   amount: number;
   updateId: number;
 };

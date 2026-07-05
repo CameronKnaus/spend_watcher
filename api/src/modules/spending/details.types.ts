@@ -4,7 +4,7 @@ export type DiscretionaryHistoryRow = {
   transaction_id: number;
   category: SpendingCategory;
   amount: number;
-  date: string; // ISO timestamp, e.g. '2024-08-01T04:00:00.000Z'
+  date: Date; // the mysql driver maps DATE columns to Date objects
   note: string | null;
   linked_trip_id: string | null;
 };

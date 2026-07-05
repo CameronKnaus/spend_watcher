@@ -23,7 +23,7 @@ export const growthOverTime = authed.accounts.growthOverTime.handler(async ({ co
 
   return dataPoints.map((dataPoint) => ({
     ...dataPoint,
-    date: format(new Date(dataPoint.date), 'yyyy-MM-dd'),
+    date: format(dataPoint.date, 'yyyy-MM-dd'),
   }));
 });
 
@@ -34,7 +34,7 @@ export const history = authed.accounts.history.handler(async ({ input }) => {
   return {
     accountId: updates[0].accountId,
     updateHistory: updates.map((update) => ({
-      date: format(new Date(update.date), 'yyyy-MM') as MonthYearDbDate,
+      date: format(update.date, 'yyyy-MM') as MonthYearDbDate,
       amount: update.amount,
       updateId: update.updateId,
     })),
