@@ -16,7 +16,8 @@
     "format": "pnpm -r run format",
     "test": "pnpm --filter @spend-watcher/ui run test",
     "test:e2e": "pnpm --filter @spend-watcher/e2e run test",
-    "test:api": "pnpm --filter @spend-watcher/e2e run test:api"
+    "test:api": "pnpm --filter @spend-watcher/e2e run test:api",
+    "test:all": "pnpm --filter @spend-watcher/ui run test:run & U=$!; pnpm --filter @spend-watcher/e2e run test & E=$!; wait $U; RU=$?; wait $E; RE=$?; test $RU -eq 0 -a $RE -eq 0"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.0",
