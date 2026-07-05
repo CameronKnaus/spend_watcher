@@ -104,11 +104,17 @@ export async function findAccountGrowthOverTime(username: string): Promise<Accou
   return rows.map(toAccountValueDataPoint);
 }
 
-// Full update history for a single account, newest first. Backs GET /history.
-export async function findAccountUpdates(accountId: string): Promise<AccountUpdate[]> {
+// Full update history for a single account, newest first. Backs GET /history. `money_account_updates`
+// has no username column, so ownership is enforced by joining to the parent `money_accounts` — without
+// it a caller could read another user's balance history by supplying their account id.
+export async function findAccountUpdates(username: string, accountId: string): Promise<AccountUpdate[]> {
   const rows = await queryAsync<AccountUpdateRow[]>(
-    'SELECT * FROM user_information.money_account_updates WHERE account_id = ? ORDER BY date DESC',
-    [accountId],
+    `SELECT u.account_id, u.date, u.amount, u.update_id
+       FROM user_information.money_account_updates AS u
+       JOIN user_information.money_accounts AS a ON u.account_id = a.account_id
+       WHERE u.account_id = ? AND a.username = ?
+       ORDER BY u.date DESC`,
+    [accountId, username],
   );
 
   return rows.map(toAccountUpdate);
@@ -166,18 +172,26 @@ export async function deleteAccount(username: string, accountId: string): Promis
   ]);
 }
 
-// `input.date` is a `yyyy-MM` string; the DB stores the first of the month.
-export async function insertAccountUpdate(input: AccountUpdateAddInput): Promise<void> {
-  await queryAsync('INSERT INTO user_information.money_account_updates (account_id, date, amount) VALUES (?, ?, ?)', [
-    input.accountId,
-    `${input.date}-01`,
-    input.amount,
-  ]);
+// `input.date` is a `yyyy-MM` string; the DB stores the first of the month. The INSERT..SELECT only
+// produces a row when the target account belongs to `username`, so a caller can't graft a balance
+// update onto another user's account.
+export async function insertAccountUpdate(username: string, input: AccountUpdateAddInput): Promise<void> {
+  await queryAsync(
+    `INSERT INTO user_information.money_account_updates (account_id, date, amount)
+       SELECT ?, ?, ? FROM user_information.money_accounts WHERE account_id = ? AND username = ?`,
+    [input.accountId, `${input.date}-01`, input.amount, input.accountId, username],
+  );
 }
 
-export async function updateAccountUpdate(input: AccountUpdateEditInput): Promise<void> {
+// Scoped through the parent `money_accounts` so a caller can only edit updates on accounts they own —
+// `update_id` is a guessable auto-increment int, so filtering on it alone would let anyone rewrite
+// another user's balance history.
+export async function updateAccountUpdate(username: string, input: AccountUpdateEditInput): Promise<void> {
   await queryAsync(
-    'UPDATE user_information.money_account_updates SET amount = ? WHERE account_id = ? AND update_id = ?',
-    [input.amount, input.accountId, input.updateId],
+    `UPDATE user_information.money_account_updates AS u
+       JOIN user_information.money_accounts AS a ON u.account_id = a.account_id
+       SET u.amount = ?
+       WHERE u.account_id = ? AND u.update_id = ? AND a.username = ?`,
+    [input.amount, input.accountId, input.updateId, username],
   );
 }

@@ -69,8 +69,8 @@ export function getAccountGrowthOverTime(username: string): Promise<AccountValue
   return findAccountGrowthOverTime(username);
 }
 
-export function getAccountUpdates(accountId: string): Promise<AccountUpdate[]> {
-  return findAccountUpdates(accountId);
+export function getAccountUpdates(username: string, accountId: string): Promise<AccountUpdate[]> {
+  return findAccountUpdates(username, accountId);
 }
 
 export function addAccount(username: string, input: AppInputs['accounts']['add']): Promise<void> {
@@ -89,10 +89,10 @@ export function removeAccount(username: string, accountId: string): Promise<void
   return deleteAccount(username, accountId);
 }
 
-export function addAccountUpdate(input: AppInputs['accounts']['updateAdd']): Promise<void> {
-  return insertAccountUpdate(input);
+export function addAccountUpdate(username: string, input: AppInputs['accounts']['updateAdd']): Promise<void> {
+  return insertAccountUpdate(username, input);
 }
 
-export function editAccountUpdate(input: AppInputs['accounts']['updateEdit']): Promise<void> {
-  return updateAccountUpdate(input);
+export function editAccountUpdate(username: string, input: AppInputs['accounts']['updateEdit']): Promise<void> {
+  return updateAccountUpdate(username, input);
 }

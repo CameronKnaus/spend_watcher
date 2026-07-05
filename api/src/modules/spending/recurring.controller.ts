@@ -16,8 +16,8 @@ export const recurringSummary = authed.spending.recurringSummary.handler(({ cont
 );
 
 // GET /api/spending/recurring/transactions — all transactions tied to a given recurring spend.
-export const recurringTransactions = authed.spending.recurringTransactions.handler(({ input }) =>
-  getRecurringTransactionsList(input.recurringSpendId),
+export const recurringTransactions = authed.spending.recurringTransactions.handler(({ context, input }) =>
+  getRecurringTransactionsList(context.username, input.recurringSpendId),
 );
 
 // POST /api/spending/recurring/add — create a new recurring spend.
@@ -41,11 +41,11 @@ export const recurringSpendSetActive = authed.spending.recurringSpendSetActive.h
 );
 
 // POST /api/spending/recurring/transactions/add — add a transaction to a recurring spend.
-export const recurringTransactionAdd = authed.spending.recurringTransactionAdd.handler(({ input }) =>
-  addRecurringTransaction(input),
+export const recurringTransactionAdd = authed.spending.recurringTransactionAdd.handler(({ context, input }) =>
+  addRecurringTransaction(context.username, input),
 );
 
 // POST /api/spending/recurring/transactions/edit — edit a recurring spend's transaction.
-export const recurringTransactionEdit = authed.spending.recurringTransactionEdit.handler(({ input }) =>
-  editRecurringTransaction(input),
+export const recurringTransactionEdit = authed.spending.recurringTransactionEdit.handler(({ context, input }) =>
+  editRecurringTransaction(context.username, input),
 );

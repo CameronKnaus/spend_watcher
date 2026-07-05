@@ -72,11 +72,21 @@ function toRecurringTransactionListItem(row: RecurringSpendTransactionRow): Recu
   };
 }
 
-// All transactions tied to a given recurring spend. Ported from `fetchRecurringSpendTransactionsList`.
-export async function findRecurringTransactionsList(recurringSpendId: string): Promise<RecurringTransactionListItem[]> {
+// All transactions tied to a given recurring spend. `recurring_transactions` has no username
+// column, so ownership is enforced by joining to the parent `recurring_spending` and filtering on
+// its username — without this a caller could read another user's history by supplying their
+// (guessable, integer-derived) recurringSpendId.
+export async function findRecurringTransactionsList(
+  username: string,
+  recurringSpendId: string,
+): Promise<RecurringTransactionListItem[]> {
   const rows = await queryAsync<RecurringSpendTransactionRow[]>(
-    'SELECT transaction_amount, date, transaction_id FROM recurring_transactions WHERE recurring_spend_id=? ORDER BY date DESC',
-    [recurringSpendId],
+    `SELECT rt.transaction_amount, rt.date, rt.transaction_id
+        FROM recurring_transactions AS rt
+        JOIN recurring_spending AS rs ON rt.recurring_spend_id = rs.recurring_spend_id
+        WHERE rt.recurring_spend_id=? AND rs.username=?
+        ORDER BY rt.date DESC`,
+    [recurringSpendId, username],
   );
 
   return rows.map(toRecurringTransactionListItem);
@@ -138,21 +148,35 @@ export async function updateRecurringActiveStatus(
   ]);
 }
 
-// `monthYearDate` is a `yyyy-MM` string; the DB stores the first of the month.
+// `monthYearDate` is a `yyyy-MM` string; the DB stores the first of the month. The INSERT..SELECT
+// only produces a row when the target spend belongs to `username`, so a caller can't graft a
+// transaction onto another user's recurring spend.
 export async function insertRecurringTransaction(
+  username: string,
   recurringSpendId: string,
   amountSpent: number,
   monthYearDate: string,
 ): Promise<void> {
   await queryAsync(
-    'INSERT INTO recurring_transactions (recurring_spend_id, transaction_amount, date) VALUES (?, ?, ?)',
-    [recurringSpendId, amountSpent, `${monthYearDate}-01`],
+    `INSERT INTO recurring_transactions (recurring_spend_id, transaction_amount, date)
+        SELECT ?, ?, ? FROM recurring_spending WHERE recurring_spend_id=? AND username=?`,
+    [recurringSpendId, amountSpent, `${monthYearDate}-01`, recurringSpendId, username],
   );
 }
 
-export async function updateRecurringTransaction(transactionId: number, amountSpent: number): Promise<void> {
-  await queryAsync('UPDATE recurring_transactions SET transaction_amount=? WHERE transaction_id=?', [
-    amountSpent,
-    transactionId,
-  ]);
+// Scoped through the parent `recurring_spending` so a caller can only edit transactions on spends
+// they own — `transaction_id` is a guessable auto-increment int, so filtering on it alone would let
+// anyone rewrite another user's amounts.
+export async function updateRecurringTransaction(
+  username: string,
+  transactionId: number,
+  amountSpent: number,
+): Promise<void> {
+  await queryAsync(
+    `UPDATE recurring_transactions AS rt
+        JOIN recurring_spending AS rs ON rt.recurring_spend_id = rs.recurring_spend_id
+        SET rt.transaction_amount=?
+        WHERE rt.transaction_id=? AND rs.username=?`,
+    [amountSpent, transactionId, username],
+  );
 }

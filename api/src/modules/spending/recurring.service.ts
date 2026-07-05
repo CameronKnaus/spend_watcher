@@ -60,9 +60,10 @@ export async function getRecurringSummary(username: string): Promise<RecurringSu
 }
 
 export async function getRecurringTransactionsList(
+  username: string,
   recurringSpendId: string,
 ): Promise<RecurringTransactionsListResponse> {
-  const transactions = await findRecurringTransactionsList(recurringSpendId);
+  const transactions = await findRecurringTransactionsList(username, recurringSpendId);
   return { transactions };
 }
 
@@ -88,10 +89,16 @@ export function setRecurringSpendActive(
   return updateRecurringActiveStatus(username, input.recurringSpendId, input.isActive);
 }
 
-export function addRecurringTransaction(input: AppInputs['spending']['recurringTransactionAdd']): Promise<void> {
-  return insertRecurringTransaction(input.recurringSpendId, input.amountSpent, input.date);
+export function addRecurringTransaction(
+  username: string,
+  input: AppInputs['spending']['recurringTransactionAdd'],
+): Promise<void> {
+  return insertRecurringTransaction(username, input.recurringSpendId, input.amountSpent, input.date);
 }
 
-export function editRecurringTransaction(input: AppInputs['spending']['recurringTransactionEdit']): Promise<void> {
-  return updateRecurringTransaction(parseTransactionIdNumber(input.transactionId), input.amountSpent);
+export function editRecurringTransaction(
+  username: string,
+  input: AppInputs['spending']['recurringTransactionEdit'],
+): Promise<void> {
+  return updateRecurringTransaction(username, parseTransactionIdNumber(input.transactionId), input.amountSpent);
 }

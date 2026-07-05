@@ -28,11 +28,13 @@ export const growthOverTime = authed.accounts.growthOverTime.handler(async ({ co
 });
 
 // GET /api/accounts/history — the full monthly update history for a single account.
-export const history = authed.accounts.history.handler(async ({ input }) => {
-  const updates = await getAccountUpdates(input.accountId);
+export const history = authed.accounts.history.handler(async ({ context, input }) => {
+  const updates = await getAccountUpdates(context.username, input.accountId);
 
+  // Empty when the account has no updates or isn't the caller's — echo the requested id rather than
+  // reading `updates[0]`, which would throw.
   return {
-    accountId: updates[0].accountId,
+    accountId: input.accountId,
     updateHistory: updates.map((update) => ({
       date: format(update.date, 'yyyy-MM') as MonthYearDbDate,
       amount: update.amount,
@@ -58,7 +60,11 @@ export const remove = authed.accounts.delete.handler(({ context, input }) =>
 );
 
 // POST /api/accounts/update/add — add a monthly balance update for an account.
-export const updateAdd = authed.accounts.updateAdd.handler(({ input }) => addAccountUpdate(input));
+export const updateAdd = authed.accounts.updateAdd.handler(({ context, input }) =>
+  addAccountUpdate(context.username, input),
+);
 
 // POST /api/accounts/update/edit — edit an existing balance update.
-export const updateEdit = authed.accounts.updateEdit.handler(({ input }) => editAccountUpdate(input));
+export const updateEdit = authed.accounts.updateEdit.handler(({ context, input }) =>
+  editAccountUpdate(context.username, input),
+);
