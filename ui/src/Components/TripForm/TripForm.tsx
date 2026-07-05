@@ -87,7 +87,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
           className={styles.textInput}
           placeholder={getContent('tripNamePlaceholder')}
           autoComplete="off"
-          {...form.register('tripName', { minLength: 1, maxLength: 100, required: true })}
+          {...form.register('tripName', { minLength: 1, maxLength: 30, required: true })}
         />
         <label className={styles.dateLabel}>{getContent('startDate')}</label>
         <DatePicker

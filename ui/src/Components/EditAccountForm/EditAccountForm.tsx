@@ -58,7 +58,7 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
           className={styles.textInput}
           placeholder={getContent('accountNamePlaceholder')}
           autoComplete="off"
-          {...form.register('accountName', { maxLength: 100, required: true })}
+          {...form.register('accountName', { maxLength: 50, required: true })}
         />
         <label>{getContent('accountTypeLabel')}</label>
         <FilterableSelect

@@ -95,7 +95,7 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
           className={styles.textInput}
           placeholder={getContent('newSpendNamePlaceholder')}
           autoComplete="off"
-          {...form.register('recurringSpendName', { required: true, maxLength: 60 })}
+          {...form.register('recurringSpendName', { required: true, maxLength: 30 })}
         />
 
         {/* Spend category */}
