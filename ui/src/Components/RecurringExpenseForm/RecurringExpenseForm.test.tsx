@@ -62,10 +62,10 @@ describe('RecurringExpenseForm add mode', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('blocks submit when the name exceeds 60 characters', async () => {
+  it('blocks submit when the name exceeds 30 characters', async () => {
     const { user, onSubmit, adds } = renderForm();
 
-    await user.type(screen.getByPlaceholderText('Rent payment'), 'N'.repeat(61));
+    await user.type(screen.getByPlaceholderText('Rent payment'), 'N'.repeat(31));
     await user.type(screen.getByPlaceholderText('$0.00'), '50');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 

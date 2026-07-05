@@ -11,9 +11,11 @@
 ## Run
 
 ```bash
-pnpm test:e2e          # from the repo root
+pnpm test:e2e          # from the repo root — everything (browser + api)
+pnpm test:api          # from the repo root — the browser-less api project only
 # or, from this folder:
 pnpm test              # headless
+pnpm test:api          # api project only (fast; no browser)
 pnpm test:headed       # watch it in a browser
 pnpm test:ui           # Playwright's interactive UI mode
 pnpm report            # open the last HTML report
@@ -22,11 +24,48 @@ pnpm report            # open the last HTML report
 That single command brings the database up, starts the api + ui, runs the suite, and tears the
 database back down.
 
+## Two kinds of tests
+
+This package runs **two** flavors under one Playwright config, split by project:
+
+- **Browser tests** (`tests/**`, excluding `tests/api/`) — the `chromium` + `mobile-chrome`
+  projects drive the real UI. One journey per spec.
+- **API integration tests** (`tests/api/**`) — the `api` project, which has **no browser**. They
+  hit the api directly with Playwright's `APIRequestContext`, asserting status codes, response
+  bodies, and DB side-effects. This is where backend-only concerns live that the UI structurally
+  can't cover: unauthenticated-access (401) sweeps, cross-tenant isolation (one user can't touch
+  another's data), input-validation 400s, and read-endpoint aggregation math.
+
+The `api` project is browser-less, so it doesn't triple-run per device; the two browser projects
+`testIgnore` `tests/api/**` so those specs run exactly once.
+
+### Writing an api test
+
+- Import `apiTest` from `src/apiFixtures.ts` (aliased `as test`). It registers a fresh user and
+  gives you an **authenticated** `api` request context (its cookie jar carries the `token` cookie
+  from `/auth/register`). No baseline data is seeded — api specs assert exact numbers, so each test
+  creates precisely the data it reads back. For tenant-isolation tests, the `otherApi` fixture is a
+  second independently-registered user.
+- Type payloads and responses with the contract (`@spend-watcher/contract`, a workspace devDep):
+  `AppInputs['spending']['discretionaryAdd']`, `SpendingDetailsResponse`, etc. Category fields use
+  the `SpendingCategory` / `AccountCategory` enums, not raw strings.
+- `src/apiHelpers.ts` has `getJson<T>()` (throws with the server body on non-2xx) and
+  `currentMonthRange()`; `src/seed.ts` has `post()` (also throws on non-2xx) and `ymd()`.
+- Auth endpoints (`register`/`login`/`verify`) are the one place to use a raw context instead of the
+  fixture — see `tests/api/auth.spec.ts` — so each test controls its own signed-in/out state.
+
+> Note on cross-tenant writes: the api scopes mutations by username, so a non-owner's write is a
+> silent no-op (200), not an error. Isolation tests therefore assert on the **effect** (the owner's
+> data is untouched), not on a status code.
+
 ## How it fits together
 
 ```
 Playwright ─┬─ webServer[0]: scripts/db-up.mjs (schema → compose up → poll) → start API  (:4001 → DB :3307)
             ├─ webServer[1]: vite --mode test                                             (UI  :3001 → API :4001)
+            ├─ project 'api':           tests/api/**      (APIRequestContext → API :4001, no browser)
+            ├─ project 'chromium':      tests/** \ api    (Desktop Chrome    → UI :3001)
+            ├─ project 'mobile-chrome': tests/** \ api    (Pixel 5           → UI :3001)
             └─ globalTeardown: scripts/db-down.mjs (compose down -v)
 ```
 

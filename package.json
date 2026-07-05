@@ -15,7 +15,8 @@
     "lint:fix": "pnpm -r run lint:fix",
     "format": "pnpm -r run format",
     "test": "pnpm --filter @spend-watcher/ui run test",
-    "test:e2e": "pnpm --filter @spend-watcher/e2e run test"
+    "test:e2e": "pnpm --filter @spend-watcher/e2e run test",
+    "test:api": "pnpm --filter @spend-watcher/e2e run test:api"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.0",

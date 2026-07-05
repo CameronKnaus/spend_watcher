@@ -1,12 +1,8 @@
 // spec: specs/spending.plan.md
 // seed: e2e/tests/seed.spec.ts
 //
-// KNOWN APP BUG (same shape as the tripName one): the contract allows recurringSpendName up to 60
-// chars (contract/src/spending.contract.ts max(60)) but the DB column is varchar(30)
-// (recurring_spending.spend_name). A 31-60 char name passes client AND contract validation, then
-// the INSERT fails and the failure is swallowed (the mutation's onError is a TODO no-op) — the
-// panel closes and the expense silently doesn't exist. This spec pins the real boundary (30) and
-// should be extended to 60 once the schema or contract is fixed. The reject-at-over-max half lives
+// The contract, ui, and DB (recurring_spending.spend_name varchar(30)) all agree on 30 as the max
+// name length. This spec pins that shared boundary end-to-end; the reject-at-over-max half lives
 // in the RecurringExpenseForm component tests.
 
 import { test, expect } from '../../src/fixtures';
