@@ -8,6 +8,7 @@ const tripSchema = z.object({
   startDate: z.iso.date(),
   endDate: z.iso.date(),
 });
+export type Trip = z.infer<typeof tripSchema>;
 
 // Per-trip cost totals as returned in the list (the internal `linkedTripId` is omitted).
 const tripCostTotalsSchema = z.object({
@@ -16,6 +17,7 @@ const tripCostTotalsSchema = z.object({
   totalAirfareSpent: z.number(),
   totalLodgingSpent: z.number(),
 });
+export type TripCostTotals = z.infer<typeof tripCostTotalsSchema>;
 
 // GET /trips/list
 export const tripsListContract = oc.route({ method: 'GET', path: '/trips/list' }).output(
@@ -56,7 +58,7 @@ export const tripExpensesContract = oc
   );
 
 // POST /trips/add
-const tripInputSchema = z.object({
+export const tripInputSchema = z.object({
   tripName: z.string().min(1).max(100),
   startDate: z.iso.date(),
   endDate: z.iso.date(),

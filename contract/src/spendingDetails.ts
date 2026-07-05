@@ -90,3 +90,4 @@ export const spendingDetailsOutputSchema = z.object({
   transactionsByDate: z.record(z.string(), spendGroupSummarySchema),
 });
 export type SpendingDetailsResponse = z.infer<typeof spendingDetailsOutputSchema>;
+export type TransactionsByDate = SpendingDetailsResponse['transactionsByDate'];

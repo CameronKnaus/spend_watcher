@@ -11,3 +11,7 @@ export const zMonthYearDate = z.string().regex(/^\d{4}-\d{2}$/, 'Expected a yyyy
 /** The public, prefixed transaction ids the api hands out. */
 export const zRecurringTransactionId = z.templateLiteral(['Recurring-', z.number().int()]);
 export const zDiscretionaryTransactionId = z.templateLiteral(['Discretionary-', z.number().int()]);
+
+export type RecurringTransactionId = z.infer<typeof zRecurringTransactionId>;
+export type DiscretionaryTransactionId = z.infer<typeof zDiscretionaryTransactionId>;
+export type TransactionId = RecurringTransactionId | DiscretionaryTransactionId;

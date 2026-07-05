@@ -79,7 +79,7 @@ export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/
 // All write endpoints respond with an empty body, so the procedures declare no output.
 
 // POST /spending/discretionary/add
-const discretionaryInputSchema = z.object({
+export const discretionaryInputSchema = z.object({
   category: zSpendingCategory,
   amountSpent: z.number().safe().positive(),
   spentDate: z.iso.date(),
@@ -103,7 +103,7 @@ export const discretionaryDeleteContract = oc
   .input(z.object({ transactionId: zDiscretionaryTransactionId }));
 
 // POST /spending/recurring/add
-const recurringSpendInputSchema = z.object({
+export const recurringSpendInputSchema = z.object({
   category: zSpendingCategory,
   recurringSpendName: z.string().trim().min(1).max(60),
   expectedMonthlyAmount: z.number().safe().positive(),
@@ -130,14 +130,25 @@ export const recurringSpendSetActiveContract = oc
   .input(z.object({ recurringSpendId: z.uuid(), isActive: z.boolean() }));
 
 // POST /spending/recurring/transactions/add
+export const recurringTransactionAddInputSchema = z.object({
+  recurringSpendId: z.uuid(),
+  amountSpent: z.number().safe().nonnegative(),
+  date: zMonthYearDate,
+});
+
 export const recurringTransactionAddContract = oc
   .route({ method: 'POST', path: '/spending/recurring/transactions/add' })
-  .input(z.object({ recurringSpendId: z.uuid(), amountSpent: z.number().safe().nonnegative(), date: zMonthYearDate }));
+  .input(recurringTransactionAddInputSchema);
 
 // POST /spending/recurring/transactions/edit
+export const recurringTransactionEditInputSchema = z.object({
+  transactionId: zRecurringTransactionId,
+  amountSpent: z.number().safe().positive(),
+});
+
 export const recurringTransactionEditContract = oc
   .route({ method: 'POST', path: '/spending/recurring/transactions/edit' })
-  .input(z.object({ transactionId: zRecurringTransactionId, amountSpent: z.number().safe().positive() }));
+  .input(recurringTransactionEditInputSchema);
 
 export const spendingContract = {
   details: detailsContract,

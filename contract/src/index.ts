@@ -15,8 +15,23 @@ export const appContract = {
 // Shared building blocks (enums + zod helpers) for anyone who needs them directly.
 export { AccountCategory, SpendingCategory } from './enums';
 export * from './shared';
-// Auth input schemas (the ui reuses these for its login/register form validation).
+// Input schemas (the ui reuses these for its form validation via zodResolver).
 export { loginInputSchema, registerInputSchema } from './auth.contract';
+export {
+  discretionaryInputSchema,
+  recurringSpendInputSchema,
+  recurringTransactionAddInputSchema,
+  recurringTransactionEditInputSchema,
+} from './spending.contract';
+export {
+  accountAddInputSchema,
+  accountEditInputSchema,
+  accountUpdateAddInputSchema,
+  accountUpdateEditInputSchema,
+  accountWithStatusSchema,
+  type AccountWithStatus,
+} from './accounts.contract';
+export { tripInputSchema, type Trip, type TripCostTotals } from './trips.contract';
 // Spending-details schemas + working types (the api transform infers its types from these).
 export * from './spendingDetails';
 
