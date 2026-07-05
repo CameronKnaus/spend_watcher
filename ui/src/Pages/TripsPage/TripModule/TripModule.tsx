@@ -3,7 +3,7 @@ import { spendCategoryColorMapper, spendCategoryIconMapper } from 'Components/Sh
 import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { FaInfoCircle, FaMoneyBillWave } from 'react-icons/fa';
-import { Trip, TripCostTotals } from 'Types/Services/trips.model';
+import { Trip, TripCostTotals } from '@spend-watcher/contract';
 import { SpendingCategory } from '@spend-watcher/contract';
 import { formatToMonthDay, formatToMonthDayYear } from 'Util/Formatters/dateFormatters/dateFormatters';
 import TripDetailsPanel from '../TripDetailsPanel/TripDetailsPanel';

@@ -12,9 +12,17 @@ import LoadingSpinner from 'Components/LoadingSpinner/LoadingSpinner';
 import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useForm } from 'react-hook-form';
-import { DiscretionarySpendTransaction, v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
-import { SpendingCategory } from '@spend-watcher/contract';
+import { DiscretionarySpendTransaction, discretionaryInputSchema, SpendingCategory } from '@spend-watcher/contract';
+import { z as zod } from 'zod';
 import styles from './DiscretionarySpendForm.module.css';
+
+// The trip select submits '' when no trip is chosen; the contract expects the field to be absent.
+export const discretionarySpendFormSchema = discretionaryInputSchema.extend({
+  linkedTripId: zod
+    .uuid()
+    .optional()
+    .or(zod.literal('').transform(() => undefined)),
+});
 
 export type SpendFormAttributes = Omit<DiscretionarySpendTransaction, 'transactionId' | 'isRecurring'>;
 
@@ -53,7 +61,7 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
-    resolver: zodResolver(v1DiscretionaryAddSchema),
+    resolver: zodResolver(discretionarySpendFormSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: transactionToEdit,
   });

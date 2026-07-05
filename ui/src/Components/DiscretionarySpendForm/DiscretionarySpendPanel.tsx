@@ -1,6 +1,6 @@
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import createContentGetter from 'Content/createContentGetter';
-import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
+import { DiscretionarySpendTransaction } from '@spend-watcher/contract';
 import EditSpendForm from './EditSpendForm';
 import NewSpendForm from './NewSpendForm';
 

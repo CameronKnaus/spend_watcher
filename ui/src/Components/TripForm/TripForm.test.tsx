@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { captureRequests, renderWithProviders, screen, waitFor, within } from 'test/testUtils';
-import type { Trip } from 'Types/Services/trips.model';
+import type { Trip } from '@spend-watcher/contract';
 import TripForm from './TripForm';
 
 const TEST_TRIP: Trip = {

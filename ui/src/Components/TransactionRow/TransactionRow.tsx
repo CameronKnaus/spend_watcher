@@ -3,7 +3,7 @@ import InteractiveRow from 'Components/InteractiveRow/InteractiveRow';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import createContentGetter from 'Content/createContentGetter';
 import { ComponentProps } from 'react';
-import { DiscretionaryTransactionId } from 'Types/Services/spending.model';
+import { DiscretionaryTransactionId } from '@spend-watcher/contract';
 import { SpendingCategory } from '@spend-watcher/contract';
 
 type TransactionRowPropTypes = {

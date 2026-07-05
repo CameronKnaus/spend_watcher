@@ -7,14 +7,14 @@ import { format } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { UseMeasureRect } from 'react-use/lib/useMeasure';
-import { AccountGrowthOverTimeV1Response } from 'Types/Services/accounts.model';
+import { AccountGrowthOverTimeResponse } from '@spend-watcher/contract';
 import { useIsMobile } from 'Util/IsMobileContext';
 import styles from './AccountGrowthOverTime.module.css';
 import AxisBottom from './AxisBottom/AxisBottom';
 import AxisLeft from './AxisLeft/AxisLeft';
 
 type AccountGrowthOverTimePropTypes = {
-  dataset: AccountGrowthOverTimeV1Response;
+  dataset: AccountGrowthOverTimeResponse;
   containerMeasurement: UseMeasureRect;
 };
 

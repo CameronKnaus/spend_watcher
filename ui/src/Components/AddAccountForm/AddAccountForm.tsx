@@ -9,9 +9,10 @@ import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
 import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
-import { AccountCategory } from '@spend-watcher/contract';
-import { AddAccountRequestParams, addAccountRequestParamSchema } from 'Types/Services/accounts.model';
+import { AccountCategory, accountAddInputSchema, AppInputs } from '@spend-watcher/contract';
 import styles from './AddAccountForm.module.css';
+
+type AddAccountRequestParams = AppInputs['accounts']['add'];
 
 type AddAccountFormPropTypes = {
   onSubmit: () => void;
@@ -32,7 +33,7 @@ export default function AddAccountForm({ onSubmit, onCancel }: AddAccountFormPro
   );
 
   const form = useForm<AddAccountRequestParams>({
-    resolver: zodResolver(addAccountRequestParamSchema),
+    resolver: zodResolver(accountAddInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       accountName: '',

@@ -9,7 +9,7 @@ import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
 import { accountsSummaryQueryOptions } from 'queryOptions/accountsSummaryQueryOptions';
 import { useState } from 'react';
-import { AccountWithStatus } from 'Types/Services/accounts.model';
+import { AccountWithStatus } from '@spend-watcher/contract';
 import { formatMonthYearDBDateAsReadable, getCurrentMonthLabel } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './AccountsList.module.css';
 

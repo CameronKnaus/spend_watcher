@@ -8,16 +8,13 @@ import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/prese
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
 import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
-import { AccountCategory } from '@spend-watcher/contract';
-import {
-  Account,
-  EditAccountDetailsRequestParams,
-  editAccountDetailsRequestParamsSchema,
-} from 'Types/Services/accounts.model';
+import { AccountCategory, accountEditInputSchema, AccountWithStatus, AppInputs } from '@spend-watcher/contract';
 import styles from './EditAccountForm.module.css';
 
+type EditAccountDetailsRequestParams = AppInputs['accounts']['edit'];
+
 type EditAccountFormPropTypes = {
-  accountToEdit: Account;
+  accountToEdit: AccountWithStatus;
   onSubmit: () => void;
   onCancel: () => void;
 };
@@ -30,7 +27,7 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
   const editAccountService = useMutation(orpc.accounts.edit.mutationOptions());
 
   const form = useForm<EditAccountDetailsRequestParams>({
-    resolver: zodResolver(editAccountDetailsRequestParamsSchema),
+    resolver: zodResolver(accountEditInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       accountName: accountToEdit.name,

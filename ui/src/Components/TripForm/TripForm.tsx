@@ -10,9 +10,11 @@ import createContentGetter from 'Content/createContentGetter';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dbDateFormat } from 'Types/dateTypes';
-import { AddTripRequestParams, Trip, v1AddTripSchema } from 'Types/Services/trips.model';
+import { AppInputs, Trip, tripInputSchema } from '@spend-watcher/contract';
 import getDateFromDBDateString from 'Util/Time/getDateFromDBDateString';
 import styles from './TripForm.module.css';
+
+type AddTripRequestParams = AppInputs['trips']['add'];
 
 type NewTripForm = {
   onSubmit: () => void;
@@ -47,7 +49,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
 
   const [defaultStartDate] = useState(() => format(new Date(), dbDateFormat));
   const form = useForm<AddTripRequestParams>({
-    resolver: zodResolver(v1AddTripSchema),
+    resolver: zodResolver(tripInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       tripName: '',

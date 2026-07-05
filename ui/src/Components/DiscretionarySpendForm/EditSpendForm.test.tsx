@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { captureRequests, renderWithProviders, screen, waitFor } from 'test/testUtils';
 import { SpendingCategory } from '@spend-watcher/contract';
-import type { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
+import type { DiscretionarySpendTransaction } from '@spend-watcher/contract';
 import EditSpendForm from './EditSpendForm';
 
 const LUNCH_TRANSACTION: DiscretionarySpendTransaction = {

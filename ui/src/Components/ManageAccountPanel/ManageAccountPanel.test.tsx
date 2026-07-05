@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AccountCategory } from '@spend-watcher/contract';
 import { captureRequests, http, HttpResponse, renderWithProviders, screen, server, within } from 'test/testUtils';
-import { AccountWithStatus } from 'Types/Services/accounts.model';
+import { AccountWithStatus } from '@spend-watcher/contract';
 import ManageAccountPanel from './ManageAccountPanel';
 
 const BASE_ACCOUNT = {

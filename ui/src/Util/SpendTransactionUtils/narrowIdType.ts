@@ -1,4 +1,4 @@
-import { DiscretionaryTransactionId, RecurringTransactionId, TransactionId } from 'Types/Services/spending.model';
+import { DiscretionaryTransactionId, RecurringTransactionId, TransactionId } from '@spend-watcher/contract';
 
 // Define a type predicate to check if the ID is a RecurringTransactionId
 export function isRecurringTransactionId(transactionId: TransactionId): transactionId is RecurringTransactionId {
