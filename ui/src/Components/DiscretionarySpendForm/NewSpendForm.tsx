@@ -13,9 +13,9 @@ import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { SpendingCategory } from '@spend-watcher/contract';
+import { discretionaryInputSchema, SpendingCategory } from '@spend-watcher/contract';
 import styles from './DiscretionarySpendForm.module.css';
-import { discretionarySpendFormSchema, SpendFormAttributes } from './EditSpendForm';
+import { SpendFormAttributes } from './EditSpendForm';
 
 type NewSpendFormPropTypes = {
   onCancel: () => void;
@@ -33,7 +33,7 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
-    resolver: zodResolver(discretionarySpendFormSchema),
+    resolver: zodResolver(discretionaryInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       category: SpendingCategory.OTHER,

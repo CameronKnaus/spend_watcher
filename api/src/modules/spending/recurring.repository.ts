@@ -82,8 +82,6 @@ export async function findRecurringTransactionsList(recurringSpendId: string): P
   return rows.map(toRecurringTransactionListItem);
 }
 
-// --- Writes ------------------------------------------------------------------------------------
-
 // Creates a recurring spend plus its first transaction for the current month, in one transaction
 // so a failed second insert can't leave a spend with no transactions.
 export async function insertRecurringSpend(username: string, input: RecurringSpendAddInput): Promise<void> {

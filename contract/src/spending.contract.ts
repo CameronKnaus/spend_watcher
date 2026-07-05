@@ -85,7 +85,13 @@ export const discretionaryInputSchema = z.object({
   spentDate: z.iso.date(),
   // The `note` DB column is varchar(60).
   note: z.string().trim().max(60),
-  linkedTripId: z.uuid().optional(),
+  // The ui's trip select submits '' when no trip is chosen (its clear action can't emit
+  // `undefined` — see FilterableSelect); treat '' the same as an absent field so the forms
+  // can validate against this schema directly instead of maintaining a diverged copy.
+  linkedTripId: z
+    .uuid()
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
 });
 
 export const discretionaryAddContract = oc
