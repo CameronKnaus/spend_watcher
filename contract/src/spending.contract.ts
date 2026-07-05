@@ -83,7 +83,8 @@ const discretionaryInputSchema = z.object({
   category: zSpendingCategory,
   amountSpent: z.number().safe().positive(),
   spentDate: z.iso.date(),
-  note: z.string().trim().max(100),
+  // The `note` DB column is varchar(60).
+  note: z.string().trim().max(60),
   linkedTripId: z.uuid().optional(),
 });
 
@@ -104,7 +105,7 @@ export const discretionaryDeleteContract = oc
 // POST /spending/recurring/add
 const recurringSpendInputSchema = z.object({
   category: zSpendingCategory,
-  recurringSpendName: z.string().trim().max(60),
+  recurringSpendName: z.string().trim().min(1).max(60),
   expectedMonthlyAmount: z.number().safe().positive(),
   isVariableRecurring: z.boolean(),
 });
