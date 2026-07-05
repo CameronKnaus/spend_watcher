@@ -111,7 +111,8 @@ export const discretionaryDeleteContract = oc
 // POST /spending/recurring/add
 export const recurringSpendInputSchema = z.object({
   category: zSpendingCategory,
-  recurringSpendName: z.string().trim().min(1).max(60),
+  // The `spend_name` DB column is varchar(30).
+  recurringSpendName: z.string().trim().min(1).max(30),
   expectedMonthlyAmount: z.number().safe().positive(),
   isVariableRecurring: z.boolean(),
 });

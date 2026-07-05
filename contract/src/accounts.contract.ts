@@ -55,7 +55,8 @@ export const accountsHistoryContract = oc
     }),
   );
 
-const accountName = z.string().min(3, 'Account names must be at least 3 characters');
+// The `account_name` DB column is varchar(50).
+const accountName = z.string().min(3, 'Account names must be at least 3 characters').max(50);
 
 // POST /accounts/add
 export const accountAddInputSchema = z.object({

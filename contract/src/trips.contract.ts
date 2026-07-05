@@ -59,7 +59,8 @@ export const tripExpensesContract = oc
 
 // POST /trips/add
 export const tripInputSchema = z.object({
-  tripName: z.string().min(1).max(100),
+  // The `trip_name` DB column is varchar(30).
+  tripName: z.string().min(1).max(30),
   startDate: z.iso.date(),
   endDate: z.iso.date(),
 });
