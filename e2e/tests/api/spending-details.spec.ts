@@ -8,8 +8,13 @@
 import { apiTest as test, expect } from '../../src/apiFixtures';
 import { post, ymd } from '../../src/seed';
 import { currentMonthRange, getJson } from '../../src/apiHelpers';
-import { startOfMonth } from 'date-fns';
-import type { HistoryStartResponse, SpendingDetailsResponse, YearlyAverageResponse } from '@spend-watcher/contract';
+import { format, startOfMonth, subMonths } from 'date-fns';
+import type {
+  HistoryStartResponse,
+  RecurringSummaryResponse,
+  SpendingDetailsResponse,
+  YearlyAverageResponse,
+} from '@spend-watcher/contract';
 
 const range = currentMonthRange();
 
@@ -86,6 +91,39 @@ test.describe('Spending details — aggregation math', () => {
     const day = details.transactionsByDate[firstOfMonth];
     expect(day.total).toEqual({ amount: 186, count: 4 });
     expect(day.includedTransactions).toHaveLength(4);
+  });
+});
+
+test.describe('Spending details — recurring history across months', () => {
+  // The recurring-history query returns EVERY transaction in range; the near-identical summary
+  // query returns only each spend's most recent. A copy-paste of the summary join into the history
+  // repo would pass every single-month spec, so this pins the difference with a two-month range.
+  test("a range spanning two months includes both of a spend's transactions", async ({ api }) => {
+    await post(api, '/api/spending/recurring/add', {
+      category: 'UTILITIES',
+      recurringSpendName: 'Electric',
+      expectedMonthlyAmount: 100,
+      isVariableRecurring: true,
+    });
+    const summary = await getJson<RecurringSummaryResponse>(api, '/api/spending/recurring/summary');
+    const spendId = summary.activeRecurringTransactions[0].recurringSpendId;
+
+    // Creation already inserted the current-month transaction (100); fill in last month at 120.
+    await post(api, '/api/spending/recurring/transactions/add', {
+      recurringSpendId: spendId,
+      amountSpent: 120,
+      date: format(subMonths(new Date(), 1), 'yyyy-MM'),
+    });
+
+    const twoMonthRange = {
+      startDate: format(startOfMonth(subMonths(new Date(), 1)), 'yyyy-MM-dd'),
+      endDate: range.endDate,
+    };
+    const details = await getJson<SpendingDetailsResponse>(api, '/api/spending/details', twoMonthRange);
+
+    expect(details.recurringTransactionIdList).toHaveLength(2);
+    expect(details.summary.recurringTotals).toEqual({ amount: 220, count: 2 });
+    expect(details.summary.total).toEqual({ amount: 220, count: 2 });
   });
 });
 

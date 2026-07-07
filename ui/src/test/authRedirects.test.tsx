@@ -56,6 +56,23 @@ describe('router auth gate', () => {
     expect(router.state.location.pathname).toBe('/dashboard');
   });
 
+  // The bare-root redirect is its own route (routes/index.tsx); these two pin the chain the old
+  // imperative PageRoutes redirect produced: '/' → '/dashboard', bouncing on to '/auth' when the
+  // session check fails.
+  it('sends an authenticated visitor from the root path to the dashboard', async () => {
+    const { router } = renderApp({ authenticated: true, route: '/' });
+
+    expect(await screen.findByRole('link', { name: /Dashboard/ })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/dashboard');
+  });
+
+  it('chain-bounces an unauthenticated visitor from the root path to the auth screen', async () => {
+    const { router } = renderApp({ authenticated: false, route: '/' });
+
+    expect(await screen.findByText('Welcome to SpendWatcher')).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/auth');
+  });
+
   it('keeps an authenticated visitor on the protected route they asked for', async () => {
     const { router } = renderApp({ authenticated: true, route: '/savings' });
 

@@ -4,9 +4,10 @@
 import { apiTest as test, expect } from '../../src/apiFixtures';
 import { post } from '../../src/seed';
 import { getJson } from '../../src/apiHelpers';
-import { format } from 'date-fns';
+import { format, subMonths } from 'date-fns';
 import {
   AccountCategory,
+  type AccountGrowthOverTimeResponse,
   type AccountsSummaryResponse,
   type AccountHistoryResponse,
   type AppInputs,
@@ -109,6 +110,30 @@ test.describe('Accounts — CRUD round-trip', () => {
     expect(summary.totalEquity).toBe(5000);
     expect(summary.totalAccountsCount).toBe(2);
     expect(summary.accountTotalsByType).toMatchObject({ CHECKING: 1000, INVESTING: 4000 });
+  });
+});
+
+test.describe('Accounts — growth over time', () => {
+  // The rows behind this endpoint are Date-typed and shaped to yyyy-MM-dd in the controller; this
+  // is the suite's only authenticated read of it, pinning the formatting and per-update fan-out.
+  test('returns one yyyy-MM-dd dated point per balance update', async ({ api }) => {
+    const previousMonth = format(subMonths(new Date(), 1), 'yyyy-MM');
+    const accountId = await addAndFindId(api, {
+      accountName: 'Growth Account',
+      startingAccountValue: 1000,
+      accountCategory: AccountCategory.SAVINGS,
+      isFixedRate: true,
+      annualPercentageRate: 0,
+    });
+    // Creation already inserted the current month's update (1000); fill in last month at 1500.
+    await post(api, '/api/accounts/update/add', { accountId, amount: 1500, date: previousMonth });
+
+    const points = await getJson<AccountGrowthOverTimeResponse>(api, '/api/accounts/growth-over-time');
+    const sorted = [...points].sort((a, b) => a.date.localeCompare(b.date));
+    expect(sorted).toEqual([
+      { accountId, accountName: 'Growth Account', date: `${previousMonth}-01`, amount: 1500 },
+      { accountId, accountName: 'Growth Account', date: `${currentMonth}-01`, amount: 1000 },
+    ]);
   });
 });
 

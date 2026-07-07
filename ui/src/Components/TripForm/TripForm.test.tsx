@@ -55,6 +55,18 @@ describe('TripForm add mode', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  // The trip_name DB column is varchar(30); the contract schema the form now resolves against
+  // caps the name at the same bound.
+  it('blocks submit when the trip name exceeds 30 characters', async () => {
+    const { user, onSubmit, adds } = renderAddForm();
+
+    await user.type(screen.getByPlaceholderText('Europe summer trip'), 'T'.repeat(31));
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(adds).toHaveLength(0);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it('POSTs a trip named via the form with both dates defaulting to today', async () => {
     const { user, onSubmit, adds } = renderAddForm();
 
