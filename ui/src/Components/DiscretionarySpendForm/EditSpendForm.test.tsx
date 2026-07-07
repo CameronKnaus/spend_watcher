@@ -31,8 +31,12 @@ beforeEach(() => {
 });
 
 describe('EditSpendForm prefill', () => {
-  it('populates every field from the transaction being edited', () => {
-    renderForm();
+  it('populates every field from the transaction being edited', async () => {
+    const { queryClient } = renderForm();
+
+    // Settle the trips fetch and the form's initial async validation so their state
+    // updates land inside act.
+    await waitFor(() => expect(queryClient.isFetching()).toBe(0));
 
     expect(screen.getByPlaceholderText('$0.00')).toHaveValue('$25.00');
     expect(screen.getByDisplayValue('Dining out')).toBeInTheDocument();
