@@ -12,6 +12,7 @@ import useSessionStatus from 'Hooks/useSessionStatus/useSessionStatus';
 import { categoryTrendsQueryOptions } from 'queryOptions/categoryTrendsQueryOptions';
 import { spendingDetailsQueryOptions } from 'queryOptions/spendingDetailsQueryOptions';
 import { useState } from 'react';
+import { DiscretionarySpendTransaction } from '@spend-watcher/contract';
 import { parseDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import styles from './SpendingByMonthTile.module.css';
@@ -118,7 +119,7 @@ export default function SpendingByMonthTile() {
   const activeMonthLabel = format(parseDbDate(`${activeMonth}-01`), 'LLLL yyyy');
 
   const topTransactions = Object.values(monthDetails?.transactionDictionary ?? {})
-    .filter((transaction) => !transaction.isRecurring)
+    .filter((transaction): transaction is DiscretionarySpendTransaction => !transaction.isRecurring)
     .sort((a, b) => b.amountSpent - a.amountSpent)
     .slice(0, TOP_TRANSACTIONS);
 
