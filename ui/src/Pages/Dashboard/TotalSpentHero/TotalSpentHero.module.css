@@ -1,0 +1,34 @@
+.hero {
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 375px;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.progressTrack {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--theme-color-neutral-600);
+  overflow: clip;
+  margin-bottom: 12px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--theme-color-neutral-300);
+}
+
+.projection {
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-standard);
+}

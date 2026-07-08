@@ -1,0 +1,6 @@
+.tile {
+  flex-basis: calc(33% - var(--dashboard-column-gap));
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 375px;
+}
