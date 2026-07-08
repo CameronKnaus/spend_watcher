@@ -10,6 +10,7 @@ import createContentGetter from 'Content/createContentGetter';
 import SummaryTotals from 'Pages/Dashboard/SummaryTotals/SummaryTotals';
 import TopDiscretionaryCategories from 'Pages/Dashboard/TopDiscretionaryCategories/TopDiscretionaryCategories';
 import BarChartModule from './BarChartModule/BarChartModule';
+import SpendingByCategoryModule from './SpendingByCategoryModule/SpendingByCategoryModule';
 import styles from './Trends.module.css';
 import TrendsMobileNavigation from './TrendsMobileNavigation/TrendsMobileNavigation';
 
@@ -25,6 +26,7 @@ export default function Trends() {
       <div className={styles.contentContainer}>
         <SummaryTotals />
         <BarChartModule />
+        <SpendingByCategoryModule />
         <TotalsTable />
         <ModuleContainer heading={getContent('topCategories')} className={styles.module} elevation="low">
           <TopDiscretionaryCategories />
