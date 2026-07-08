@@ -48,7 +48,42 @@ test.describe('Spending pace — comparison windows', () => {
     const res = await getJson<SpendingPaceResponse>(api, '/api/spending/pace', { targetDate: '2024-05-10' });
 
     const zeros = { total: 0, discretionary: 0, recurring: 0 };
-    expect(res).toEqual({ monthToDate: zeros, previousMonthSameDay: zeros, previousMonthFull: zeros });
+    expect(res.monthToDate).toEqual(zeros);
+    expect(res.previousMonthSameDay).toEqual(zeros);
+    expect(res.previousMonthFull).toEqual(zeros);
+    expect(res.dailyTotals).toHaveLength(14);
+    expect(res.dailyTotals.every((day) => day.amount === 0)).toBe(true);
+    expect(res.largestRecentExpense).toBeNull();
+  });
+
+  test('daily totals zero-fill a 14-day window ending at targetDate', async ({ api }) => {
+    await addExpense(api, '2024-05-01', 10);
+    await addExpense(api, '2024-05-14', 20);
+    // The day before the window starts must not leak in.
+    await addExpense(api, '2024-04-30', 99);
+
+    const res = await getJson<SpendingPaceResponse>(api, '/api/spending/pace', { targetDate: '2024-05-14' });
+
+    expect(res.dailyTotals).toHaveLength(14);
+    expect(res.dailyTotals[0]).toEqual({ date: '2024-05-01', amount: 10 });
+    expect(res.dailyTotals[13]).toEqual({ date: '2024-05-14', amount: 20 });
+    expect(res.dailyTotals.slice(1, 13).every((day) => day.amount === 0)).toBe(true);
+    // The April 30 outlier is outside the window, so May 14 is the largest in range.
+    expect(res.largestRecentExpense).toEqual({ date: '2024-05-14', amount: 20, note: 'pace seed' });
+  });
+
+  test('the largest recent expense carries its note', async ({ api }) => {
+    await addExpense(api, '2024-05-10', 15);
+    await post(api, '/api/spending/discretionary/add', {
+      category: 'AIRFARE',
+      amountSpent: 412,
+      spentDate: '2024-05-08',
+      note: 'flight tickets',
+    });
+
+    const res = await getJson<SpendingPaceResponse>(api, '/api/spending/pace', { targetDate: '2024-05-14' });
+
+    expect(res.largestRecentExpense).toEqual({ date: '2024-05-08', amount: 412, note: 'flight tickets' });
   });
 
   test('recurring spend counts toward the recurring split in every window', async ({ api }) => {
@@ -77,5 +112,8 @@ test.describe('Spending pace — comparison windows', () => {
     // Recurring transactions land on the 1st, inside any same-day window.
     expect(res.previousMonthSameDay).toEqual({ total: 120, discretionary: 0, recurring: 120 });
     expect(res.previousMonthFull).toEqual({ total: 120, discretionary: 0, recurring: 120 });
+    // Recurring spend never shows up in the daily bars — their dates are synthetic.
+    expect(res.dailyTotals.every((day) => day.amount === 0)).toBe(true);
+    expect(res.largestRecentExpense).toBeNull();
   });
 });

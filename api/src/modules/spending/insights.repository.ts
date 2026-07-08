@@ -75,6 +75,69 @@ export async function findSpendTotalsInRange(
   };
 }
 
+type DailyTotalRow = {
+  day: string;
+  daily_total: string;
+};
+
+export type DailySpendTotal = {
+  date: string;
+  amount: number;
+};
+
+// Per-day discretionary totals inside a closed date range. Days with no transactions are absent —
+// the service zero-fills.
+export async function findDiscretionaryDailyTotals(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<DailySpendTotal[]> {
+  const rows = await queryAsync<DailyTotalRow[]>(
+    `SELECT DATE_FORMAT(date, '%Y-%m-%d') AS day, SUM(amount) AS daily_total
+      FROM spend_transactions
+      WHERE username = ? AND date BETWEEN ? AND ?
+      GROUP BY day`,
+    [username, startDate, endDate],
+  );
+
+  return rows.map((row) => ({ date: row.day, amount: Number(row.daily_total) }));
+}
+
+type LargestExpenseRow = {
+  day: string;
+  amount: string;
+  note: string | null;
+};
+
+export type LargestExpense = {
+  date: string;
+  amount: number;
+  note: string;
+};
+
+// The single largest discretionary transaction inside a closed date range, ties broken by insert
+// order so the result is deterministic.
+export async function findLargestExpenseInRange(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<LargestExpense | null> {
+  const rows = await queryAsync<LargestExpenseRow[]>(
+    `SELECT DATE_FORMAT(date, '%Y-%m-%d') AS day, amount, note
+      FROM spend_transactions
+      WHERE username = ? AND date BETWEEN ? AND ?
+      ORDER BY amount DESC, transaction_id ASC
+      LIMIT 1`,
+    [username, startDate, endDate],
+  );
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  return { date: rows[0].day, amount: Number(rows[0].amount), note: rows[0].note ?? '' };
+}
+
 type YearlyTotalsRow = {
   year: number;
   total_amount: number;

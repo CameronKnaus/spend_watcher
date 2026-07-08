@@ -11,6 +11,8 @@ import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import { useState } from 'react';
 import { dbDateFormat } from 'Types/dateTypes';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
+import { useIsMobile } from 'Util/IsMobileContext';
+import DailySpendBars from './DailySpendBars';
 import styles from './TotalSpentHero.module.css';
 
 export default function TotalSpentHero() {
@@ -18,6 +20,7 @@ export default function TotalSpentHero() {
   const { isAuthenticated } = useSessionStatus();
   const pageLoading = isLoading || isFetching || !spendingData;
   const getContent = createContentGetter('dashboard');
+  const isMobile = useIsMobile();
 
   // The dashboard always views the current month (it calls setToCurrentMonth on mount), so the
   // progress and projection math can key off a mount-time snapshot of "now".
@@ -52,26 +55,35 @@ export default function TotalSpentHero() {
 
   return (
     <ModuleContainer heading={getContent('totalSpent')} className={styles.hero} elevation="medium">
-      <Currency className="font-heading-medium font-thin" amount={-totalSpent} isGainLoss />
-      <div className={styles.progressLabels}>
-        <span>{getContent('dayOfMonthProgress', [dayOfMonth, daysInMonth])}</span>
-        <span>{getContent('percentOfMonth', [monthProgressPercent, monthName])}</span>
-      </div>
-      <div className={styles.progressTrack}>
-        <div className={styles.progressFill} style={{ width: `${monthProgressPercent}%` }} />
-      </div>
-      <div className={styles.paceRow}>
-        {totalSpent > 0 && (
-          <span className={styles.projection}>{getContent('onPaceFor', [formatCurrency(projectedMonthTotal)])}</span>
-        )}
-        {paceChange !== null && (
-          <span className={styles.paceBadge} style={{ color: paceColor }}>
-            {isOverPace ? <FaCaretUp /> : <FaCaretDown />}
-            {getContent(isOverPace ? 'paceOver' : 'paceUnder', [
-              Math.abs(Math.round(paceChange * 100)),
-              previousMonthName,
-            ])}
-          </span>
+      <div className={styles.contentRow}>
+        <div className={styles.mainColumn}>
+          <Currency className="font-heading-medium font-thin" amount={-totalSpent} isGainLoss />
+          <div className={styles.progressLabels}>
+            <span>{getContent('dayOfMonthProgress', [dayOfMonth, daysInMonth])}</span>
+            <span>{getContent('percentOfMonth', [monthProgressPercent, monthName])}</span>
+          </div>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFill} style={{ width: `${monthProgressPercent}%` }} />
+          </div>
+          <div className={styles.paceRow}>
+            {totalSpent > 0 && (
+              <span className={styles.projection}>
+                {getContent('onPaceFor', [formatCurrency(projectedMonthTotal)])}
+              </span>
+            )}
+            {paceChange !== null && (
+              <span className={styles.paceBadge} style={{ color: paceColor }}>
+                {isOverPace ? <FaCaretUp /> : <FaCaretDown />}
+                {getContent(isOverPace ? 'paceOver' : 'paceUnder', [
+                  Math.abs(Math.round(paceChange * 100)),
+                  previousMonthName,
+                ])}
+              </span>
+            )}
+          </div>
+        </div>
+        {!isMobile && paceData && (
+          <DailySpendBars dailyTotals={paceData.dailyTotals} largestRecentExpense={paceData.largestRecentExpense} />
         )}
       </div>
     </ModuleContainer>

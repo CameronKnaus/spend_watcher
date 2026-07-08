@@ -54,6 +54,31 @@ describe('TotalSpentHero', () => {
     expect(await screen.findByText("86% over May's pace")).toBeInTheDocument();
   });
 
+  it('renders the daily-spend bars with today highlighted and the spike annotated', async () => {
+    vi.setSystemTime(new Date(2026, 5, 15));
+    const { container } = renderWithProviders(<TotalSpentHero />);
+
+    expect(await screen.findByText('Daily spend — last 14 days')).toBeInTheDocument();
+
+    const bars = container.querySelectorAll('rect');
+    expect(bars).toHaveLength(14);
+    expect(bars[13]).toHaveAttribute('fill', 'var(--theme-color-primary-500)');
+    expect(bars[0]).toHaveAttribute('fill', 'var(--theme-color-neutral-600)');
+
+    // Window is June 2–15; the mock's largest expense sits on index 7 = June 9.
+    expect(screen.getByText('Jun 2')).toBeInTheDocument();
+    expect(screen.getByText('Today')).toBeInTheDocument();
+    expect(screen.getByText('Big spike · Jun 9 — flights $44')).toBeInTheDocument();
+  });
+
+  it('omits the daily-spend bars on mobile', async () => {
+    vi.setSystemTime(new Date(2026, 5, 15));
+    renderWithProviders(<TotalSpentHero />, { isMobile: true });
+
+    expect(await screen.findByText('-$186.00')).toBeInTheDocument();
+    expect(screen.queryByText('Daily spend — last 14 days')).toBeNull();
+  });
+
   it('hides the pace badge when the previous month has no spend to compare against', async () => {
     vi.setSystemTime(new Date(2026, 5, 15));
     server.use(

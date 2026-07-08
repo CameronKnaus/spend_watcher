@@ -1,9 +1,22 @@
 import { dbDateFormat } from '@type/dateTypes';
 import { formatDbDate } from '@utils/DateUtils/dateUtils';
-import { endOfMonth, getDate, getDaysInMonth, isBefore, parse, setDate, startOfMonth, subMonths } from 'date-fns';
 import {
+  eachDayOfInterval,
+  endOfMonth,
+  getDate,
+  getDaysInMonth,
+  isBefore,
+  parse,
+  setDate,
+  startOfMonth,
+  subDays,
+  subMonths,
+} from 'date-fns';
+import {
+  findDiscretionaryDailyTotals,
   findEarliestDiscretionaryDate,
   findEarliestRecurringDate,
+  findLargestExpenseInRange,
   findSpendTotalsInRange,
   findYearlyMonthlyTotals,
   SpendRangeTotals,
@@ -41,21 +54,33 @@ export async function getSpendingPace(username: string, targetDate: string): Pro
   const target = parse(targetDate, dbDateFormat, new Date());
   const previousMonthStart = startOfMonth(subMonths(target, 1));
   const clampedDay = Math.min(getDate(target), getDaysInMonth(previousMonthStart));
+  const dailyWindowStart = subDays(target, 13);
 
-  const [monthToDate, previousMonthSameDay, previousMonthFull] = await Promise.all([
-    findSpendTotalsInRange(username, formatDbDate(startOfMonth(target)), targetDate),
-    findSpendTotalsInRange(
-      username,
-      formatDbDate(previousMonthStart),
-      formatDbDate(setDate(previousMonthStart, clampedDay)),
-    ),
-    findSpendTotalsInRange(username, formatDbDate(previousMonthStart), formatDbDate(endOfMonth(previousMonthStart))),
-  ]);
+  const [monthToDate, previousMonthSameDay, previousMonthFull, dailySpendTotals, largestRecentExpense] =
+    await Promise.all([
+      findSpendTotalsInRange(username, formatDbDate(startOfMonth(target)), targetDate),
+      findSpendTotalsInRange(
+        username,
+        formatDbDate(previousMonthStart),
+        formatDbDate(setDate(previousMonthStart, clampedDay)),
+      ),
+      findSpendTotalsInRange(username, formatDbDate(previousMonthStart), formatDbDate(endOfMonth(previousMonthStart))),
+      findDiscretionaryDailyTotals(username, formatDbDate(dailyWindowStart), targetDate),
+      findLargestExpenseInRange(username, formatDbDate(dailyWindowStart), targetDate),
+    ]);
+
+  const totalsByDay = new Map(dailySpendTotals.map((day) => [day.date, day.amount]));
+  const dailyTotals = eachDayOfInterval({ start: dailyWindowStart, end: target }).map((day) => {
+    const date = formatDbDate(day);
+    return { date, amount: totalsByDay.get(date) ?? 0 };
+  });
 
   return {
     monthToDate: withCombinedTotal(monthToDate),
     previousMonthSameDay: withCombinedTotal(previousMonthSameDay),
     previousMonthFull: withCombinedTotal(previousMonthFull),
+    dailyTotals,
+    largestRecentExpense,
   };
 }
 

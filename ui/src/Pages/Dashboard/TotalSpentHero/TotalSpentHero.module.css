@@ -5,6 +5,18 @@
   min-width: 375px;
 }
 
+.contentRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.mainColumn {
+  flex: 1;
+  min-width: 280px;
+}
+
 .progressLabels {
   display: flex;
   justify-content: space-between;

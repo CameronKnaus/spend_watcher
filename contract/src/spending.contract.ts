@@ -80,6 +80,11 @@ export const paceContract = oc
       // partial months compare like-for-like.
       previousMonthSameDay: paceAmountsSchema,
       previousMonthFull: paceAmountsSchema,
+      // One entry per day for the 14 days ending at targetDate, zero-filled. Discretionary only —
+      // recurring transactions carry a synthetic first-of-month date that would render as a fake
+      // day-one spike.
+      dailyTotals: z.array(z.object({ date: z.iso.date(), amount: z.number() })),
+      largestRecentExpense: z.object({ date: z.iso.date(), amount: z.number(), note: z.string() }).nullable(),
     }),
   );
 
