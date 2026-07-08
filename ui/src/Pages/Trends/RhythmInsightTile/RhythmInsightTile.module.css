@@ -1,0 +1,57 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  margin-bottom: 6px;
+}
+
+.headline {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.unusualHighlight {
+  color: var(--token-color-semantic-loss);
+}
+
+.strip {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.dayCell {
+  flex: 1;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--theme-color-neutral-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unusualDay {
+  background: rgba(237, 12, 63, 0.12);
+  outline: 1.5px solid var(--theme-color-tertiary-600);
+}
+
+.todayDay {
+  background: transparent;
+  outline: 1.5px solid var(--theme-color-primary-500);
+}
+
+.dayNumber {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-color-tertiary-500);
+}
