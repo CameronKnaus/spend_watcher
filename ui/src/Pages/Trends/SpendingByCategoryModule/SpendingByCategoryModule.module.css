@@ -60,6 +60,20 @@
   height: 100%;
 }
 
+.deltaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.neutralDelta {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-placeholder);
+}
+
 .shareLabel {
   font-size: var(--font-body-small);
   color: var(--token-color-text-subdued);

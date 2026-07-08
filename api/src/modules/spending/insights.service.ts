@@ -1,8 +1,10 @@
-import { dbDateFormat } from '@type/dateTypes';
+import { dbDateFormat, monthYearDbDateFormat } from '@type/dateTypes';
 import { formatDbDate } from '@utils/DateUtils/dateUtils';
 import {
+  addMonths,
   eachDayOfInterval,
   endOfMonth,
+  format,
   getDate,
   getDaysInMonth,
   isBefore,
@@ -13,6 +15,7 @@ import {
   subMonths,
 } from 'date-fns';
 import {
+  findCategoryMonthlyTotals,
   findDiscretionaryDailyTotals,
   findEarliestDiscretionaryDate,
   findEarliestRecurringDate,
@@ -21,7 +24,53 @@ import {
   findYearlyMonthlyTotals,
   SpendRangeTotals,
 } from './insights.repository';
-import { HistoryStartResponse, SpendingPaceResponse, YearlyAverageResponse } from '@spend-watcher/contract';
+import {
+  CategoryTrendsResponse,
+  HistoryStartResponse,
+  SpendingCategory,
+  SpendingPaceResponse,
+  YearlyAverageResponse,
+} from '@spend-watcher/contract';
+
+const TREND_WINDOW_MONTHS = 6;
+
+// Per-category monthly totals for the six months ending at targetMonth, zero-filled so every
+// category's series aligns with the months axis.
+export async function getCategoryTrends(username: string, targetMonth: string): Promise<CategoryTrendsResponse> {
+  const targetMonthStart = parse(targetMonth, monthYearDbDateFormat, new Date());
+  const windowStart = subMonths(targetMonthStart, TREND_WINDOW_MONTHS - 1);
+
+  const monthlyTotals = await findCategoryMonthlyTotals(
+    username,
+    formatDbDate(windowStart),
+    formatDbDate(endOfMonth(targetMonthStart)),
+  );
+
+  const months = Array.from({ length: TREND_WINDOW_MONTHS }, (_, index) =>
+    format(addMonths(windowStart, index), monthYearDbDateFormat),
+  );
+  const monthIndex = new Map(months.map((month, index) => [month, index]));
+
+  const totalsByCategory = new Map<SpendingCategory, number[]>();
+  for (const entry of monthlyTotals) {
+    const series = totalsByCategory.get(entry.category) ?? Array.from({ length: TREND_WINDOW_MONTHS }, () => 0);
+    series[monthIndex.get(entry.month) ?? 0] = entry.amount;
+    totalsByCategory.set(entry.category, series);
+  }
+
+  const categories = [...totalsByCategory.entries()].map(([category, series]) => {
+    const latest = series[TREND_WINDOW_MONTHS - 1];
+    const previous = series[TREND_WINDOW_MONTHS - 2];
+
+    return {
+      category,
+      monthlyTotals: series,
+      percentChange: previous > 0 ? (latest - previous) / previous : null,
+    };
+  });
+
+  return { months, categories };
+}
 
 // Earliest dates the user has spending history for. The combined earliest is computed here in the
 // service — the repository only owns the two raw queries.

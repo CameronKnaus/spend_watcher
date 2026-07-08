@@ -53,6 +53,8 @@ const locale = {
     spendingByCategory: 'Spending by category',
     shareOfTotal: 'Share of total',
     spendingByCategoryEmpty: 'No spending recorded for this period yet.',
+    vsPrevMonthHeader: 'vs {{0}}',
+    lastSixMonthsHeader: 'Last 6 months',
     category: 'Category',
     totalAmountSpentHeader: 'Total spent',
     totalCountHeader: 'Transaction count',
