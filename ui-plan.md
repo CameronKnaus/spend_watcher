@@ -400,3 +400,131 @@ _Read first_: `api/src/modules/accounts/accounts.{controller,service,repository}
 
 _Done when_: the tile matches the full design card; all verify commands green
 (`pnpm test:api` included).
+
+---
+
+# Phase 2 — Trends insight tiles (design 4b) + month comparison (3b) + category ledger (3c)
+
+All seven additions are **standalone tiles on the Trends page**, added without deleting or
+modifying any existing widget. Isolation is the ruling constraint: each tile lives in its own
+directory under `ui/src/Pages/Trends/`, is wired into `Trends.tsx` with a single line, and lands
+in its own commit — backing one out means deleting its directory, its content keys, and that line.
+Backend work is additive only (new contract entries, new insights functions, new router lines).
+
+**Shared decisions (apply to every Phase-2 tile):**
+
+- Tiles render in **MONTH mode only** (`dateRangeType === DateRangeType.MONTH`) — same rule the
+  slice-6 trend columns follow. In yearly mode they render nothing.
+- Tiles honor the selected month (`useSelectedTimeFrame`), not just "now": date-parameterized
+  queries use the range's `endDate` as `targetDate`.
+- Pace and rhythm math is **discretionary-only** (the 4b mock's default toggle is
+  "Discretionary"; recurring lands on synthetic first-of-month dates). The
+  Discretionary/Recurring/Everything toggle from the mock is out of scope.
+- The mock's CTA links ("See your pace", "Open the ledger", …) navigate to separate views that
+  don't exist here — the tiles are standalone, so CTAs are omitted.
+- Each tile shows a friendly empty-state line when it has no basis (fresh user), never a crash.
+- Existing endpoints are reused wherever the data already exists: `spending/details` (current
+  range, already fetched on Trends) and `spending/category-trends` (already fetched by the
+  slice-6 module; same query key = cache hit). Only two new endpoints are needed:
+  `spending/typical-pace` (slice 12) and `spending/rhythm` (slice 13).
+
+The insight tiles (slices 9–13) share a CSS grid wrapper: slice 9 introduces
+`TrendsInsightsGrid` (a thin layout component that composes whichever insight tiles exist) so
+later slices only add one import + one child line there instead of touching `Trends.tsx` again.
+
+### Slice 9 — Insights grid + Months tile (client-only)
+
+Design (4b "Months" card): uppercase MONTHS label; headline "May was your priciest month —
+$357 above average" (delta in loss red); six mini bars — priciest month in loss red, the
+current/selected month in primary green, others neutral.
+
+- `TrendsInsightsGrid/TrendsInsightsGrid.tsx` — CSS grid (3 columns desktop, 1 column mobile),
+  renders nothing in yearly mode. Wire into `Trends.tsx` directly under the banners.
+- `MonthsInsightTile/MonthsInsightTile.tsx` — data: `categoryTrends` (sum `monthlyTotals` across
+  categories per month = six month totals). Priciest month, average of the six, delta headline.
+  Empty state when every month is zero. Headline month names from the `months` axis.
+
+### Slice 10 — Breakdown tile (client-only)
+
+Design (4b "Breakdown"): headline "Groceries and restaurants are half of July so far"; a
+horizontal color band, one segment per top-4 category + a neutral "everything else" segment.
+
+- `BreakdownInsightTile/BreakdownInsightTile.tsx` — data: existing details query
+  (`categoryDetailsList` combined totals + percentages). Headline: top two categories and their
+  combined rounded share of the selected month. Band segments use `spendCategoryColorMapper`.
+
+### Slice 11 — Categories tile (client-only)
+
+Design (4b "Categories"): headline "Entertainment is up 35% vs your 3-month average" (loss red
+when up, gain green when down); the category's icon chip + 6-month sparkline in its color.
+
+- `CategoriesInsightTile/CategoriesInsightTile.tsx` — data: `categoryTrends`. Biggest mover =
+  max |current − avg(prev 3 months)| / avg among categories with a non-zero 3-month average.
+  Reuses `Sparkline` + `SpendingCategoryIcon`. Empty state when no category has a basis.
+
+### Slice 12 — Pace tile (`spending/typical-pace` endpoint)
+
+Design (4b "Pace", semantics from 3a): headline "You're $214 under your usual pace this month";
+subline "Projected $2,610 vs a typical $2,890"; a chart with the actual cumulative line ending in
+a dot vs a dashed "typical" trajectory.
+
+- Contract (additive): `GET /spending/typical-pace`, input `{ targetDate }`, output
+  `{ cumulativeByDay: [{date, amount}], typicalMonthTotal: number|null,
+  typicalThroughSameDay: number|null, baselineMonthCount: number }`. Baseline = the six full
+  months before targetDate's month, using only months that have any discretionary spend;
+  typicalThroughSameDay clamps day-of-month per month length. Nulls when the baseline is empty.
+- API: new service function in `insights.service.ts` reusing the existing
+  `findDiscretionaryDailyTotals` repo function over a 7-month window (no repo changes);
+  controller + router lines. API tests: fixed-date seeds pinning baseline averaging, the
+  same-day clamp, partial-baseline (only some months have data), and the no-history nulls.
+- UI: `PaceInsightTile/PaceInsightTile.tsx` (spans 2 grid columns). Delta headline
+  under/over in green/red; projection = client-side `(monthToDate / day) * daysInMonth`;
+  SVG: solid cumulative polyline + endpoint dot, dashed straight typical trajectory to
+  `typicalMonthTotal`. Empty state (no baseline): show month-to-date line only with a
+  "not enough history" subline.
+
+### Slice 13 — Rhythm tile (`spending/rhythm` endpoint)
+
+Design (4b "Rhythm", semantics from 3e): headline "Jul 4 ran 3.8× your daily median"; a 7-cell
+strip for the last 7 days — unusual days outlined loss-red with the day number, today outlined
+primary-green.
+
+- Contract (additive): `GET /spending/rhythm`, input `{ targetDate }`, output
+  `{ dailyMedian: number|null, days: [{date, amount}] }` where `days` covers the 1st of
+  targetDate's month through targetDate (zero-filled) and `dailyMedian` is the median of
+  non-zero discretionary days in the 90 days ending at targetDate.
+- API: service reuses `findDiscretionaryDailyTotals` (90-day window + month window); no repo
+  changes. Tests: median math (odd/even counts, zero days excluded), zero-fill, null median.
+- UI: `RhythmInsightTile/RhythmInsightTile.tsx` — flag threshold: amount ≥ 3× median. Headline
+  names the month's biggest-ratio flagged day; falls back to an even-rhythm line when nothing
+  is flagged or the median is null. Strip = last 7 entries of `days`.
+
+### Slice 14 — Spending by month tile (design 3b, client-only)
+
+Master-detail: left = six stacked bars (top-4 categories by window total + "everything else"),
+dashed 6-month average line, month/total labels, selected bar highlighted, legend; right panel =
+selected month (default: priciest): total, "±$X vs your average" badge, "What drove it" (top 3
+discretionary transactions by amount, note as label), "vs your average month" per-category bars
+with an average tick and ±% (vs the average of the other five months).
+
+- `SpendingByMonthTile/SpendingByMonthTile.tsx` — stacks/averages from `categoryTrends`;
+  the right panel fetches `spending/details` for the selected month's full range (react-query
+  caches per month). Clicking a bar re-selects. The mock's projection overlay on the current
+  month and the "See all N transactions" link are out of scope.
+
+### Slice 15 — Category ledger tile (design 3c, client-only)
+
+Master-detail: left = categories sorted by signed change vs their 3-month average (risers first,
+no-basis last) — icon chip, name, "avg $X/mo", sparkline, current-month total, ±% badge; right
+panel = selected category (default: top of the list): icon + name + transaction count, total,
+"±% vs your 3-mo average", 6-month bar chart with dashed average line, and the selected month's
+discretionary transactions newest-first (note as label, day-of-month date).
+
+- `CategoryLedgerTile/CategoryLedgerTile.tsx` — list/sparklines/averages from `categoryTrends`;
+  transactions from the existing details query (`transactionDictionary` filtered to the selected
+  category, discretionary only — the mock's "Recurring bills are a separate tab" note becomes a
+  static footnote). The mock's "Log expense to X" button is out of scope.
+
+**Verification per slice** — same loop as Phase 1: lint, api tsc, ui build, ui tests,
+`pnpm test:api` when the api changed, Trends e2e (`e2e/tests/trends`) for every slice (layout
+grew), full e2e before the final commit. Commit per slice with explicit `git add` paths.
