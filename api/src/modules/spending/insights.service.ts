@@ -1,11 +1,14 @@
+import { dbDateFormat } from '@type/dateTypes';
 import { formatDbDate } from '@utils/DateUtils/dateUtils';
-import { isBefore } from 'date-fns';
+import { endOfMonth, getDate, getDaysInMonth, isBefore, parse, setDate, startOfMonth, subMonths } from 'date-fns';
 import {
   findEarliestDiscretionaryDate,
   findEarliestRecurringDate,
+  findSpendTotalsInRange,
   findYearlyMonthlyTotals,
+  SpendRangeTotals,
 } from './insights.repository';
-import { HistoryStartResponse, YearlyAverageResponse } from '@spend-watcher/contract';
+import { HistoryStartResponse, SpendingPaceResponse, YearlyAverageResponse } from '@spend-watcher/contract';
 
 // Earliest dates the user has spending history for. The combined earliest is computed here in the
 // service — the repository only owns the two raw queries.
@@ -24,6 +27,35 @@ export async function getHistoryStart(username: string): Promise<HistoryStartRes
     earliestTransactionDate: formatDbDate(earliestDate),
     earliestRecurringTransactionDate: formatDbDate(earliestRecurring),
     earliestDiscretionaryTransactionDate: formatDbDate(earliestDiscretionary),
+  };
+}
+
+function withCombinedTotal({ discretionary, recurring }: SpendRangeTotals) {
+  return { total: discretionary + recurring, discretionary, recurring };
+}
+
+// Month-to-date totals for the month containing `targetDate`, alongside two previous-month
+// windows: cut off at the same day-of-month (clamped — Mar 31 compares against Feb 28) and the
+// full month.
+export async function getSpendingPace(username: string, targetDate: string): Promise<SpendingPaceResponse> {
+  const target = parse(targetDate, dbDateFormat, new Date());
+  const previousMonthStart = startOfMonth(subMonths(target, 1));
+  const clampedDay = Math.min(getDate(target), getDaysInMonth(previousMonthStart));
+
+  const [monthToDate, previousMonthSameDay, previousMonthFull] = await Promise.all([
+    findSpendTotalsInRange(username, formatDbDate(startOfMonth(target)), targetDate),
+    findSpendTotalsInRange(
+      username,
+      formatDbDate(previousMonthStart),
+      formatDbDate(setDate(previousMonthStart, clampedDay)),
+    ),
+    findSpendTotalsInRange(username, formatDbDate(previousMonthStart), formatDbDate(endOfMonth(previousMonthStart))),
+  ]);
+
+  return {
+    monthToDate: withCombinedTotal(monthToDate),
+    previousMonthSameDay: withCombinedTotal(previousMonthSameDay),
+    previousMonthFull: withCombinedTotal(previousMonthFull),
   };
 }
 

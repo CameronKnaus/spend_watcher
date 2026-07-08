@@ -27,8 +27,24 @@
   background: var(--theme-color-neutral-300);
 }
 
+.paceRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .projection {
   font-size: var(--font-body-medium);
   font-weight: var(--font-weight-medium);
   color: var(--token-color-text-standard);
+}
+
+.paceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
 }

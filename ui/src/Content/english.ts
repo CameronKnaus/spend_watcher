@@ -16,6 +16,8 @@ const locale = {
     dayOfMonthProgress: 'Day {{0}} of {{1}}',
     percentOfMonth: '{{0}}% of {{1}}',
     onPaceFor: 'On pace for {{0}} this month',
+    paceUnder: "{{0}}% under {{1}}'s pace",
+    paceOver: "{{0}}% over {{1}}'s pace",
     topCategories: 'Top discretionary categories',
     avgSpentPerMonth: 'Avg spent · per month',
     vsYearAvg: 'vs {{0}} avg',

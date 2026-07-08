@@ -35,6 +35,46 @@ export async function findEarliestRecurringDate(username: string): Promise<strin
   return rows[0].earliest_recurring_transaction_date;
 }
 
+type RangeTotalsRow = {
+  discretionary_total: string | null;
+  recurring_total: string | null;
+};
+
+export type SpendRangeTotals = {
+  discretionary: number;
+  recurring: number;
+};
+
+// Combined discretionary + recurring spend totals inside a closed date range.
+export async function findSpendTotalsInRange(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<SpendRangeTotals> {
+  const rows = await queryAsync<RangeTotalsRow[]>(
+    `SELECT
+        SUM(CASE WHEN source = 'discretionary' THEN amount ELSE 0 END) AS discretionary_total,
+        SUM(CASE WHEN source = 'recurring' THEN amount ELSE 0 END) AS recurring_total
+      FROM (
+        SELECT 'discretionary' AS source, amount, date
+        FROM spend_transactions
+        WHERE username = ? AND date BETWEEN ? AND ?
+        UNION ALL
+        SELECT 'recurring' AS source, t.transaction_amount AS amount, t.date
+        FROM user_information.recurring_transactions t
+        JOIN user_information.recurring_spending s
+          ON t.recurring_spend_id = s.recurring_spend_id
+        WHERE s.username = ? AND t.date BETWEEN ? AND ?
+      ) combined`,
+    [username, startDate, endDate, username, startDate, endDate],
+  );
+
+  return {
+    discretionary: Number(rows[0]?.discretionary_total ?? 0),
+    recurring: Number(rows[0]?.recurring_total ?? 0),
+  };
+}
+
 type YearlyTotalsRow = {
   year: number;
   total_amount: number;

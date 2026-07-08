@@ -61,6 +61,28 @@ export const historyStartContract = oc.route({ method: 'GET', path: '/spending/h
   }),
 );
 
+// Window totals for the pace comparisons, split the same way the details summary is.
+const paceAmountsSchema = z.object({
+  total: z.number(),
+  discretionary: z.number(),
+  recurring: z.number(),
+});
+
+// GET /spending/pace — month-to-date totals plus previous-month comparison windows. `targetDate`
+// comes from the client so "today" reflects the user's timezone and tests stay deterministic.
+export const paceContract = oc
+  .route({ method: 'GET', path: '/spending/pace' })
+  .input(z.object({ targetDate: z.iso.date() }))
+  .output(
+    z.object({
+      monthToDate: paceAmountsSchema,
+      // The previous month cut off at the same day-of-month (clamped to that month's length), so
+      // partial months compare like-for-like.
+      previousMonthSameDay: paceAmountsSchema,
+      previousMonthFull: paceAmountsSchema,
+    }),
+  );
+
 // GET /spending/yearly-average
 export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/yearly-average' }).output(
   z.object({
@@ -163,6 +185,7 @@ export const spendingContract = {
   recurringTransactions: recurringTransactionsContract,
   historyStart: historyStartContract,
   yearlyAverage: yearlyAverageContract,
+  pace: paceContract,
   discretionaryAdd: discretionaryAddContract,
   discretionaryEdit: discretionaryEditContract,
   discretionaryDelete: discretionaryDeleteContract,
