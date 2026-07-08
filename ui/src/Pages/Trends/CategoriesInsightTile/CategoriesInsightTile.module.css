@@ -1,0 +1,33 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  margin-bottom: 6px;
+}
+
+.headline {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.vizRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.emptyMessage {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}
