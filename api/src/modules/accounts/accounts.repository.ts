@@ -89,6 +89,32 @@ export async function findAccountsWithLatestUpdate(username: string): Promise<Ac
   return rows.map(toAccountWithLatestUpdate);
 }
 
+type YearStartTotalRow = {
+  year_start_total: string | null;
+};
+
+// Net worth entering the given year: each account's latest update dated before `yearStartDate`,
+// summed across all the user's accounts (active or not, matching the summary's population).
+// "Latest" follows the summary's MAX(update_id) convention. NULL sum means no pre-year history.
+export async function findYearStartNetWorth(username: string, yearStartDate: string): Promise<number | null> {
+  const rows = await queryAsync<YearStartTotalRow[]>(
+    `SELECT SUM(u1.amount) AS year_start_total
+       FROM user_information.money_account_updates u1
+       JOIN (
+         SELECT u.account_id, MAX(u.update_id) AS max_update_id
+         FROM user_information.money_account_updates u
+         JOIN user_information.money_accounts a ON u.account_id = a.account_id
+         WHERE a.username = ? AND u.date < ?
+         GROUP BY u.account_id
+       ) u2
+       ON u1.account_id = u2.account_id AND u1.update_id = u2.max_update_id`,
+    [username, yearStartDate],
+  );
+
+  const total = rows[0]?.year_start_total;
+  return total == null ? null : Number(total);
+}
+
 // Every account update for the user, ordered for charting. Backs GET /growth-over-time.
 export async function findAccountGrowthOverTime(username: string): Promise<AccountValueDataPoint[]> {
   const rows = await queryAsync<AccountGrowthRow[]>(

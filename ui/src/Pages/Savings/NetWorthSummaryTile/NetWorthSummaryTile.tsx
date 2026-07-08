@@ -38,7 +38,19 @@ export default function NetWorthSummaryTile() {
 
   return (
     <ModuleContainer heading={getContent('netWorth')} elevation="medium">
-      <Currency className="font-heading-medium font-thin" amount={totalEquity} />
+      <div className={styles.totalRow}>
+        <Currency className="font-heading-medium font-thin" amount={totalEquity} />
+        {accountsSummary.yearStartNetWorth !== null && (
+          <div className={styles.ytdBadge}>
+            <Currency
+              className={styles.ytdAmount}
+              amount={totalEquity - accountsSummary.yearStartNetWorth}
+              isGainLoss
+            />
+            <div className={styles.ytdLabel}>{getContent('ytdGrowth')}</div>
+          </div>
+        )}
+      </div>
       {hasAllocation ? (
         <>
           <div className={styles.allocationBar}>

@@ -1,3 +1,26 @@
+.totalRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ytdBadge {
+  text-align: right;
+}
+
+.ytdAmount {
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.ytdLabel {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
 .allocationBar {
   display: flex;
   height: 10px;

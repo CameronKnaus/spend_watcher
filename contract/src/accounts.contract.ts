@@ -23,6 +23,10 @@ export const accountsSummaryContract = oc.route({ method: 'GET', path: '/account
     accountsCountByCategory: z.record(zAccountCategory, z.number()),
     accountTotalsByType: z.record(zAccountCategory, z.number()),
     accountsList: z.array(accountWithStatusSchema),
+    // Net worth entering the current year — each account's last update dated before Jan 1,
+    // summed. Null when no account has pre-year history, so callers can distinguish "started
+    // this year" from "started the year at $0".
+    yearStartNetWorth: z.number().nullable(),
   }),
 );
 

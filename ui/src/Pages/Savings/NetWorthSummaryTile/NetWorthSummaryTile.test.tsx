@@ -4,10 +4,11 @@ import { accountsSummaryResponse } from '@msw/mocks/accounts/accountsSummaryResp
 import { AccountCategory } from '@spend-watcher/contract';
 import NetWorthSummaryTile from './NetWorthSummaryTile';
 
-// The design-doc example: 45% / 38% / 10% / 7%.
+// The design-doc example: 45% / 38% / 10% / 7% with +$7,702 YTD growth.
 const multiTypeSummary = {
   ...accountsSummaryResponse,
   totalEquity: 48902,
+  yearStartNetWorth: 41200,
   accountTotalsByType: {
     [AccountCategory.CHECKING]: 4823,
     [AccountCategory.SAVINGS]: 18450,
@@ -37,6 +38,34 @@ describe('NetWorthSummaryTile', () => {
       'Checking $4,823.00 · 10%',
       'Bonds $3,509.00 · 7%',
     ]);
+  });
+
+  it('shows YTD growth against the year-start net worth', async () => {
+    server.use(http.get('*/api/accounts/summary', () => HttpResponse.json(multiTypeSummary)));
+    renderWithProviders(<NetWorthSummaryTile />);
+
+    expect(await screen.findByText('+$7,702.00')).toBeInTheDocument();
+    expect(screen.getByText('YTD growth')).toBeInTheDocument();
+  });
+
+  it('shows a YTD decline as a loss', async () => {
+    server.use(
+      http.get('*/api/accounts/summary', () => HttpResponse.json({ ...multiTypeSummary, yearStartNetWorth: 50000 })),
+    );
+    renderWithProviders(<NetWorthSummaryTile />);
+
+    expect(await screen.findByText('-$1,098.00')).toBeInTheDocument();
+    expect(screen.getByText('YTD growth')).toBeInTheDocument();
+  });
+
+  it('hides the YTD badge when there is no pre-year history', async () => {
+    server.use(
+      http.get('*/api/accounts/summary', () => HttpResponse.json({ ...multiTypeSummary, yearStartNetWorth: null })),
+    );
+    renderWithProviders(<NetWorthSummaryTile />);
+
+    expect(await screen.findByText('$48,902.00')).toBeInTheDocument();
+    expect(screen.queryByText('YTD growth')).toBeNull();
   });
 
   it('skips account types with no balance', async () => {
