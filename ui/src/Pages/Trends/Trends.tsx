@@ -12,6 +12,7 @@ import TopDiscretionaryCategories from 'Pages/Dashboard/TopDiscretionaryCategori
 import BarChartModule from './BarChartModule/BarChartModule';
 import SpendingByCategoryModule from './SpendingByCategoryModule/SpendingByCategoryModule';
 import styles from './Trends.module.css';
+import TrendsInsightsGrid from './TrendsInsightsGrid/TrendsInsightsGrid';
 import TrendsMobileNavigation from './TrendsMobileNavigation/TrendsMobileNavigation';
 
 export default function Trends() {
@@ -24,6 +25,7 @@ export default function Trends() {
       <RecurringSpendNeedsUpdateBanner />
 
       <div className={styles.contentContainer}>
+        <TrendsInsightsGrid />
         <SummaryTotals />
         <BarChartModule />
         <SpendingByCategoryModule />

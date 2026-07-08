@@ -1,0 +1,43 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  margin-bottom: 6px;
+}
+
+.headline {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.deltaHighlight {
+  color: var(--token-color-semantic-loss);
+}
+
+.barRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 46px;
+  margin-top: auto;
+}
+
+.bar {
+  flex: 1;
+  border-radius: 3px;
+}
+
+.emptyMessage {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}
