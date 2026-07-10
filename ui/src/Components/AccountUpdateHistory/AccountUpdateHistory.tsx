@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
+import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveRow';
 import { format, parse } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
 import { accountHistoryQueryOptions } from 'queryOptions/accountHistoryQueryOptions';
@@ -9,6 +10,9 @@ import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { AccountWithStatus } from '@spend-watcher/contract';
 import AddAccountUpdateRow from './AddAccountUpdateRow/AddAccountUpdateRow';
 import EditAccountUpdateRow from './EditAccountUpdateRow/EditAccountUpdateRow';
+
+// Static keys for the fixed-size loading placeholder list (it never reorders).
+const SKELETON_KEYS = Array.from({ length: 4 }, (_, i) => `account-update-history-skeleton-${i}`);
 
 const formatDate = (date: string) => format(parse(date, monthYearDbDateFormat, new Date()), 'MMMM yyyy');
 
@@ -23,8 +27,13 @@ export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdat
   const [now] = useState(() => new Date());
 
   if (isLoading || !accountHistory) {
-    // TODO:
-    return <h2>Loading...</h2>;
+    return (
+      <>
+        {SKELETON_KEYS.map((key) => (
+          <LoadingInteractiveRow key={key} />
+        ))}
+      </>
+    );
   }
 
   const { updateHistory } = accountHistory;

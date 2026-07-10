@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
+import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveRow';
 import EditableRecurringTransactionRow from 'Components/RecurringTransactionRow/EditableRecurringTransactionRow';
 import AddRecurringTransactionRow from 'Components/RecurringTransactionRow/AddRecurringTransactionRow';
 import { format, parse, subMonths } from 'date-fns';
@@ -9,6 +10,9 @@ import { recurringTransactionsQueryOptions } from 'queryOptions/recurringTransac
 import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { RecurringSpendTransaction } from '@spend-watcher/contract';
+
+// Static keys for the fixed-size loading placeholder list (it never reorders).
+const SKELETON_KEYS = Array.from({ length: 4 }, (_, i) => `recurring-transactions-skeleton-${i}`);
 
 type RecurringTransactionsListPropTypes = {
   recurringSpendTransaction: RecurringSpendTransaction;
@@ -27,8 +31,13 @@ export default function RecurringTransactionsList({
   const [now] = useState(() => new Date());
 
   if (!recurringTransactionsList || isLoading) {
-    // TODO:
-    return <h1>Loading...</h1>;
+    return (
+      <>
+        {SKELETON_KEYS.map((key) => (
+          <LoadingInteractiveRow key={key} />
+        ))}
+      </>
+    );
   }
 
   const oldestTransactionDate = recurringTransactionsList[recurringTransactionsList.length - 1].date;
