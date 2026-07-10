@@ -4,7 +4,7 @@
 import { apiTest as test, expect } from '../../src/apiFixtures';
 import { post } from '../../src/seed';
 import { getJson } from '../../src/apiHelpers';
-import { format, subMonths } from 'date-fns';
+import { format, startOfYear, subMonths } from 'date-fns';
 import {
   AccountCategory,
   type AccountGrowthOverTimeResponse,
@@ -230,5 +230,64 @@ test.describe('Accounts — tenant isolation', () => {
 
     const after = await getJson<AccountHistoryResponse>(api, '/api/accounts/history', { accountId });
     expect(after.updateHistory).toEqual([{ date: currentMonth, amount: 1234, updateId: ownerUpdateId }]);
+  });
+});
+
+test.describe('Accounts — year-start net worth', () => {
+  // Pre-year months derived from "now" so the window holds on any run date.
+  const yearStart = startOfYear(new Date());
+  const lastDecember = format(subMonths(yearStart, 1), 'yyyy-MM');
+  const lastJune = format(subMonths(yearStart, 7), 'yyyy-MM');
+
+  test('sums each account’s latest pre-year update', async ({ api }) => {
+    const accountId = await addAndFindId(api, {
+      accountName: 'Seasoned Savings',
+      startingAccountValue: 5000,
+      accountCategory: AccountCategory.SAVINGS,
+      isFixedRate: true,
+      annualPercentageRate: 0,
+    });
+    await post(api, '/api/accounts/update/add', { accountId, amount: 4000, date: lastJune });
+    await post(api, '/api/accounts/update/add', { accountId, amount: 4500, date: lastDecember });
+
+    const summary = await readSummary(api);
+    expect(summary.yearStartNetWorth).toBe(4500);
+  });
+
+  test('is null when every account started this year', async ({ api }) => {
+    await addAndFindId(api, {
+      accountName: 'Fresh Checking',
+      startingAccountValue: 1000,
+      accountCategory: AccountCategory.CHECKING,
+      isFixedRate: true,
+      annualPercentageRate: 0,
+    });
+
+    const summary = await readSummary(api);
+    expect(summary.yearStartNetWorth).toBeNull();
+  });
+
+  test('accounts added this year contribute nothing to the year-start sum', async ({ api }) => {
+    const seasonedId = await addAndFindId(api, {
+      accountName: 'Seasoned Savings',
+      startingAccountValue: 5000,
+      accountCategory: AccountCategory.SAVINGS,
+      isFixedRate: true,
+      annualPercentageRate: 0,
+    });
+    await post(api, '/api/accounts/update/add', { accountId: seasonedId, amount: 4500, date: lastDecember });
+    await addAndFindId(api, {
+      accountName: 'Fresh Checking',
+      startingAccountValue: 1000,
+      accountCategory: AccountCategory.CHECKING,
+      isFixedRate: true,
+      annualPercentageRate: 0,
+    });
+
+    const summary = await readSummary(api);
+    // The summary's "current value" follows the newest INSERTED update (MAX(update_id)), so the
+    // December backfill (4500) supersedes the seasoned account's starting 5000.
+    expect(summary.totalEquity).toBe(5500);
+    expect(summary.yearStartNetWorth).toBe(4500);
   });
 });

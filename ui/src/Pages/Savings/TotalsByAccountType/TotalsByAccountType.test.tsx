@@ -30,6 +30,7 @@ describe('TotalsByAccountType', () => {
       http.get('*/api/accounts/summary', () =>
         HttpResponse.json({
           totalEquity: 5000,
+          yearStartNetWorth: null,
           totalAccountsCount: 1,
           accountsCountByCategory: ZERO_TOTALS,
           accountTotalsByType: { ...ZERO_TOTALS, ...totals },

@@ -83,6 +83,8 @@ const locale = {
     pageTitle: 'Savings',
     accountTotalByType: 'Totals by account type',
     netWorth: 'Net worth',
+    netWorthAllocationEmpty: 'Add an account with a balance to see your allocation.',
+    ytdGrowth: 'YTD growth',
   },
   accounts: {
     addAccount: 'Add account',

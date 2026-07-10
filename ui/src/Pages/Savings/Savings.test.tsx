@@ -10,7 +10,9 @@ describe('Savings page', () => {
     renderWithProviders(<Savings />);
 
     expect(screen.getByRole('heading', { level: 1, name: 'Savings' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Net worth' })).toBeInTheDocument();
+    // Two while loading: the summary tile always carries the heading, the growth-chart tile only
+    // in its skeleton state.
+    expect(screen.getAllByRole('heading', { name: 'Net worth' }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('heading', { name: 'Totals by account type' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Your accounts' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add account' })).toBeInTheDocument();

@@ -22,6 +22,7 @@ function makeAccount(overrides: Partial<AccountEntry> = {}) {
 
 const BASE_SUMMARY = {
   totalEquity: 5000,
+  yearStartNetWorth: null,
   totalAccountsCount: 1,
   accountsCountByCategory: {
     [AccountCategory.CHECKING]: 1,

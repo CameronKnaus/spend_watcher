@@ -2,6 +2,7 @@ import { AccountCategory, type AccountsSummaryResponse } from '@spend-watcher/co
 
 export const accountsSummaryResponse = {
   totalEquity: 5000,
+  yearStartNetWorth: 4000,
   totalAccountsCount: 1,
   accountsCountByCategory: {
     [AccountCategory.CHECKING]: 1,

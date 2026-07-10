@@ -1,11 +1,13 @@
 import { AccountCategory, AccountsSummaryResponse, AppInputs } from '@spend-watcher/contract';
 import { MonthYearDbDate, monthYearDbDateFormat } from '@type/dateTypes';
-import { format, isBefore } from 'date-fns';
+import { formatDbDate } from '@utils/DateUtils/dateUtils';
+import { format, isBefore, startOfYear } from 'date-fns';
 import {
   deleteAccount,
   findAccountGrowthOverTime,
   findAccountsWithLatestUpdate,
   findAccountUpdates,
+  findYearStartNetWorth,
   insertAccount,
   insertAccountUpdate,
   updateAccount,
@@ -25,7 +27,10 @@ function emptyCategoryRecord(): Record<AccountCategory, number> {
 
 // Aggregate the user's accounts into the summary payload.
 export async function getAccountsSummary(username: string): Promise<AccountsSummaryResponse> {
-  const fetchedAccounts = await findAccountsWithLatestUpdate(username);
+  const [fetchedAccounts, yearStartNetWorth] = await Promise.all([
+    findAccountsWithLatestUpdate(username),
+    findYearStartNetWorth(username, formatDbDate(startOfYear(new Date()))),
+  ]);
 
   let totalEquity = 0;
   let totalAccountsCount = 0;
@@ -61,6 +66,7 @@ export async function getAccountsSummary(username: string): Promise<AccountsSumm
     accountTotalsByType,
     accountsCountByCategory,
     accountsList: accountsList.sort((a, b) => (a.currentAccountValue < b.currentAccountValue ? 1 : -1)),
+    yearStartNetWorth,
   };
 }
 
