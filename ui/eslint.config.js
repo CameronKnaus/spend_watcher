@@ -24,7 +24,7 @@ export default [
     },
     rules: {
       'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/exhaustive-deps': 'error',
       // eslint-plugin-react-hooks (the React team's implementation) is the authority on hooks;
       // turn off @eslint-react's overlapping copies so each issue reports once.
       '@eslint-react/rules-of-hooks': 'off',
@@ -32,6 +32,7 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },
   {

@@ -32,6 +32,9 @@ const router = createRouter({
 // Registering the router's type is what makes Link/useNavigate/useLocation across the app
 // typecheck their targets against the generated route tree.
 declare module '@tanstack/react-router' {
+  // Register is declared as an interface upstream; augmenting it requires declaration
+  // merging, which only works with `interface`, not `type`.
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Register {
     router: typeof router;
   }
