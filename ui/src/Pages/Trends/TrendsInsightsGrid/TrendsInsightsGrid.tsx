@@ -4,6 +4,7 @@ import BreakdownInsightTile from '../BreakdownInsightTile/BreakdownInsightTile';
 import CategoriesInsightTile from '../CategoriesInsightTile/CategoriesInsightTile';
 import MonthsInsightTile from '../MonthsInsightTile/MonthsInsightTile';
 import PaceInsightTile from '../PaceInsightTile/PaceInsightTile';
+import RhythmInsightTile from '../RhythmInsightTile/RhythmInsightTile';
 import styles from './TrendsInsightsGrid.module.css';
 
 // Layout-only wrapper for the insight tiles so each tile stays an independently removable unit.
@@ -21,6 +22,7 @@ export default function TrendsInsightsGrid() {
       <CategoriesInsightTile />
       <MonthsInsightTile />
       <BreakdownInsightTile />
+      <RhythmInsightTile />
     </div>
   );
 }

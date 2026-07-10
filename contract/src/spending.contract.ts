@@ -129,6 +129,20 @@ export const typicalPaceContract = oc
     }),
   );
 
+// GET /spending/rhythm — the month's daily discretionary totals plus the user's daily median so
+// unusual days stand out. Median = the middle non-zero spend day of the 90 days ending at
+// targetDate; null when that window has no spend at all.
+export const rhythmContract = oc
+  .route({ method: 'GET', path: '/spending/rhythm' })
+  .input(z.object({ targetDate: z.iso.date() }))
+  .output(
+    z.object({
+      dailyMedian: z.number().nullable(),
+      // One entry per day from the 1st through targetDate, zero-filled.
+      days: z.array(z.object({ date: z.iso.date(), amount: z.number() })),
+    }),
+  );
+
 // GET /spending/yearly-average
 export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/yearly-average' }).output(
   z.object({
@@ -234,6 +248,7 @@ export const spendingContract = {
   pace: paceContract,
   categoryTrends: categoryTrendsContract,
   typicalPace: typicalPaceContract,
+  rhythm: rhythmContract,
   discretionaryAdd: discretionaryAddContract,
   discretionaryEdit: discretionaryEditContract,
   discretionaryDelete: discretionaryDeleteContract,

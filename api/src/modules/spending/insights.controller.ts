@@ -3,6 +3,7 @@ import {
   getCategoryTrends,
   getHistoryStart,
   getSpendingPace,
+  getSpendingRhythm,
   getTypicalPace,
   getYearlyAverage,
 } from './insights.service';
@@ -26,4 +27,9 @@ export const categoryTrends = authed.spending.categoryTrends.handler(({ context,
 // GET /api/spending/typical-pace — this month's cumulative spend vs a typical-month baseline.
 export const typicalPace = authed.spending.typicalPace.handler(({ context, input }) =>
   getTypicalPace(context.username, input.targetDate),
+);
+
+// GET /api/spending/rhythm — the month's daily totals with the trailing daily median.
+export const rhythm = authed.spending.rhythm.handler(({ context, input }) =>
+  getSpendingRhythm(context.username, input.targetDate),
 );

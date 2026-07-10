@@ -29,9 +29,41 @@ import {
   HistoryStartResponse,
   SpendingCategory,
   SpendingPaceResponse,
+  SpendingRhythmResponse,
   TypicalPaceResponse,
   YearlyAverageResponse,
 } from '@spend-watcher/contract';
+
+const MEDIAN_WINDOW_DAYS = 90;
+
+// The month's zero-filled daily discretionary totals plus the median non-zero spend day of the
+// trailing 90 days — zero days are excluded so quiet stretches don't drag the "usual day" to $0.
+export async function getSpendingRhythm(username: string, targetDate: string): Promise<SpendingRhythmResponse> {
+  const target = parse(targetDate, dbDateFormat, new Date());
+  const windowStart = subDays(target, MEDIAN_WINDOW_DAYS - 1);
+
+  const dailyTotals = await findDiscretionaryDailyTotals(username, formatDbDate(windowStart), targetDate);
+
+  const spendDays = dailyTotals
+    .map((day) => day.amount)
+    .filter((amount) => amount > 0)
+    .sort((a, b) => a - b);
+  const middle = Math.floor(spendDays.length / 2);
+  const dailyMedian =
+    spendDays.length === 0
+      ? null
+      : spendDays.length % 2 === 1
+        ? spendDays[middle]
+        : (spendDays[middle - 1] + spendDays[middle]) / 2;
+
+  const totalsByDate = new Map(dailyTotals.map((day) => [day.date, day.amount]));
+  const days = eachDayOfInterval({ start: startOfMonth(target), end: target }).map((day) => {
+    const date = formatDbDate(day);
+    return { date, amount: totalsByDate.get(date) ?? 0 };
+  });
+
+  return { dailyMedian, days };
+}
 
 const TYPICAL_BASELINE_MONTHS = 6;
 
