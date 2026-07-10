@@ -134,3 +134,13 @@ describe('TripForm edit mode', () => {
     expect(screen.queryByRole('button', { name: /Permanently delete this trip/ })).not.toBeInTheDocument();
   });
 });
+
+describe('TripForm label association', () => {
+  it('associates each label with its input via htmlFor/id, including the MUI date pickers', () => {
+    renderAddForm();
+
+    expect(screen.getByLabelText('Trip name')).toBe(screen.getByPlaceholderText('Europe summer trip'));
+    expect(screen.getByLabelText('Start date')).toBeInstanceOf(HTMLInputElement);
+    expect(screen.getByLabelText('End date')).toBeInstanceOf(HTMLInputElement);
+  });
+});

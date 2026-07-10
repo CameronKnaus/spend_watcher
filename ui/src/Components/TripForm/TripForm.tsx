@@ -7,7 +7,7 @@ import DeleteButton from 'Components/DeleteButton/DeleteButton';
 import DatePicker from 'Components/FormInputs/DatePickerController/DatePickerController';
 import { format } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dbDateFormat } from 'Types/dateTypes';
 import { AppInputs, Trip, tripInputSchema } from '@spend-watcher/contract';
@@ -36,6 +36,10 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
   const queryClient = useQueryClient();
   const getContent = createContentGetter('trips');
   const getGeneralContent = createContentGetter('general');
+  const id = useId();
+  const tripNameId = `${id}-tripName`;
+  const startDateId = `${id}-startDate`;
+  const endDateId = `${id}-endDate`;
 
   const editMode = Boolean(tripToEdit);
 
@@ -82,15 +86,19 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
   return (
     <>
       <form className={styles.tripForm} onSubmit={form.handleSubmit(handleSubmission)}>
-        <label>{getContent('tripName')}</label>
+        <label htmlFor={tripNameId}>{getContent('tripName')}</label>
         <input
+          id={tripNameId}
           className={styles.textInput}
           placeholder={getContent('tripNamePlaceholder')}
           autoComplete="off"
           {...form.register('tripName', { minLength: 1, maxLength: 30, required: true })}
         />
-        <label className={styles.dateLabel}>{getContent('startDate')}</label>
+        <label htmlFor={startDateId} className={styles.dateLabel}>
+          {getContent('startDate')}
+        </label>
         <DatePicker
+          id={startDateId}
           isRequired
           control={form.control}
           name="startDate"
@@ -99,8 +107,11 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
           maxDate={endDate}
           className={styles.textInput}
         />
-        <label className={styles.dateLabel}>{getContent('endDate')}</label>
+        <label htmlFor={endDateId} className={styles.dateLabel}>
+          {getContent('endDate')}
+        </label>
         <DatePicker
+          id={endDateId}
           isRequired
           control={form.control}
           name="endDate"

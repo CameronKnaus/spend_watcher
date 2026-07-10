@@ -5,6 +5,7 @@ import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
 import { orpc } from 'apiClient/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import createContentGetter from 'Content/createContentGetter';
+import { useId } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../AuthScreen.module.css';
 
@@ -16,6 +17,9 @@ export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const getContent = createContentGetter('authScreen');
+  const id = useId();
+  const usernameId = `${id}-username`;
+  const passwordId = `${id}-password`;
   const form = useForm({
     resolver: zodResolver(loginInputSchema),
   });
@@ -38,16 +42,18 @@ export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmission)}>
-      <label>{getContent('username')}</label>
+      <label htmlFor={usernameId}>{getContent('username')}</label>
       <input
+        id={usernameId}
         className={styles.textInput}
         placeholder={getContent('username')}
         autoComplete="username"
         type="username"
         {...form.register('username', { maxLength: 100 })}
       />
-      <label>{getContent('password')}</label>
+      <label htmlFor={passwordId}>{getContent('password')}</label>
       <input
+        id={passwordId}
         className={styles.textInput}
         placeholder={getContent('password')}
         autoComplete="current-password"
