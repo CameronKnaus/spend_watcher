@@ -1,0 +1,49 @@
+.tile {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .tile {
+    grid-column: span 1;
+  }
+}
+
+.contentRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.textColumn {
+  flex: 1;
+  min-width: 220px;
+}
+
+.label {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  margin-bottom: 6px;
+}
+
+.headline {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.projection {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.chart {
+  width: 240px;
+  flex: none;
+  display: block;
+}

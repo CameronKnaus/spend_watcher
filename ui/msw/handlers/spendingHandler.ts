@@ -6,6 +6,7 @@ import { recurringSummaryResponse } from '../mocks/spending/recurringSummaryResp
 import { spendingDetailsResponse } from '../mocks/spending/spendingDetailsResponse';
 import { spendingHistoryStartResponse } from '../mocks/spending/spendingHistoryStartResponse';
 import { buildSpendingPaceResponse } from '../mocks/spending/spendingPaceResponse';
+import { buildTypicalPaceResponse } from '../mocks/spending/typicalPaceResponse';
 import { spendingYearlyAverageResponse } from '../mocks/spending/spendingYearlyAverageResponse';
 
 export const spendingHandlers = [
@@ -13,6 +14,10 @@ export const spendingHandlers = [
   http.get('*/api/spending/pace', ({ request }) => {
     const targetDate = new URL(request.url).searchParams.get('targetDate') ?? format(new Date(), 'yyyy-MM-dd');
     return HttpResponse.json(buildSpendingPaceResponse(targetDate));
+  }),
+  http.get('*/api/spending/typical-pace', ({ request }) => {
+    const targetDate = new URL(request.url).searchParams.get('targetDate') ?? format(new Date(), 'yyyy-MM-dd');
+    return HttpResponse.json(buildTypicalPaceResponse(targetDate));
   }),
   http.get('*/api/spending/category-trends', ({ request }) => {
     const targetMonth = new URL(request.url).searchParams.get('targetMonth') ?? format(new Date(), 'yyyy-MM');

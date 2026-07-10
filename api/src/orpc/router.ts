@@ -12,7 +12,7 @@ import {
 import { login, register, verify } from '@modules/auth/auth.controller';
 import { details } from '@modules/spending/details.controller';
 import { discretionaryAdd, discretionaryDelete, discretionaryEdit } from '@modules/spending/discretionary.controller';
-import { categoryTrends, historyStart, pace, yearlyAverage } from '@modules/spending/insights.controller';
+import { categoryTrends, historyStart, pace, typicalPace, yearlyAverage } from '@modules/spending/insights.controller';
 import {
   recurringSpendAdd,
   recurringSpendDelete,
@@ -41,6 +41,7 @@ export const router = pub.router({
     yearlyAverage,
     pace,
     categoryTrends,
+    typicalPace,
     discretionaryAdd,
     discretionaryEdit,
     discretionaryDelete,

@@ -111,6 +111,24 @@ export const categoryTrendsContract = oc
     }),
   );
 
+// GET /spending/typical-pace — this month's cumulative discretionary spend against a "typical"
+// month averaged from the six prior full months. Discretionary only: recurring lands on synthetic
+// first-of-month dates that would distort a day-by-day pace.
+export const typicalPaceContract = oc
+  .route({ method: 'GET', path: '/spending/typical-pace' })
+  .input(z.object({ targetDate: z.iso.date() }))
+  .output(
+    z.object({
+      // One entry per day from the 1st through targetDate, cumulative.
+      cumulativeByDay: z.array(z.object({ date: z.iso.date(), amount: z.number() })),
+      // Averages over the baseline months that had any spend; null when none did, so the ui can
+      // tell "no history" apart from "a typical month is $0".
+      typicalMonthTotal: z.number().nullable(),
+      typicalThroughSameDay: z.number().nullable(),
+      baselineMonthCount: z.number(),
+    }),
+  );
+
 // GET /spending/yearly-average
 export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/yearly-average' }).output(
   z.object({
@@ -215,6 +233,7 @@ export const spendingContract = {
   yearlyAverage: yearlyAverageContract,
   pace: paceContract,
   categoryTrends: categoryTrendsContract,
+  typicalPace: typicalPaceContract,
   discretionaryAdd: discretionaryAddContract,
   discretionaryEdit: discretionaryEditContract,
   discretionaryDelete: discretionaryDeleteContract,

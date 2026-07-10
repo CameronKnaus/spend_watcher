@@ -29,8 +29,65 @@ import {
   HistoryStartResponse,
   SpendingCategory,
   SpendingPaceResponse,
+  TypicalPaceResponse,
   YearlyAverageResponse,
 } from '@spend-watcher/contract';
+
+const TYPICAL_BASELINE_MONTHS = 6;
+
+// This month's cumulative discretionary series plus a "typical month" baseline averaged over the
+// six prior full months (only months with any spend count toward the average).
+export async function getTypicalPace(username: string, targetDate: string): Promise<TypicalPaceResponse> {
+  const target = parse(targetDate, dbDateFormat, new Date());
+  const targetMonthStart = startOfMonth(target);
+  const dayOfMonth = getDate(target);
+
+  const dailyTotals = await findDiscretionaryDailyTotals(
+    username,
+    formatDbDate(subMonths(targetMonthStart, TYPICAL_BASELINE_MONTHS)),
+    targetDate,
+  );
+
+  const byMonth = new Map<string, { day: number; amount: number }[]>();
+  for (const entry of dailyTotals) {
+    const month = entry.date.slice(0, 7);
+    const days = byMonth.get(month) ?? [];
+    days.push({ day: Number(entry.date.slice(8, 10)), amount: entry.amount });
+    byMonth.set(month, days);
+  }
+
+  let baselineMonthCount = 0;
+  let baselineTotalSum = 0;
+  let baselineThroughSum = 0;
+  for (let monthsBack = 1; monthsBack <= TYPICAL_BASELINE_MONTHS; monthsBack++) {
+    const monthStart = subMonths(targetMonthStart, monthsBack);
+    const days = byMonth.get(format(monthStart, monthYearDbDateFormat));
+    if (!days || days.length === 0) {
+      continue;
+    }
+
+    const clampedDay = Math.min(dayOfMonth, getDaysInMonth(monthStart));
+    baselineMonthCount += 1;
+    baselineTotalSum += days.reduce((sum, day) => sum + day.amount, 0);
+    baselineThroughSum += days.reduce((sum, day) => (day.day <= clampedDay ? sum + day.amount : sum), 0);
+  }
+
+  const currentMonthDays = new Map(
+    (byMonth.get(format(targetMonthStart, monthYearDbDateFormat)) ?? []).map((day) => [day.day, day.amount]),
+  );
+  let runningTotal = 0;
+  const cumulativeByDay = Array.from({ length: dayOfMonth }, (_, index) => {
+    runningTotal += currentMonthDays.get(index + 1) ?? 0;
+    return { date: formatDbDate(setDate(targetMonthStart, index + 1)), amount: runningTotal };
+  });
+
+  return {
+    cumulativeByDay,
+    typicalMonthTotal: baselineMonthCount > 0 ? baselineTotalSum / baselineMonthCount : null,
+    typicalThroughSameDay: baselineMonthCount > 0 ? baselineThroughSum / baselineMonthCount : null,
+    baselineMonthCount,
+  };
+}
 
 const TREND_WINDOW_MONTHS = 6;
 
