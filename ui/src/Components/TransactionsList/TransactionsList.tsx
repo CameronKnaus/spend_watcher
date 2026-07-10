@@ -45,7 +45,7 @@ export default function TransactionsList() {
                           .map((transactionId) => {
                             const transaction = spendingData.transactionDictionary[transactionId];
                             // Ids were filtered to discretionary, so narrow the union value to match.
-                            if (transaction.isRecurring) {
+                            if (!transaction || transaction.isRecurring) {
                               return null;
                             }
                             return (

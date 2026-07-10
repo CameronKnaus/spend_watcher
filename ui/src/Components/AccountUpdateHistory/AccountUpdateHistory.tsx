@@ -28,7 +28,11 @@ export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdat
   }
 
   const { updateHistory } = accountHistory;
-  const oldestAccountUpdateDate = updateHistory[updateHistory.length - 1].date;
+  const oldestAccountUpdateDate = updateHistory.at(-1)?.date;
+  if (oldestAccountUpdateDate === undefined) {
+    return null;
+  }
+
   // Starting with the current date, iterate backwards until we reach the oldest account update date.
   // Copied from the mount snapshot because the loop below mutates it, and state must stay untouched.
   const currentDate = new Date(now);

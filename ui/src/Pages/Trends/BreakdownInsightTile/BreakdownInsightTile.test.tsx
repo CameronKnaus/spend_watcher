@@ -13,8 +13,8 @@ describe('BreakdownInsightTile', () => {
     // Four named segments (46/32/13/8) plus a 1% everything-else remainder.
     const segments = screen.getAllByTestId('breakdown-segment');
     expect(segments).toHaveLength(5);
-    expect(segments[0].getAttribute('style')).toContain('width: 46%');
-    expect(segments[0].getAttribute('style')).toContain('GROCERIES');
+    expect(segments[0]?.getAttribute('style')).toContain('width: 46%');
+    expect(segments[0]?.getAttribute('style')).toContain('GROCERIES');
   });
 
   it('uses the single-category phrasing when only one category has spend', async () => {

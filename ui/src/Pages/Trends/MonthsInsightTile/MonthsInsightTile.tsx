@@ -33,7 +33,7 @@ export default function MonthsInsightTile() {
 
   const monthTotals = trendsData.months.map((month, index) => ({
     month,
-    total: trendsData.categories.reduce((sum, category) => sum + category.monthlyTotals[index], 0),
+    total: trendsData.categories.reduce((sum, category) => sum + (category.monthlyTotals[index] ?? 0), 0),
   }));
   const monthsWithData = monthTotals.filter((entry) => entry.total > 0);
 

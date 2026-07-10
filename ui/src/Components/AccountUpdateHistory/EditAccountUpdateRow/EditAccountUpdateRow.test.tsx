@@ -40,7 +40,7 @@ describe('EditAccountUpdateRow confirm gating', () => {
 
     await waitFor(() => {
       expect(edits).toHaveLength(1);
-      expect(edits[0].body).toMatchObject({ accountId: ACCOUNT_ID, updateId: 7, amount: 5500 });
+      expect(edits[0]?.body).toMatchObject({ accountId: ACCOUNT_ID, updateId: 7, amount: 5500 });
     });
   });
 });

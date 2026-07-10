@@ -29,7 +29,7 @@ describe('LoginForm', () => {
 
     await waitFor(() => {
       expect(logins).toHaveLength(1);
-      expect(logins[0].body).toMatchObject({ username: 'e2euser_abc', password: 'aValidPassword1' });
+      expect(logins[0]?.body).toMatchObject({ username: 'e2euser_abc', password: 'aValidPassword1' });
     });
   });
 

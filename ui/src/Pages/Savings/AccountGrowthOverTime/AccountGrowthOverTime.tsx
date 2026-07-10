@@ -25,9 +25,10 @@ export default function AccountGrowthOverTime({ dataset, containerMeasurement }:
     (d) => d.date,
   );
   const totalsArray: DataPoint[] = Array.from(totalsByDate, ([date, amount]) => ({ date, amount }));
+  const lastDataPoint = totalsArray.at(-1);
 
   // Hooks
-  const [hoveredData, setHoveredData] = useState<DataPoint>(totalsArray[totalsArray.length - 1]);
+  const [hoveredData, setHoveredData] = useState<DataPoint | undefined>(lastDataPoint);
   const getContent = createContentGetter('savings');
   const isMobile = useIsMobile();
 
@@ -97,7 +98,11 @@ export default function AccountGrowthOverTime({ dataset, containerMeasurement }:
       closestDataPoint = d0 || d1;
     }
 
-    setHoveredData(closestDataPoint ?? totalsArray[totalsArray.length - 1]);
+    setHoveredData(closestDataPoint ?? lastDataPoint);
+  }
+
+  if (!hoveredData) {
+    return null;
   }
 
   return (

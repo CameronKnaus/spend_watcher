@@ -75,7 +75,7 @@ describe('TripForm add mode', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(adds).toHaveLength(1));
-    expect(adds[0].body).toMatchObject({
+    expect(adds[0]?.body).toMatchObject({
       tripName: 'Day Trip',
       startDate: '2026-06-15',
       endDate: '2026-06-15',
@@ -87,8 +87,11 @@ describe('TripForm add mode', () => {
 
     // Both pickers default to today (June 15). Open the END picker: days before the start date
     // are blocked by minDate = startDate.
-    const dateInputs = screen.getAllByRole('textbox', { name: /Choose date/ });
-    await user.click(dateInputs[1]);
+    const [, endDateInput] = screen.getAllByRole('textbox', { name: /Choose date/ });
+    if (!endDateInput) {
+      throw new Error('expected both start and end date inputs to be present');
+    }
+    await user.click(endDateInput);
     const dialog = await screen.findByRole('dialog');
 
     expect(within(dialog).getByRole('gridcell', { name: '14' })).toBeDisabled(); // before start
@@ -109,7 +112,7 @@ describe('TripForm edit mode', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(edits).toHaveLength(1));
-    expect(edits[0].body).toMatchObject({
+    expect(edits[0]?.body).toMatchObject({
       tripId: TEST_TRIP.tripId,
       tripName: 'Renamed Trip',
       startDate: '2026-06-01',

@@ -82,7 +82,7 @@ export default function CategoryLedgerTile() {
   const windowLength = trendsData.months.length;
   const rows: LedgerRow[] = trendsData.categories
     .map((trend) => {
-      const current = trend.monthlyTotals[windowLength - 1];
+      const current = trend.monthlyTotals[windowLength - 1] ?? 0;
       const baseline = trend.monthlyTotals.slice(windowLength - 1 - BASELINE_MONTHS, windowLength - 1);
       const baselineAverage = baseline.reduce((sum, amount) => sum + amount, 0) / BASELINE_MONTHS;
 
@@ -107,7 +107,8 @@ export default function CategoryLedgerTile() {
       return b.change - a.change;
     });
 
-  if (rows.length === 0) {
+  const [firstRow] = rows;
+  if (!firstRow) {
     return (
       <ModuleContainer heading={getContent('categoryLedgerHeading')} className={styles.module} elevation="medium">
         <div className={styles.emptyMessage}>{getContent('categoryLedgerEmpty')}</div>
@@ -115,7 +116,7 @@ export default function CategoryLedgerTile() {
     );
   }
 
-  const activeRow = rows.find((row) => row.category === selectedCategory) ?? rows[0];
+  const activeRow = rows.find((row) => row.category === selectedCategory) ?? firstRow;
   const activeColor = spendCategoryColorMapper[activeRow.category];
   const activeMax = Math.max(...activeRow.monthlyTotals, 1);
   const monthYearLabel = format(parseDbDate(startDate), 'LLLL yyyy');
@@ -137,7 +138,7 @@ export default function CategoryLedgerTile() {
               key={row.category}
               type="button"
               data-testid="ledger-category-row"
-              className={clsx(styles.categoryRow, { [styles.selectedRow]: row.category === activeRow.category })}
+              className={clsx(styles.categoryRow, { [styles.selectedRow ?? '']: row.category === activeRow.category })}
               onClick={() => setSelectedCategory(row.category)}
             >
               <SpendingCategoryIcon size={34} category={row.category} />
@@ -209,7 +210,7 @@ export default function CategoryLedgerTile() {
                     />
                     <span
                       className={clsx(styles.historyBarLabel, {
-                        [styles.currentBarLabel]: index === windowLength - 1,
+                        [styles.currentBarLabel ?? '']: index === windowLength - 1,
                       })}
                     >
                       {format(parseDbDate(`${trendsData.months[index]}-01`), 'LLL')}

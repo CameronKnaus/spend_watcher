@@ -21,7 +21,8 @@ type DailySpendBarsPropTypes = {
 export default function DailySpendBars({ dailyTotals, largestRecentExpense }: DailySpendBarsPropTypes) {
   const getContent = createContentGetter('dashboard');
 
-  if (dailyTotals.length === 0) {
+  const [firstDay] = dailyTotals;
+  if (!firstDay) {
     return null;
   }
 
@@ -59,7 +60,7 @@ export default function DailySpendBars({ dailyTotals, largestRecentExpense }: Da
         })}
       </svg>
       <div className={styles.axisLabels}>
-        <span>{format(parseDbDate(dailyTotals[0].date), 'MMM d')}</span>
+        <span>{format(parseDbDate(firstDay.date), 'MMM d')}</span>
         {largestRecentExpense && (
           <span className={styles.spikeLabel}>
             {getContent('bigSpikeLabel', [

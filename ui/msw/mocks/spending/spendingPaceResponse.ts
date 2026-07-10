@@ -30,6 +30,6 @@ export function buildSpendingPaceResponse(targetDate: string): SpendingPaceRespo
   return {
     ...spendingPaceResponse,
     dailyTotals,
-    largestRecentExpense: { date: dailyTotals[7].date, amount: 44, note: 'flights' },
+    largestRecentExpense: { date: format(addDays(windowStart, 7), 'yyyy-MM-dd'), amount: 44, note: 'flights' },
   };
 }
