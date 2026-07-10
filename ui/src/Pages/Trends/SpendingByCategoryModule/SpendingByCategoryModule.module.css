@@ -1,0 +1,93 @@
+.module {
+  width: 100%;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerRow th {
+  padding: 6px 12px 6px 0;
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  white-space: nowrap;
+}
+
+.categoryRow td {
+  padding: 9px 12px 9px 0;
+  border-top: 1px solid var(--token-color-border-tertiary);
+  font-size: var(--font-body-medium);
+}
+
+.categoryCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.shareHeader {
+  width: 160px;
+}
+
+.shareCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.shareTrack {
+  flex: 1;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--theme-color-neutral-600);
+  overflow: clip;
+}
+
+.shareFill {
+  height: 100%;
+}
+
+.deltaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.neutralDelta {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-placeholder);
+}
+
+.shareLabel {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+  min-width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.placeholderSkeleton {
+  height: 36px;
+  margin-bottom: 8px;
+}
+
+.emptyMessage {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}

@@ -1,5 +1,5 @@
 import { authed } from '../../orpc/base';
-import { getHistoryStart, getSpendingPace, getYearlyAverage } from './insights.service';
+import { getCategoryTrends, getHistoryStart, getSpendingPace, getYearlyAverage } from './insights.service';
 
 // GET /api/spending/history-start — the earliest dates the user has spending history for.
 export const historyStart = authed.spending.historyStart.handler(({ context }) => getHistoryStart(context.username));
@@ -10,4 +10,9 @@ export const yearlyAverage = authed.spending.yearlyAverage.handler(({ context })
 // GET /api/spending/pace — month-to-date totals with previous-month comparison windows.
 export const pace = authed.spending.pace.handler(({ context, input }) =>
   getSpendingPace(context.username, input.targetDate),
+);
+
+// GET /api/spending/category-trends — six months of per-category totals ending at targetMonth.
+export const categoryTrends = authed.spending.categoryTrends.handler(({ context, input }) =>
+  getCategoryTrends(context.username, input.targetMonth),
 );

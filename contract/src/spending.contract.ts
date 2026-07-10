@@ -88,6 +88,29 @@ export const paceContract = oc
     }),
   );
 
+// GET /spending/category-trends — per-category totals for the six calendar months ending at
+// targetMonth, powering the delta + sparkline columns on Trends. Totals combine discretionary and
+// recurring spend. Categories with no spend anywhere in the window are omitted.
+export const categoryTrendsContract = oc
+  .route({ method: 'GET', path: '/spending/category-trends' })
+  .input(z.object({ targetMonth: zMonthYearDate }))
+  .output(
+    z.object({
+      // Oldest first; the last entry is targetMonth. monthlyTotals aligns with this, zero-filled.
+      months: z.array(zMonthYearDate),
+      categories: z.array(
+        z.object({
+          category: zSpendingCategory,
+          monthlyTotals: z.array(z.number()),
+          // targetMonth vs the month before it; null when that month has no spend to compare
+          // against. When targetMonth is the current month this compares a partial month against
+          // a full one — accepted for v1.
+          percentChange: z.number().nullable(),
+        }),
+      ),
+    }),
+  );
+
 // GET /spending/yearly-average
 export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/yearly-average' }).output(
   z.object({
@@ -191,6 +214,7 @@ export const spendingContract = {
   historyStart: historyStartContract,
   yearlyAverage: yearlyAverageContract,
   pace: paceContract,
+  categoryTrends: categoryTrendsContract,
   discretionaryAdd: discretionaryAddContract,
   discretionaryEdit: discretionaryEditContract,
   discretionaryDelete: discretionaryDeleteContract,

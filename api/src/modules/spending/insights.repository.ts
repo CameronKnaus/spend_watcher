@@ -1,4 +1,5 @@
 import { queryAsync } from '@lib/queryAsync';
+import { SpendingCategory } from '@spend-watcher/contract';
 
 type EarliestDiscretionaryDateRow = {
   /**  e.g. '2024-08-01T04:00:00.000Z' */
@@ -136,6 +137,49 @@ export async function findLargestExpenseInRange(
   }
 
   return { date: rows[0].day, amount: Number(rows[0].amount), note: rows[0].note ?? '' };
+}
+
+type CategoryMonthlyTotalRow = {
+  category: string;
+  month: string;
+  month_total: string;
+};
+
+export type CategoryMonthlyTotal = {
+  category: SpendingCategory;
+  month: string;
+  amount: number;
+};
+
+// Combined discretionary + recurring totals per category per calendar month inside a closed date
+// range. Months with no spend for a category are absent — the service zero-fills.
+export async function findCategoryMonthlyTotals(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<CategoryMonthlyTotal[]> {
+  const rows = await queryAsync<CategoryMonthlyTotalRow[]>(
+    `SELECT category, DATE_FORMAT(date, '%Y-%m') AS month, SUM(amount) AS month_total
+      FROM (
+        SELECT category, date, amount
+        FROM spend_transactions
+        WHERE username = ? AND date BETWEEN ? AND ?
+        UNION ALL
+        SELECT s.category, t.date, t.transaction_amount AS amount
+        FROM user_information.recurring_transactions t
+        JOIN user_information.recurring_spending s
+          ON t.recurring_spend_id = s.recurring_spend_id
+        WHERE s.username = ? AND t.date BETWEEN ? AND ?
+      ) combined
+      GROUP BY category, month`,
+    [username, startDate, endDate, username, startDate, endDate],
+  );
+
+  return rows.map((row) => ({
+    category: row.category as SpendingCategory,
+    month: row.month,
+    amount: Number(row.month_total),
+  }));
 }
 
 type YearlyTotalsRow = {
