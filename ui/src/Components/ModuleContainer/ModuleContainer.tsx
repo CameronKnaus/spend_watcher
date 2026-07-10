@@ -1,11 +1,9 @@
 import { clsx } from 'clsx';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import { ComponentProps, ReactNode } from 'react';
-import { UseMeasureRef } from 'react-use/lib/useMeasure';
 import styles from './ModuleContainer.module.css';
 
 type ModuleContainerPropTypes = {
-  forwardRef?: UseMeasureRef<HTMLDivElement>;
   heading?: ReactNode;
   // For shadow effect
   elevation?: 'low' | 'medium' | 'high';
@@ -16,7 +14,7 @@ type ModuleContainerPropTypes = {
 
 // TODO: This component has too many responsibilities.  It should be made into a simple "Tile" extension of a div
 export default function ModuleContainer({
-  forwardRef,
+  ref,
   heading,
   elevation,
   isLoading = false,
@@ -33,7 +31,7 @@ export default function ModuleContainer({
 
   return (
     // Order of attributes here matters
-    <div ref={forwardRef} {...restAttributes} className={containerClass}>
+    <div ref={ref} {...restAttributes} className={containerClass}>
       {heading && <h3 className={styles.heading}>{heading}</h3>}
       {isLoading ? (
         <div className={styles.skeletonLoaderContainer}>
