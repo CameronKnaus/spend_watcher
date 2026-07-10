@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orpc } from 'apiClient/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { RecurringTransactionId, recurringTransactionEditInputSchema } from '@spend-watcher/contract';
 import { z as zod } from 'zod';
@@ -40,6 +39,10 @@ export default function EditableRecurringTransactionRow({
     defaultValues: {
       transactionId,
     },
+    values: {
+      transactionId,
+      amountSpent,
+    },
   });
 
   function handleSubmission(submission: EditRecurringFormValues) {
@@ -52,10 +55,6 @@ export default function EditableRecurringTransactionRow({
       amountSpent: submission.amountSpent,
     });
   }
-
-  useEffect(() => {
-    form.setValue('amountSpent', amountSpent);
-  }, [amountSpent, form]);
 
   const formAmountSpentValue = form.watch('amountSpent') ?? 0;
   const isDirty = formAmountSpentValue !== amountSpent;
