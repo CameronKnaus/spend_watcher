@@ -22,8 +22,8 @@ test.describe('Recurring Spending Page — Create Recurring Expense', () => {
     await expect(page.getByRole('checkbox')).not.toBeChecked();
 
     // 3. Type 'Netflix' in the Expense name field
-    await page.getByRole('textbox', { name: 'Rent payment' }).fill('Netflix');
-    await expect(page.getByRole('textbox', { name: 'Rent payment' })).toHaveValue('Netflix');
+    await page.getByLabel('Expense name').fill('Netflix');
+    await expect(page.getByLabel('Expense name')).toHaveValue('Netflix');
 
     // 4. Open the Category select and choose 'Entertainment'
     await page.locator('input[name="category"]').click();
@@ -37,9 +37,9 @@ test.describe('Recurring Spending Page — Create Recurring Expense', () => {
     await expect(page.getByText('Monthly amount')).toBeVisible();
 
     // 6. Enter 18 in the Monthly amount field
-    await page.getByRole('textbox', { name: '$0.00' }).click();
-    await page.getByRole('textbox', { name: '$0.00' }).fill('18');
-    await expect(page.getByRole('textbox', { name: '$0.00' })).toHaveValue('$18.00');
+    await page.getByLabel('Monthly amount').click();
+    await page.getByLabel('Monthly amount').fill('18');
+    await expect(page.getByLabel('Monthly amount')).toHaveValue('$18.00');
 
     // 7. Click 'Submit'
     await page.getByRole('button', { name: 'Submit' }).click();
@@ -61,8 +61,8 @@ test.describe('Recurring Spending Page — Create Recurring Expense', () => {
     await expect(page.getByRole('heading', { name: 'New recurring expense', level: 2 })).toBeVisible();
 
     // 2. Enter 'Electric bill' in the Expense name field
-    await page.getByRole('textbox', { name: 'Rent payment' }).fill('Electric bill');
-    await expect(page.getByRole('textbox', { name: 'Rent payment' })).toHaveValue('Electric bill');
+    await page.getByLabel('Expense name').fill('Electric bill');
+    await expect(page.getByLabel('Expense name')).toHaveValue('Electric bill');
 
     // 3. Select 'Utilities' from the Category select
     await page.locator('input[name="category"]').click();
@@ -77,9 +77,9 @@ test.describe('Recurring Spending Page — Create Recurring Expense', () => {
     await expect(page.getByText('Estimated monthly amount')).toBeVisible();
 
     // 5. Enter 80 in the Estimated monthly amount field
-    await page.getByRole('textbox', { name: '$0.00' }).click();
-    await page.getByRole('textbox', { name: '$0.00' }).fill('80');
-    await expect(page.getByRole('textbox', { name: '$0.00' })).toHaveValue('$80.00');
+    await page.getByLabel('Estimated monthly amount').click();
+    await page.getByLabel('Estimated monthly amount').fill('80');
+    await expect(page.getByLabel('Estimated monthly amount')).toHaveValue('$80.00');
 
     // 6. Click 'Submit'
     await page.getByRole('button', { name: 'Submit' }).click();

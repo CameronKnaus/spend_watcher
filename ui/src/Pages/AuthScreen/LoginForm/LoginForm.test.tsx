@@ -41,4 +41,11 @@ describe('LoginForm', () => {
     expect(switchToRegister).toHaveBeenCalledTimes(1);
     expect(logins).toHaveLength(0);
   });
+
+  it('associates the username and password labels with their inputs via htmlFor/id', () => {
+    renderForm();
+
+    expect(screen.getByLabelText('Username')).toBe(screen.getByPlaceholderText('Username'));
+    expect(screen.getByLabelText('Password')).toBe(screen.getByPlaceholderText('Password'));
+  });
 });

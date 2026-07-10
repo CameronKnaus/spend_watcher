@@ -80,4 +80,11 @@ describe('EditAccountForm submit gating', () => {
     expect(edits).toHaveLength(0);
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it('associates the name and fixed-rate labels with their inputs via htmlFor/id', () => {
+    renderForm();
+
+    expect(screen.getByLabelText('Account name')).toBe(screen.getByDisplayValue('Test Checking'));
+    expect(screen.getByLabelText('This growth rate is fixed')).toBe(screen.getByRole('checkbox'));
+  });
 });

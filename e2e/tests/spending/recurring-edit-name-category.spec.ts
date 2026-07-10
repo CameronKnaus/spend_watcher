@@ -18,13 +18,13 @@ test.describe('Recurring Spending — Edit and Delete', () => {
     // 3. Click 'Edit'
     await page.getByRole('button', { name: 'Edit' }).click();
     // The panel transitions to the Edit view
-    await expect(page.getByRole('textbox', { name: 'Rent payment' })).toHaveValue('Internet');
+    await expect(page.getByLabel('Expense name')).toHaveValue('Internet');
     await expect(page.locator('input[name="category"]')).toHaveValue('Utilities');
-    await expect(page.getByRole('textbox', { name: '$0.00' })).toHaveValue('$60.00');
+    await expect(page.getByLabel('Monthly amount')).toHaveValue('$60.00');
 
     // 4. Clear the Expense name and type 'Home Internet'
-    await page.getByRole('textbox', { name: 'Rent payment' }).fill('Home Internet');
-    await expect(page.getByRole('textbox', { name: 'Rent payment' })).toHaveValue('Home Internet');
+    await page.getByLabel('Expense name').fill('Home Internet');
+    await expect(page.getByLabel('Expense name')).toHaveValue('Home Internet');
 
     // 5. Open the Category select and choose 'Housing'
     await page.locator('input[name="category"]').click();
