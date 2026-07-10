@@ -57,7 +57,8 @@ describe('NewSpendForm defaults', () => {
     renderForm();
 
     expect(screen.getByPlaceholderText('$0.00')).toHaveValue('');
-    expect(screen.getAllByRole('textbox').some((input) => (input as HTMLInputElement).value === 'Other')).toBe(true);
+    // Category and linked-trip are both FilterableSelects (role="combobox"); find category by its default value.
+    expect(screen.getAllByRole('combobox').some((input) => (input as HTMLInputElement).value === 'Other')).toBe(true);
     // The (mobile-variant) MUI date field renders today's date.
     expect(screen.getByRole('textbox', { name: /Choose date/ })).toHaveValue('June 15th, 2026');
   });
