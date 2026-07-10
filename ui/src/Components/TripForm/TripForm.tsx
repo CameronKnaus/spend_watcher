@@ -42,6 +42,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
   function onTripSaved() {
     queryClient.invalidateQueries({ queryKey: orpc.trips.key() });
     form.reset();
+    onSubmit();
   }
 
   const addTripMutation = useMutation(orpc.trips.add.mutationOptions({ onSuccess: onTripSaved }));
@@ -68,12 +69,15 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
   }
 
   function handleSubmission(submission: AddTripRequestParams) {
-    if (editMode) {
-      editTripMutation.mutate({ ...submission, tripId: tripToEdit!.tripId });
+    if (addTripMutation.isPending || editTripMutation.isPending) {
+      return;
+    }
+
+    if (tripToEdit) {
+      editTripMutation.mutate({ ...submission, tripId: tripToEdit.tripId });
     } else {
       addTripMutation.mutate(submission);
     }
-    onSubmit();
   }
 
   const startDate = getDateFromDBDateString(form.watch('startDate'));
