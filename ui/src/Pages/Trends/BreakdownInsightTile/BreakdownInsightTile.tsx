@@ -1,4 +1,5 @@
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import { spendCategoryColorMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
@@ -32,7 +33,7 @@ export default function BreakdownInsightTile() {
     return (
       <ModuleContainer className={styles.tile} elevation="low">
         <div className={styles.label}>{getContent('breakdownInsightLabel')}</div>
-        <div className={styles.emptyMessage}>{getContent('breakdownInsightEmpty')}</div>
+        <EmptyState message={getContent('breakdownInsightEmpty')} />
       </ModuleContainer>
     );
   }

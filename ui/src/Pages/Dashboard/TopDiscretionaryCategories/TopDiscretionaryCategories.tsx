@@ -1,4 +1,5 @@
 import CustomButton from 'Components/CustomButton/CustomButton';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
@@ -69,11 +70,7 @@ export default function TopDiscretionaryCategories() {
 
   // If the highest spend is zero, then there is no data
   if (numberOfCategories === 0) {
-    return (
-      <div ref={containerRef} className={styles.topDiscretionaryCategories}>
-        {getContent('noTopDiscretionaryCategories')}
-      </div>
-    );
+    return <EmptyState ref={containerRef} message={getContent('noTopDiscretionaryCategories')} />;
   }
 
   // Show combined total if more than 1 categories are represented

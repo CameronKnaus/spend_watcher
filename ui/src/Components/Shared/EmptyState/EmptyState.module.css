@@ -1,0 +1,6 @@
+.emptyState {
+  text-align: center;
+  padding: 24px 16px;
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}

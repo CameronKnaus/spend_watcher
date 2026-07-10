@@ -238,14 +238,3 @@
   white-space: nowrap;
   color: var(--token-color-text-standard);
 }
-
-.noTransactions {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-  padding: 9px 0;
-}
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}

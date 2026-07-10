@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import { spendCategoryColorMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
@@ -79,7 +80,7 @@ export default function SpendingByMonthTile() {
   if (monthsWithData.length === 0 || !activeMonth || activeIndex === -1) {
     return (
       <ModuleContainer heading={getContent('spendingByMonthHeading')} className={styles.module} elevation="medium">
-        <div className={styles.emptyMessage}>{getContent('spendingByMonthEmpty')}</div>
+        <EmptyState message={getContent('spendingByMonthEmpty')} />
       </ModuleContainer>
     );
   }
@@ -220,7 +221,7 @@ export default function SpendingByMonthTile() {
           </div>
           <div className={styles.sectionTitle}>{getContent('whatDroveIt')}</div>
           {topTransactions.length === 0 ? (
-            <div className={styles.noTransactions}>{getContent('noTransactionsForMonth')}</div>
+            <EmptyState message={getContent('noTransactionsForMonth')} />
           ) : (
             topTransactions.map((transaction) => (
               <div key={transaction.transactionId} className={styles.transactionRow}>

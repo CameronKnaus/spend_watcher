@@ -36,8 +36,3 @@
   flex: 1;
   border-radius: 3px;
 }
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}
