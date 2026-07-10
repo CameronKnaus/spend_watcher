@@ -28,9 +28,6 @@ export default function EditableRecurringTransactionRow({
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

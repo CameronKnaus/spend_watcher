@@ -1,0 +1,31 @@
+.toastContainer {
+  position: fixed;
+  z-index: 1000;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  width: calc(100% - 32px);
+  max-width: 380px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .toastContainer {
+    top: auto;
+    right: auto;
+    /* Clears the fixed mobile nav bar so the toast doesn't sit under it. */
+    bottom: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    align-items: center;
+    max-width: 600px;
+  }
+}

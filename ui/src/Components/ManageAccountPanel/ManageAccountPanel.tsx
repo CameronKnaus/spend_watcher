@@ -43,18 +43,12 @@ export default function ManageAccountPanel({ account, onPanelClose }: ManageAcco
   const activeStatusMutation = useMutation(
     orpc.accounts.setActive.mutationOptions({
       onSuccess: invalidateQueries,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 
   const deleteAccountMutation = useMutation(
     orpc.accounts.delete.mutationOptions({
       onSuccess: invalidateQueries,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

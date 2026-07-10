@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   captureRequests,
   http,
@@ -10,6 +10,9 @@ import {
   within,
 } from 'test/testUtils';
 import type { TripsListResponse } from '@spend-watcher/contract';
+import { createQueryClient } from 'queryClient';
+import { clearAllToasts } from 'Util/Toast/toastStore';
+import ToastContainer from 'Util/Toast/ToastContainer';
 import NewSpendForm from './NewSpendForm';
 
 function renderForm({ activeTrip = false } = {}) {
@@ -145,5 +148,37 @@ describe('NewSpendForm active trip', () => {
 
     expect(screen.queryByRole('heading', { name: /has already been applied/ })).not.toBeInTheDocument();
     expect(screen.queryByDisplayValue('Test Trip')).not.toBeInTheDocument();
+  });
+});
+
+describe('NewSpendForm mutation failure', () => {
+  afterEach(() => {
+    // The toast store is module-scoped and outlives this test, so clear it explicitly.
+    clearAllToasts();
+  });
+
+  it('shows the global error toast when the save request fails', async () => {
+    server.use(
+      http.post('*/api/spending/discretionary/add', () =>
+        HttpResponse.json({ message: 'Internal server error' }, { status: 500 }),
+      ),
+    );
+    const onCancel = vi.fn();
+    const onSubmit = vi.fn();
+    // The app's real QueryClient (mutationCache wired to the toast store), since this is
+    // exercising the production error-handling path rather than a form-local concern.
+    const { user } = renderWithProviders(
+      <>
+        <ToastContainer />
+        <NewSpendForm onCancel={onCancel} onSubmit={onSubmit} />
+      </>,
+      { queryClient: createQueryClient() },
+    );
+
+    await user.type(screen.getByPlaceholderText('$0.00'), '50');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(await screen.findByText("Couldn't save your changes")).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });

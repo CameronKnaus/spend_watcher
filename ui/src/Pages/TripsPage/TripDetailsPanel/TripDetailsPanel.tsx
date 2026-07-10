@@ -35,9 +35,6 @@ export default function TripDetailsPanel({ trip, isOpen, dateLabel, onClose }: T
         // Deleting a trip unlinks its expenses, which affects spending reads too.
         queryClient.invalidateQueries({ queryKey: orpc.spending.key() });
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

@@ -60,17 +60,11 @@ export default function ManageRecurringSpendPanel({
   const deleteMutation = useMutation(
     orpc.spending.recurringSpendDelete.mutationOptions({
       onSuccess: invalidateRecurring,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
   const activeStatusMutation = useMutation(
     orpc.spending.recurringSpendSetActive.mutationOptions({
       onSuccess: invalidateRecurring,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

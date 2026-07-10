@@ -28,9 +28,6 @@ export default function AddAccountUpdateRow({ accountId, date }: AddAccountUpdat
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 
