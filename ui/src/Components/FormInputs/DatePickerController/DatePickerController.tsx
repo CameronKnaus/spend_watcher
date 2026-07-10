@@ -1,8 +1,7 @@
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers';
-import { format } from 'date-fns';
 import { useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { dbDateFormat } from 'Types/dateTypes';
+import { formatDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import getDateFromDBDateString from 'Util/Time/getDateFromDBDateString';
 
 type DatePickerWithoutEssentialAttributes = Omit<DatePickerProps<Date>, 'onChange'>;
@@ -21,14 +20,13 @@ export default function DatePickerController<T extends FieldValues>({
   ...datePickerProps
 }: DatePickerControllerPropTypes<T>) {
   const [today] = useState(() => new Date());
-  const formatDate = (date: Date | null) => format(date ?? new Date(), dbDateFormat);
 
   return (
     <Controller
       control={control}
       name={name}
       // @ts-expect-error I should figure out the proper typing of this but it works for now
-      defaultValue={formatDate(today)}
+      defaultValue={formatDbDate(today)}
       rules={{ required: isRequired }}
       render={({ field }) => (
         <DatePicker
@@ -37,7 +35,7 @@ export default function DatePickerController<T extends FieldValues>({
           // value={field.value ? new Date(field.value) : today}
           value={getDateFromDBDateString(field.value)}
           onChange={(date) => {
-            field.onChange(formatDate(date));
+            field.onChange(formatDbDate(date ?? new Date()));
           }}
           {...datePickerProps}
         />
