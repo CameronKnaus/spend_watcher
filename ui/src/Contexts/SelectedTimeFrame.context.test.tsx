@@ -118,3 +118,29 @@ describe('SelectedTimeFrame yearly mode', () => {
     expect(result.current.endDate).toBe('2026-06-15');
   });
 });
+
+describe('SelectedTimeFrame handler identity', () => {
+  it('keeps setToCurrentMonth stable across a re-render triggered by another handler', () => {
+    const { result } = renderHook(useTimeFrame, { wrapper });
+    const setToCurrentMonthBefore = result.current.setToCurrentMonth;
+    const updateDateRangeTypeBefore = result.current.updateDateRangeType;
+
+    act(() => result.current.backOneMonth());
+
+    expect(result.current.setToCurrentMonth).toBe(setToCurrentMonthBefore);
+    expect(result.current.updateDateRangeType).toBe(updateDateRangeTypeBefore);
+  });
+
+  it('gives steppers a fresh identity only when their own inputs change, unlike the always-stable handlers', () => {
+    const { result } = renderHook(useTimeFrame, { wrapper });
+    const backOneMonthBefore = result.current.backOneMonth;
+    const setToCurrentMonthBefore = result.current.setToCurrentMonth;
+
+    act(() => result.current.backOneMonth());
+
+    // parsedStartDate is a real dependency, so the closure legitimately changes.
+    expect(result.current.backOneMonth).not.toBe(backOneMonthBefore);
+    // Handlers with no date/type dependencies stay referentially stable regardless.
+    expect(result.current.setToCurrentMonth).toBe(setToCurrentMonthBefore);
+  });
+});
