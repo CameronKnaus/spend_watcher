@@ -14,11 +14,11 @@ test.describe('Recurring Spending — DB Boundaries', () => {
     await expect(page.getByRole('heading', { name: 'New recurring expense', level: 2 })).toBeVisible();
 
     const maxLengthName = 'N'.repeat(30);
-    await page.getByRole('textbox', { name: 'Rent payment' }).fill(maxLengthName);
+    await page.getByLabel('Expense name').fill(maxLengthName);
 
-    await page.getByRole('textbox', { name: '$0.00' }).click();
-    await page.getByRole('textbox', { name: '$0.00' }).fill('50');
-    await expect(page.getByRole('textbox', { name: '$0.00' })).toHaveValue('$50.00');
+    await page.getByLabel('Monthly amount').click();
+    await page.getByLabel('Monthly amount').fill('50');
+    await expect(page.getByLabel('Monthly amount')).toHaveValue('$50.00');
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New recurring expense', level: 2 })).not.toBeVisible();

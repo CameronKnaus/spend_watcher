@@ -2,11 +2,8 @@
  * Cross-platform date-picker helpers for Playwright tests.
  *
  * MUI X DatePicker renders differently based on the pointer type:
- *   Desktop (pointer: fine) — editable <input>, accessible name = format mask "MMMM DD, YYYY".
- *                             You can call .fill() with a date string.
+ *   Desktop (pointer: fine) — editable <input>. You can call .fill() with a date string.
  *   Mobile  (pointer: coarse) — readonly <input> that opens a modal dialog on click.
- *                              accessible name = "Choose date" or
- *                              "Choose date, selected date is <formatted date>".
  *                              .fill() does not work; you must tap to open the dialog,
  *                              navigate months, tap the day, then tap OK.
  */
@@ -26,11 +23,13 @@ export async function isMobilePicker(page: Page): Promise<boolean> {
  * Returns a locator matching ALL date-picker text inputs on the page,
  * regardless of platform. Order matches DOM order.
  *
- * Desktop: aria-label = "MMMM DD, YYYY" (derived from the format-mask placeholder)
- * Mobile:  aria-label starts with "Choose date" (set by MUI's open-dialog helper)
+ * Matched on the placeholder ATTRIBUTE (the format mask), not the accessible name: both the
+ * desktop and mobile variants carry it, and it is stable whether or not the picker has an
+ * associated <label> — a labeled picker's accessible name is the label text, an unlabeled
+ * desktop picker's is the placeholder, and the mobile variant's is its "Choose date…" aria-label.
  */
 export function datePickerInputs(page: Page): Locator {
-  return page.getByRole('textbox', { name: 'MMMM DD, YYYY' }).or(page.getByRole('textbox', { name: /^Choose date/ }));
+  return page.getByPlaceholder('MMMM DD, YYYY');
 }
 
 /**

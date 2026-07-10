@@ -23,17 +23,16 @@ test.describe('Add Trip — Happy Path', () => {
     // 2. Click the 'Add trip' button.
     await page.getByRole('button', { name: 'Add trip' }).click();
     await expect(page.getByRole('heading', { name: 'New trip' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toBeVisible();
-    // Date pickers are visible — use cross-platform locator (desktop: "MMMM DD, YYYY",
-    // mobile: "Choose date…")
+    await expect(page.getByLabel('Trip name')).toBeVisible();
+    // Date pickers are visible — datePickerInputs() matches both platform variants.
     const allDateInputs = datePickerInputs(page);
     await expect(allDateInputs.first()).toBeVisible();
     await expect(allDateInputs.last()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
 
     // 3. Type the trip name.
-    await page.getByRole('textbox', { name: 'Europe summer trip' }).fill('Summer Vacation');
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue('Summer Vacation');
+    await page.getByLabel('Trip name').fill('Summer Vacation');
+    await expect(page.getByLabel('Trip name')).toHaveValue('Summer Vacation');
 
     // 4. Set the END date first, then the start date. Order matters on mobile: the start picker's
     // maxDate is the current end date (which defaults to today), so its "Next month" button is
@@ -62,7 +61,7 @@ test.describe('Add Trip — Happy Path', () => {
     await page.getByRole('button', { name: 'Add trip' }).click();
     await expect(page.getByRole('heading', { name: 'New trip' })).toBeVisible();
 
-    await page.getByRole('textbox', { name: 'Europe summer trip' }).fill('Day Trip');
+    await page.getByLabel('Trip name').fill('Day Trip');
 
     // Leave both dates at their default (today) — a same-day trip is valid.
     const allDateInputs = datePickerInputs(page);
@@ -86,8 +85,8 @@ test.describe('Add Trip — Happy Path', () => {
     await page.getByRole('button', { name: 'Add trip' }).click();
     await expect(page.getByRole('heading', { name: 'New trip' })).toBeVisible();
 
-    await page.getByRole('textbox', { name: 'Europe summer trip' }).fill(maxLengthName);
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue(maxLengthName);
+    await page.getByLabel('Trip name').fill(maxLengthName);
+    await expect(page.getByLabel('Trip name')).toHaveValue(maxLengthName);
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New trip' })).not.toBeVisible();
