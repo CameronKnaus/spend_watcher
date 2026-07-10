@@ -14,6 +14,10 @@
     "lint": "pnpm -r run lint",
     "lint:fix": "pnpm -r run lint:fix",
     "format": "pnpm -r run format",
+    "db:new": "pnpm --filter @spend-watcher/api run db:new",
+    "db:migrate": "pnpm --filter @spend-watcher/api run db:migrate",
+    "db:rollback": "pnpm --filter @spend-watcher/api run db:rollback",
+    "db:status": "pnpm --filter @spend-watcher/api run db:status",
     "test": "pnpm --filter @spend-watcher/ui run test",
     "test:e2e": "pnpm --filter @spend-watcher/e2e run test"
   },

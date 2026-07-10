@@ -8,6 +8,10 @@
     "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --packages=external --alias:@spend-watcher/contract=../contract/src/index.ts --outdir=dist --format=esm",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
+    "db:new": "dbmate new",
+    "db:migrate": "dbmate up",
+    "db:rollback": "dbmate rollback",
+    "db:status": "dbmate status",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -49,6 +53,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mysql": "^2.15.27",
     "@types/node": "^22.19.18",
+    "dbmate": "^2.34.1",
     "esbuild": "^0.27.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0"
