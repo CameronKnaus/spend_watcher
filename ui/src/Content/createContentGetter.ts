@@ -13,8 +13,8 @@ export default function createContentGetter<T extends ContentGroupKey>(contentGr
      *   Example, given the following key:
      *   "MONTH_TOTAL": "{{0}} Total"
      *
-     *   Each index of the injections array replaces a token like so: $<index-of-array>
-     *   So $0 will be replaced with the first element of the injections array, $1 with the second, and so on.
+     *   Each index of the injections array replaces a token like so: {{<index-of-array>}}
+     *   So {{0}} will be replaced with the first element of the injections array, {{1}} with the second, and so on.
      * */
 
     const rawContent = englishContent[contentGroup][key];
@@ -31,7 +31,7 @@ export default function createContentGetter<T extends ContentGroupKey>(contentGr
     // Injections have been provided, find and replace:
     if (injections?.length) {
       injections.forEach((injectionVar, index) => {
-        contentString = contentString.replace(`{{${index}}}`, String(injectionVar));
+        contentString = contentString.replaceAll(`{{${index}}}`, String(injectionVar));
       });
     }
 

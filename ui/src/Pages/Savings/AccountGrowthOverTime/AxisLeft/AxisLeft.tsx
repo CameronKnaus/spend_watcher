@@ -1,7 +1,7 @@
 import { CanvasDimensions } from 'Components/charts/utils/getCanvasDimensions/getCanvasDimensions';
 import * as d3 from 'd3';
 
-interface AxisBottomProps {
+type AxisLeftPropTypes = {
   /** A D3 time scale that maps Date objects to x coordinates */
   scale: d3.ScaleLinear<number, number>;
   /** A translation to position the axis */
@@ -15,7 +15,7 @@ interface AxisBottomProps {
   tickColor?: string;
   formatter?: (n: number) => string;
   fontSize?: string;
-}
+};
 
 function formatCurrency(n: number): string {
   const format = d3.format;
@@ -44,7 +44,7 @@ export default function AxisLeft({
   lineColor = 'currentColor',
   formatter = formatCurrency,
   fontSize = '12px',
-}: AxisBottomProps) {
+}: AxisLeftPropTypes) {
   // Compute tick values using D3's scale method.
   const ticks = scale.ticks(tickCount);
 
