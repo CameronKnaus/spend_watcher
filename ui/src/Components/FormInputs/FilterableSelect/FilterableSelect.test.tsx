@@ -51,10 +51,9 @@ describe('FilterableSelect filtering', () => {
 
     expect(latest).toBe('BANANA');
     expect(screen.getByRole('combobox')).toHaveValue('Banana');
-    // Note: the list does NOT close on selection — the component's document-level click listener
-    // sees the option click as inside the popover and keeps it open; dismissal happens on the next
-    // outside click (covered below). A UX nit worth a look, pinned here so a fix updates this test.
-    expect(screen.getByText('Apple')).toBeInTheDocument();
+    // Pins the fix for an old quirk where the document-level click listener saw the option
+    // click as inside the popover and kept the list open until the next outside click.
+    expect(screen.queryByText('Apple')).not.toBeInTheDocument();
   });
 
   it('closes the option list when clicking outside the select', async () => {
@@ -117,6 +116,24 @@ describe('FilterableSelect keyboard navigation', () => {
     expect(latest).toBe('APRICOT');
     expect(combobox).toHaveValue('Apricot');
     expect(combobox).toHaveAttribute('aria-expanded', 'false');
+    // Per the WAI-ARIA combobox pattern, selection must not move focus — a keyboard user
+    // continues tabbing through the form from the field they just set.
+    expect(combobox).toHaveFocus();
+  });
+
+  it('reopens the list when typing after a keyboard selection', async () => {
+    const { user } = renderWithProviders(<FruitPicker />);
+    const combobox = screen.getByRole('combobox');
+
+    await user.click(combobox);
+    await user.keyboard('{ArrowDown}{Enter}');
+    expect(combobox).toHaveValue('Apple');
+    expect(combobox).toHaveAttribute('aria-expanded', 'false');
+
+    await user.keyboard('{Backspace}');
+
+    expect(combobox).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('option', { name: 'Apple' })).toBeInTheDocument();
   });
 
   it('does not move past the last option on repeated ArrowDown', async () => {

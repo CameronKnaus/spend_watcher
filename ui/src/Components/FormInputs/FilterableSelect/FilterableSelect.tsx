@@ -59,8 +59,9 @@ function FilterableSelect<T extends string>({
   }
 
   function currentSelectedValue() {
-    // If the text input is still in focus only show filter text
-    if (containerRef.current?.contains(document.activeElement)) {
+    // Keyed on open state, not focus: keying on focus would require blurring after a keyboard
+    // selection to show the resolved name, which would throw away the user's tab position.
+    if (isOpen) {
       return filterText;
     }
 
@@ -141,10 +142,6 @@ function FilterableSelect<T extends string>({
       } else {
         selectOption(activeItem.option);
       }
-      // A mouse selection blurs the input as a side effect of the option div's mousedown (its
-      // default action steals focus away, which is what makes currentSelectedValue() render the
-      // resolved option name instead of raw filter text). Replicate that here for parity.
-      event.currentTarget.blur();
       return;
     }
 
@@ -178,6 +175,9 @@ function FilterableSelect<T extends string>({
         placeholder={noSelectionText}
         onChange={(event) => {
           setFilterText(event.target.value);
+          // Typing means the user is filtering; reopen so results are visible even when the
+          // list was closed by a keyboard selection or by tabbing in without clicking.
+          setIsOpen(true);
           setActiveIndex(-1);
         }}
         onKeyDown={handleKeyDown}
@@ -202,7 +202,12 @@ function FilterableSelect<T extends string>({
                   role="option"
                   aria-selected={selectedValue === undefined}
                   className={`${styles.option} ${isActive ? styles.active : ''}`}
-                  onClick={() => clearSelection()}
+                  onClick={(event) => {
+                    // Without this the document-level listener sees the click as inside the
+                    // popover and re-opens the list the selection just closed.
+                    event.stopPropagation();
+                    clearSelection();
+                  }}
                 >
                   <div className={styles.clearLabel}>{clearLabel}</div>
                 </div>
@@ -219,7 +224,12 @@ function FilterableSelect<T extends string>({
                 role="option"
                 aria-selected={isSelected}
                 className={`${styles.option} ${isSelected ? styles.selected : ''} ${isActive ? styles.active : ''}`}
-                onClick={() => selectOption(option)}
+                onClick={(event) => {
+                  // Without this the document-level listener sees the click as inside the
+                  // popover and re-opens the list the selection just closed.
+                  event.stopPropagation();
+                  selectOption(option);
+                }}
               >
                 {option.customRender?.(option.optionName, option.value) ?? option.optionName}
               </div>
