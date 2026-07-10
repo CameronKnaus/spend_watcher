@@ -1,0 +1,39 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--token-color-text-subdued);
+  margin-bottom: 6px;
+}
+
+.headline {
+  font-size: var(--font-body-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.band {
+  display: flex;
+  gap: 3px;
+  height: 46px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.remainderSegment {
+  background: var(--theme-color-neutral-300);
+}
+
+.emptyMessage {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}

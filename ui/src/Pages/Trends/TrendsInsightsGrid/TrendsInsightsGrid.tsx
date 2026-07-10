@@ -1,5 +1,6 @@
 import { DateRangeType } from 'Contexts/SelectedTimeFrame.context';
 import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFrame';
+import BreakdownInsightTile from '../BreakdownInsightTile/BreakdownInsightTile';
 import MonthsInsightTile from '../MonthsInsightTile/MonthsInsightTile';
 import styles from './TrendsInsightsGrid.module.css';
 
@@ -15,6 +16,7 @@ export default function TrendsInsightsGrid() {
   return (
     <div className={styles.grid}>
       <MonthsInsightTile />
+      <BreakdownInsightTile />
     </div>
   );
 }
