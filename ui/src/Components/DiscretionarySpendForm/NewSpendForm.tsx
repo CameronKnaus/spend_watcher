@@ -49,9 +49,6 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
         form.reset();
         onSubmit();
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

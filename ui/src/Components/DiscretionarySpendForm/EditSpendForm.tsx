@@ -44,9 +44,6 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
         form.reset();
         onSubmit();
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 
@@ -75,9 +72,6 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
       onSuccess: () => {
         invalidateRelevantQueries();
         onCancel();
-      },
-      onError: () => {
-        // TODO: Error handling
       },
     }),
   );

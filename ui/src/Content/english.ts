@@ -7,6 +7,7 @@ const locale = {
     register: 'Register',
     login: 'Login',
     submit: 'Submit',
+    invalidCredentials: 'Check your username and password and try again.',
   },
   dashboard: {
     monthOverview: '{{0}} overview',
@@ -127,6 +128,11 @@ const locale = {
     confirm: 'Confirm',
     close: 'Close',
     confirmChange: 'Confirm change',
+    mutationErrorTitle: "Couldn't save your changes",
+    mutationErrorMessage: 'Check your connection and try again.',
+    routeErrorTitle: 'Something went wrong',
+    routeErrorMessage: 'Reload the page and try again.',
+    reloadPage: 'Reload page',
   },
   savings: {
     pageTitle: 'Savings',

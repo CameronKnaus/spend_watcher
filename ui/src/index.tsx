@@ -1,22 +1,16 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, Link, RouterProvider } from '@tanstack/react-router';
+import RouteErrorFallback from 'Components/RouteErrorFallback/RouteErrorFallback';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { IsMobileContextProvider } from 'Util/IsMobileContext';
-import msMapper from 'Util/Time/TimeMapping';
+import { createQueryClient } from './queryClient';
 import { routeTree } from './routeTree.gen';
 import './index.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: msMapper.day,
-    },
-  },
-});
+const queryClient = createQueryClient();
 
 const router = createRouter({
   routeTree,
@@ -27,6 +21,7 @@ const router = createRouter({
       <Link to="/dashboard">Go to dashboard</Link>
     </div>
   ),
+  defaultErrorComponent: RouteErrorFallback,
 });
 
 // Registering the router's type is what makes Link/useNavigate/useLocation across the app

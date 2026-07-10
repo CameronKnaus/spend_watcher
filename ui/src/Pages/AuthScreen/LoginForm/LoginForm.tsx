@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { LoginInput, loginInputSchema } from '@spend-watcher/contract';
 import { orpc } from 'apiClient/orpc';
+import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import createContentGetter from 'Content/createContentGetter';
 import { useForm } from 'react-hook-form';
@@ -22,12 +23,11 @@ export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
 
   const loginService = useMutation(
     orpc.auth.login.mutationOptions({
+      // Bad credentials aren't a "something broke" event worth a toast — show it inline instead.
+      meta: { suppressGlobalError: true },
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: orpc.auth.key() });
         await navigate({ to: '/dashboard' });
-      },
-      onError: () => {
-        // TODO: Error handling
       },
     }),
   );
@@ -54,6 +54,9 @@ export default function LoginForm({ switchToRegister }: LoginFormPropTypes) {
         type="password"
         {...form.register('password', { maxLength: 100 })}
       />
+      {loginService.isError && (
+        <AlertMessage variant="error" title={getContent('invalidCredentials')} className={styles.loginError} />
+      )}
       <div className={styles.buttonRowContainer}>
         <CustomButton
           isDisabled={loginService.isPending}

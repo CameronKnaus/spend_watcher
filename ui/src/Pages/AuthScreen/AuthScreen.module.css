@@ -50,6 +50,10 @@
   margin-bottom: var(--form-space-between-items) !important;
 }
 
+.loginError {
+  margin-top: 8px;
+}
+
 .buttonRowContainer {
   display: flex;
   justify-content: space-between;

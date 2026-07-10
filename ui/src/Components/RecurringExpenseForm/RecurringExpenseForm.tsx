@@ -47,18 +47,12 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
   const editRecurringMutation = useMutation(
     orpc.spending.recurringSpendEdit.mutationOptions({
       onSuccess: invalidateRecurring,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 
   const addRecurringMutation = useMutation(
     orpc.spending.recurringSpendAdd.mutationOptions({
       onSuccess: invalidateRecurring,
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 

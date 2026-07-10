@@ -30,9 +30,6 @@ export default function EditAccountUpdateRow({
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: orpc.accounts.key() });
       },
-      onError: () => {
-        // TODO: Error handling
-      },
     }),
   );
 
