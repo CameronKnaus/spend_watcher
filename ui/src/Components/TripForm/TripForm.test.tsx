@@ -82,6 +82,19 @@ describe('TripForm add mode', () => {
     });
   });
 
+  it('keeps the form open when the add-trip request fails', async () => {
+    const onSubmit = vi.fn();
+    const onCancel = vi.fn();
+    const adds = captureRequests('/api/trips/add', { status: 500 });
+    const { user } = renderWithProviders(<TripForm onSubmit={onSubmit} onCancel={onCancel} />);
+
+    await user.type(screen.getByPlaceholderText('Europe summer trip'), 'Doomed Trip');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(adds).toHaveLength(1));
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it('end-date picker disables days before the selected start date', async () => {
     const { user } = renderAddForm();
 
