@@ -60,7 +60,9 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
   const isPresentYear = getYear(endDate) === getYear(presentDate);
   const isSameMonth = getMonth(endDate) === getMonth(presentDate);
 
-  const parsedStartDate = parseDbDate(startDate);
+  // parseDbDate returns a fresh Date each call; without memoization the stepper callbacks (and
+  // thus the context value) would get a new identity on every render.
+  const parsedStartDate = useMemo(() => parseDbDate(startDate), [startDate]);
 
   const setToCurrentMonth = useCallback(() => {
     setStartDate(formatDate(startOfMonth(new Date())));

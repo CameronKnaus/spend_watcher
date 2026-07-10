@@ -120,6 +120,17 @@ describe('SelectedTimeFrame yearly mode', () => {
 });
 
 describe('SelectedTimeFrame handler identity', () => {
+  it('keeps the entire context value referentially stable across a re-render with no state change', () => {
+    const { result, rerender } = renderHook(useTimeFrame, { wrapper });
+    const apiBefore = result.current;
+    const backOneMonthBefore = result.current.backOneMonth;
+
+    rerender();
+
+    expect(result.current).toBe(apiBefore);
+    expect(result.current.backOneMonth).toBe(backOneMonthBefore);
+  });
+
   it('keeps setToCurrentMonth stable across a re-render triggered by another handler', () => {
     const { result } = renderHook(useTimeFrame, { wrapper });
     const setToCurrentMonthBefore = result.current.setToCurrentMonth;
