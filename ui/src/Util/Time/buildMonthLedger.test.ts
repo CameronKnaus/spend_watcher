@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { MonthYearDbDate } from 'Types/dateTypes';
 import buildMonthLedger from './buildMonthLedger';
 
 describe('buildMonthLedger', () => {
@@ -33,6 +34,15 @@ describe('buildMonthLedger', () => {
     const now = new Date(2026, 6, 9);
 
     const { months, monthBeforeOldest } = buildMonthLedger('2026-12', now);
+
+    expect(months).toEqual(['2026-07']);
+    expect(monthBeforeOldest).toBe('2026-06');
+  });
+
+  it('degrades to just the current month when the oldest month is malformed, instead of throwing', () => {
+    const now = new Date(2026, 6, 9);
+
+    const { months, monthBeforeOldest } = buildMonthLedger('not-a-month' as MonthYearDbDate, now);
 
     expect(months).toEqual(['2026-07']);
     expect(monthBeforeOldest).toBe('2026-06');
