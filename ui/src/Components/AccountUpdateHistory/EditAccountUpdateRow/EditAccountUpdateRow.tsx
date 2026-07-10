@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { orpc } from 'apiClient/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { AccountWithStatus, accountUpdateEditInputSchema, AppInputs } from '@spend-watcher/contract';
 
@@ -42,11 +41,12 @@ export default function EditAccountUpdateRow({
       accountId,
       updateId,
     },
+    values: {
+      accountId,
+      updateId,
+      amount: currentAmount,
+    },
   });
-
-  useEffect(() => {
-    form.setValue('amount', currentAmount);
-  }, [currentAmount, form]);
 
   function handleSubmission(submission: EditAccountUpdateV1RequestParams) {
     if (accountUpdateMutation.isPending) {
