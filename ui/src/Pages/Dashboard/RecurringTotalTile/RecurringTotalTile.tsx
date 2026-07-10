@@ -9,7 +9,7 @@ import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetai
 import { recurringSummaryQueryOptions } from 'queryOptions/recurringSummaryQueryOptions';
 import { spendingPaceQueryOptions } from 'queryOptions/spendingPaceQueryOptions';
 import { useState } from 'react';
-import { dbDateFormat } from 'Types/dateTypes';
+import { formatDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './RecurringTotalTile.module.css';
 
 // Below this the month-over-month movement reads as noise, not a trend.
@@ -23,7 +23,7 @@ export default function RecurringTotalTile() {
 
   const [now] = useState(() => new Date());
   const { data: paceData } = useQuery({
-    ...spendingPaceQueryOptions({ targetDate: format(now, dbDateFormat) }),
+    ...spendingPaceQueryOptions({ targetDate: formatDbDate(now) }),
     enabled: isAuthenticated,
   });
   const { data: recurringSummary } = useQuery({ ...recurringSummaryQueryOptions, enabled: isAuthenticated });
