@@ -6,6 +6,9 @@ import { showErrorToast } from 'Util/Toast/toastStore';
 // Registering mutationMeta is what lets a mutation opt out of the global error toast below
 // (`meta: { suppressGlobalError: true }`) with full type-checking on the meta shape.
 declare module '@tanstack/react-query' {
+  // Register is declared as an interface upstream; augmenting it requires declaration
+  // merging, which only works with `interface`, not `type`.
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Register {
     mutationMeta: {
       suppressGlobalError?: boolean;
