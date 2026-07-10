@@ -1,0 +1,33 @@
+.container {
+  width: 320px;
+  flex: none;
+}
+
+.heading {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+  margin-bottom: 8px;
+}
+
+.chart {
+  width: 100%;
+  display: block;
+}
+
+.axisLabels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-placeholder);
+}
+
+.spikeLabel {
+  color: var(--token-color-text-subdued);
+  text-align: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

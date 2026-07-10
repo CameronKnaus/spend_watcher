@@ -1,0 +1,62 @@
+.hero {
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 375px;
+}
+
+.contentRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.mainColumn {
+  flex: 1;
+  min-width: 280px;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.progressTrack {
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--theme-color-neutral-600);
+  overflow: clip;
+  margin-bottom: 12px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--theme-color-neutral-300);
+}
+
+.paceRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.projection {
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-standard);
+}
+
+.paceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}

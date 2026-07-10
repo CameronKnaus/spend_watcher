@@ -11,9 +11,11 @@ import useSelectedTimeFrame from 'Hooks/useSelectedTimeFrame/useSelectedTimeFram
 import { useEffect, useState } from 'react';
 import AvgSpentPerMonth from './AvgSpentPerMonth/AvgSpentPerMonth';
 import styles from './Dashboard.module.css';
+import DiscretionaryTotalTile from './DiscretionaryTotalTile/DiscretionaryTotalTile';
 import RecentTransactions from './RecentTransactions/RecentTransactions';
-import SummaryTotals from './SummaryTotals/SummaryTotals';
+import RecurringTotalTile from './RecurringTotalTile/RecurringTotalTile';
 import TopDiscretionaryCategories from './TopDiscretionaryCategories/TopDiscretionaryCategories';
+import TotalSpentHero from './TotalSpentHero/TotalSpentHero';
 
 export default function Dashboard() {
   const { setToCurrentMonth } = useSelectedTimeFrame();
@@ -33,7 +35,9 @@ export default function Dashboard() {
       <div className={styles.contentContainer}>
         <div className={styles.leftSection}>
           <div className={styles.spendingGrid}>
-            <SummaryTotals />
+            <TotalSpentHero />
+            <DiscretionaryTotalTile />
+            <RecurringTotalTile />
             <AvgSpentPerMonth />
             {/* Top categories */}
             <ModuleContainer

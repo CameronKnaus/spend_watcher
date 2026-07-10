@@ -46,6 +46,7 @@ export type RecurringSummaryResponse = AppOutputs['spending']['recurringSummary'
 export type RecurringTransactionsListResponse = AppOutputs['spending']['recurringTransactions'];
 export type HistoryStartResponse = AppOutputs['spending']['historyStart'];
 export type YearlyAverageResponse = AppOutputs['spending']['yearlyAverage'];
+export type SpendingPaceResponse = AppOutputs['spending']['pace'];
 
 export type AccountsSummaryResponse = AppOutputs['accounts']['summary'];
 export type AccountGrowthOverTimeResponse = AppOutputs['accounts']['growthOverTime'];

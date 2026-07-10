@@ -35,6 +35,109 @@ export async function findEarliestRecurringDate(username: string): Promise<strin
   return rows[0].earliest_recurring_transaction_date;
 }
 
+type RangeTotalsRow = {
+  discretionary_total: string | null;
+  recurring_total: string | null;
+};
+
+export type SpendRangeTotals = {
+  discretionary: number;
+  recurring: number;
+};
+
+// Combined discretionary + recurring spend totals inside a closed date range.
+export async function findSpendTotalsInRange(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<SpendRangeTotals> {
+  const rows = await queryAsync<RangeTotalsRow[]>(
+    `SELECT
+        SUM(CASE WHEN source = 'discretionary' THEN amount ELSE 0 END) AS discretionary_total,
+        SUM(CASE WHEN source = 'recurring' THEN amount ELSE 0 END) AS recurring_total
+      FROM (
+        SELECT 'discretionary' AS source, amount, date
+        FROM spend_transactions
+        WHERE username = ? AND date BETWEEN ? AND ?
+        UNION ALL
+        SELECT 'recurring' AS source, t.transaction_amount AS amount, t.date
+        FROM user_information.recurring_transactions t
+        JOIN user_information.recurring_spending s
+          ON t.recurring_spend_id = s.recurring_spend_id
+        WHERE s.username = ? AND t.date BETWEEN ? AND ?
+      ) combined`,
+    [username, startDate, endDate, username, startDate, endDate],
+  );
+
+  return {
+    discretionary: Number(rows[0]?.discretionary_total ?? 0),
+    recurring: Number(rows[0]?.recurring_total ?? 0),
+  };
+}
+
+type DailyTotalRow = {
+  day: string;
+  daily_total: string;
+};
+
+export type DailySpendTotal = {
+  date: string;
+  amount: number;
+};
+
+// Per-day discretionary totals inside a closed date range. Days with no transactions are absent —
+// the service zero-fills.
+export async function findDiscretionaryDailyTotals(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<DailySpendTotal[]> {
+  const rows = await queryAsync<DailyTotalRow[]>(
+    `SELECT DATE_FORMAT(date, '%Y-%m-%d') AS day, SUM(amount) AS daily_total
+      FROM spend_transactions
+      WHERE username = ? AND date BETWEEN ? AND ?
+      GROUP BY day`,
+    [username, startDate, endDate],
+  );
+
+  return rows.map((row) => ({ date: row.day, amount: Number(row.daily_total) }));
+}
+
+type LargestExpenseRow = {
+  day: string;
+  amount: string;
+  note: string | null;
+};
+
+export type LargestExpense = {
+  date: string;
+  amount: number;
+  note: string;
+};
+
+// The single largest discretionary transaction inside a closed date range, ties broken by insert
+// order so the result is deterministic.
+export async function findLargestExpenseInRange(
+  username: string,
+  startDate: string,
+  endDate: string,
+): Promise<LargestExpense | null> {
+  const rows = await queryAsync<LargestExpenseRow[]>(
+    `SELECT DATE_FORMAT(date, '%Y-%m-%d') AS day, amount, note
+      FROM spend_transactions
+      WHERE username = ? AND date BETWEEN ? AND ?
+      ORDER BY amount DESC, transaction_id ASC
+      LIMIT 1`,
+    [username, startDate, endDate],
+  );
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  return { date: rows[0].day, amount: Number(rows[0].amount), note: rows[0].note ?? '' };
+}
+
 type YearlyTotalsRow = {
   year: number;
   total_amount: number;
