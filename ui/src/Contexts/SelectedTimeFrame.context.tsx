@@ -12,8 +12,8 @@ import {
   subYears,
 } from 'date-fns';
 import { createContext, ReactNode, useState } from 'react';
-import { DbDate } from 'Types/dateTypes';
-import { formatDbDate, parseDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
+import { DbDate, dbDateFormat } from 'Types/dateTypes';
+import { parseDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 
 export enum DateRangeType {
   MONTH = 'MONTH',
@@ -42,12 +42,17 @@ export type SelectedTimeFrameContextAPI = {
 
 export const SelectedTimeFrameContext = createContext<SelectedTimeFrameContextAPI | null>(null);
 
+// Small wrapper for readability
+const formatDate = (date: Date) => {
+  return format(date, dbDateFormat);
+};
+
 export default function SelectedTimeFrameProvider({ children }: { children: ReactNode }) {
   const [dateRangeType, setDateRangeType] = useState<DateRangeType>(DateRangeType.MONTH);
   // Default start date to first day of this month
-  const [startDate, setStartDate] = useState<DbDate>(() => formatDbDate(startOfMonth(new Date())));
+  const [startDate, setStartDate] = useState<DbDate>(() => formatDate(startOfMonth(new Date())));
   // Default end date to today
-  const [endDate, setEndDate] = useState<DbDate>(() => formatDbDate(new Date()));
+  const [endDate, setEndDate] = useState<DbDate>(() => formatDate(new Date()));
 
   // Snapshotted at mount so render stays pure; handlers that write dates read it the same way
   // render-time computation did (fresh as of the last committed render).
@@ -58,8 +63,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
   const parsedStartDate = parseDbDate(startDate);
 
   function setToCurrentMonth() {
-    setStartDate(formatDbDate(startOfMonth(new Date())));
-    setEndDate(formatDbDate(new Date()));
+    setStartDate(formatDate(startOfMonth(new Date())));
+    setEndDate(formatDate(new Date()));
     setDateRangeType(DateRangeType.MONTH);
   }
 
@@ -76,8 +81,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
 
     if (type === DateRangeType.YEAR) {
       // When changing to yearly, set it to the current year
-      setStartDate(formatDbDate(startOfYear(new Date())));
-      setEndDate(formatDbDate(new Date()));
+      setStartDate(formatDate(startOfYear(new Date())));
+      setEndDate(formatDate(new Date()));
       setDateRangeType(type);
     }
   }
@@ -104,8 +109,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
     // If the new month is the current month, use today instead of the end of the month
     const isCurrentMonth =
       getMonth(nextMonthDate) === getMonth(presentDate) && getYear(nextMonthDate) === getYear(presentDate);
-    setEndDate(isCurrentMonth ? formatDbDate(presentDate) : formatDbDate(nextMonthEnd));
-    setStartDate(formatDbDate(nextMonthStart));
+    setEndDate(isCurrentMonth ? formatDate(presentDate) : formatDate(nextMonthEnd));
+    setStartDate(formatDate(nextMonthStart));
   }
 
   function backOneMonth() {
@@ -122,8 +127,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
     const previousMonthStart = startOfMonth(previousMonthDate);
     const previousMonthEnd = endOfMonth(previousMonthDate);
 
-    setStartDate(formatDbDate(previousMonthStart));
-    setEndDate(formatDbDate(previousMonthEnd));
+    setStartDate(formatDate(previousMonthStart));
+    setEndDate(formatDate(previousMonthEnd));
   }
 
   function forwardOneYear() {
@@ -142,8 +147,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
 
     // If the new year is the current year, use today instead of the end of the year
     const newYearEqualsPresentYear = getYear(nextYearDate) === getYear(presentDate);
-    setEndDate(newYearEqualsPresentYear ? formatDbDate(presentDate) : formatDbDate(nextYearEnd));
-    setStartDate(formatDbDate(nextYearStart));
+    setEndDate(newYearEqualsPresentYear ? formatDate(presentDate) : formatDate(nextYearEnd));
+    setStartDate(formatDate(nextYearStart));
   }
 
   function backOneYear() {
@@ -160,8 +165,8 @@ export default function SelectedTimeFrameProvider({ children }: { children: Reac
     const previousYearStart = startOfYear(previousYearDate);
     const previousYearEnd = endOfYear(previousYearDate);
 
-    setStartDate(formatDbDate(previousYearStart));
-    setEndDate(formatDbDate(previousYearEnd));
+    setStartDate(formatDate(previousYearStart));
+    setEndDate(formatDate(previousYearEnd));
   }
 
   const selectedTimeFrameAPI: SelectedTimeFrameContextAPI = {
