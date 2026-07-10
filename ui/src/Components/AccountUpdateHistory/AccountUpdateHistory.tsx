@@ -7,6 +7,7 @@ import { accountHistoryQueryOptions } from 'queryOptions/accountHistoryQueryOpti
 import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { AccountWithStatus } from '@spend-watcher/contract';
+import buildMonthLedger from 'Util/Time/buildMonthLedger';
 import AddAccountUpdateRow from './AddAccountUpdateRow/AddAccountUpdateRow';
 import EditAccountUpdateRow from './EditAccountUpdateRow/EditAccountUpdateRow';
 
@@ -28,23 +29,9 @@ export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdat
   }
 
   const { updateHistory } = accountHistory;
-  const oldestAccountUpdateDate = updateHistory[updateHistory.length - 1].date;
-  // Starting with the current date, iterate backwards until we reach the oldest account update date.
-  // Copied from the mount snapshot because the loop below mutates it, and state must stay untouched.
-  const currentDate = new Date(now);
-  const applicableMonths: MonthYearDbDate[] = [];
-  let lastUpdateDateReached = false;
-  while (!lastUpdateDateReached) {
-    const formattedCurrentDate = format(currentDate, monthYearDbDateFormat) as MonthYearDbDate;
-    applicableMonths.push(formattedCurrentDate);
-
-    if (formattedCurrentDate === oldestAccountUpdateDate) {
-      lastUpdateDateReached = true;
-    }
-
-    // Update current date to the previous month for next iteration
-    currentDate.setMonth(currentDate.getMonth() - 1);
-  }
+  // The contract validates this as a yyyy-MM string at runtime but types it as plain `string`.
+  const oldestAccountUpdateDate = updateHistory.at(-1)?.date as MonthYearDbDate | undefined;
+  const { months: applicableMonths, monthBeforeOldest } = buildMonthLedger(oldestAccountUpdateDate, now);
 
   return (
     <>
@@ -69,11 +56,7 @@ export default function AccountUpdateHistory({ accountId, onBack }: AccountUpdat
         return <AddAccountUpdateRow key={formattedDate} accountId={accountId} date={date} />;
       })}
       {/* Add button for the month prior to the oldest month logged */}
-      <AddAccountUpdateRow
-        key={currentDate.toISOString()}
-        accountId={accountId}
-        date={format(currentDate, 'yyyy-MM') as MonthYearDbDate}
-      />
+      <AddAccountUpdateRow key={monthBeforeOldest} accountId={accountId} date={monthBeforeOldest} />
       <BottomSheet>
         <CustomButton variant="secondary" onClick={onBack} layout="full-width">
           {getContent('backButton')}

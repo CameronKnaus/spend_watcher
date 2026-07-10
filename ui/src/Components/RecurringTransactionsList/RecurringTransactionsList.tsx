@@ -3,12 +3,13 @@ import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditableRecurringTransactionRow from 'Components/RecurringTransactionRow/EditableRecurringTransactionRow';
 import AddRecurringTransactionRow from 'Components/RecurringTransactionRow/AddRecurringTransactionRow';
-import { format, parse, subMonths } from 'date-fns';
+import { format, parse } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
 import { recurringTransactionsQueryOptions } from 'queryOptions/recurringTransactionsQueryOptions';
 import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
 import { RecurringSpendTransaction } from '@spend-watcher/contract';
+import buildMonthLedger from 'Util/Time/buildMonthLedger';
 
 type RecurringTransactionsListPropTypes = {
   recurringSpendTransaction: RecurringSpendTransaction;
@@ -31,22 +32,9 @@ export default function RecurringTransactionsList({
     return <h1>Loading...</h1>;
   }
 
-  const oldestTransactionDate = recurringTransactionsList[recurringTransactionsList.length - 1].date;
-  // Starting with the current date, we will iterate backwards until we reach the oldest transaction date
-  let currentDate = now;
-  const applicableMonths: MonthYearDbDate[] = [];
-  let lastTransactionDateReached = false;
-  while (!lastTransactionDateReached) {
-    const formattedCurrentDate = format(currentDate, monthYearDbDateFormat) as MonthYearDbDate;
-    applicableMonths.push(formattedCurrentDate);
-
-    if (formattedCurrentDate === oldestTransactionDate) {
-      lastTransactionDateReached = true;
-    }
-
-    // Update current date to the previous month for next iteration
-    currentDate = subMonths(currentDate, 1);
-  }
+  // The contract validates this as a yyyy-MM string at runtime but types it as plain `string`.
+  const oldestTransactionDate = recurringTransactionsList.at(-1)?.date as MonthYearDbDate | undefined;
+  const { months: applicableMonths, monthBeforeOldest } = buildMonthLedger(oldestTransactionDate, now);
 
   return (
     <>
@@ -83,8 +71,8 @@ export default function RecurringTransactionsList({
       })}
       {/* Add button for the month prior to the oldest month logged */}
       <AddRecurringTransactionRow
-        key={currentDate.toISOString()}
-        date={format(currentDate, 'yyyy-MM') as MonthYearDbDate}
+        key={monthBeforeOldest}
+        date={monthBeforeOldest}
         expectedMonthlyAmount={recurringSpendTransaction.expectedMonthlyAmount}
         recurringSpendId={recurringSpendTransaction.recurringSpendId}
       />
