@@ -66,6 +66,12 @@
   color: #333;
 }
 
+/* Keyboard focus indicator, distinct from .selected so the two can be told apart when an
+   option is both the current value and the arrow-key-highlighted row. */
+.selectContainer .option.active {
+  background-color: var(--theme-color-neutral-700);
+}
+
 .iconContainer {
   font-size: 1rem;
   height: 2rem;

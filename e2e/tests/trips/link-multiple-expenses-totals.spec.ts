@@ -21,9 +21,9 @@ test.describe('Linking an Expense to a Trip', () => {
     await page.locator('div').filter({ hasText: /^Airfare$/ }).nth(3).click();
     await expect(page.locator('input[name="category"]')).toHaveValue('Airfare');
 
-    await page.getByRole('textbox', { name: '--' }).click();
+    await page.getByRole('combobox', { name: '--' }).click();
     await page.getByText('Test Trip').click();
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Test Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Test Trip');
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New expense', level: 2 })).not.toBeVisible();
@@ -41,9 +41,9 @@ test.describe('Linking an Expense to a Trip', () => {
     await page.locator('div').filter({ hasText: /^Lodging$/ }).nth(3).click();
     await expect(page.locator('input[name="category"]')).toHaveValue('Lodging');
 
-    await page.getByRole('textbox', { name: '--' }).click();
+    await page.getByRole('combobox', { name: '--' }).click();
     await page.getByText('Test Trip').click();
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Test Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Test Trip');
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New expense', level: 2 })).not.toBeVisible();
@@ -57,9 +57,9 @@ test.describe('Linking an Expense to a Trip', () => {
     await expect(page.getByRole('textbox', { name: '$' })).toHaveValue('$25.00');
     // Category remains 'Other' (default)
 
-    await page.getByRole('textbox', { name: '--' }).click();
+    await page.getByRole('combobox', { name: '--' }).click();
     await page.getByText('Test Trip').click();
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Test Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Test Trip');
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New expense', level: 2 })).not.toBeVisible();
