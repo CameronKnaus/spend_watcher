@@ -14,7 +14,7 @@ test.describe('Linking an Expense to a Trip', () => {
     await expect(page.getByRole('heading', { name: 'New expense', level: 2 })).toBeVisible();
 
     // The 'Linked Trip' field shows the default placeholder (no active trip, so not auto-selected)
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('');
 
     // 3. Enter '50' in the Amount field.
     await page.getByRole('textbox', { name: '$' }).click();
@@ -27,9 +27,9 @@ test.describe('Linking an Expense to a Trip', () => {
 
     // 6. Leave the Date of Expense as today's date.
     // 7. Click the 'Linked Trip' filterable-select dropdown and select 'Test Trip'.
-    await page.getByRole('textbox', { name: '--' }).click();
+    await page.getByRole('combobox', { name: '--' }).click();
     await page.getByText('Test Trip').click();
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Test Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Test Trip');
 
     // 8. Click 'Submit'.
     await page.getByRole('button', { name: 'Submit' }).click();
