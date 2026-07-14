@@ -1,9 +1,13 @@
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  // tanstackRouter must run before the react plugin so route files are transformed first
+  plugins: [tanstackRouter({ target: 'react', autoCodeSplitting: true }), react()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   server: {
     port: 3000,
   },

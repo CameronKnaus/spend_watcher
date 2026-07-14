@@ -1,4 +1,4 @@
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 
 export const tripExpensesQueryOptions = (tripId?: string) =>
   orpc.trips.expenses.queryOptions({

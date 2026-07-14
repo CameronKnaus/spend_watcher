@@ -1,17 +1,12 @@
-import { queryAsync } from '@lib/queryAsync';
+import { queryAsync, queryTransactionAsync } from '@lib/queryAsync';
 import { AppInputs, SpendingCategory } from '@spend-watcher/contract';
 import { dbDateFormat } from '@type/dateTypes';
+import { formatDiscretionaryTransactionId } from '@utils/transactionId';
 import { format } from 'date-fns';
 import { v4 as uuid4 } from 'uuid';
 
 type TripAddInput = AppInputs['trips']['add'];
 type TripEditInput = AppInputs['trips']['edit'];
-
-// Builds the user-facing `Discretionary-<id>` transaction id. Kept local to the module so we
-// don't import across module boundaries.
-function formatDiscretionaryTransactionId(transactionId: number): `Discretionary-${number}` {
-  return `Discretionary-${transactionId}`;
-}
 
 type TripRow = {
   trip_id: string; // uuid
@@ -35,7 +30,7 @@ type TripLinkedExpenseRow = {
   amount: number;
   category: string;
   note: string;
-  date: string; // ISO, e.g. '2023-12-27T05:00:00.000Z'
+  date: Date; // the mysql driver maps DATE columns to Date objects
   username: string;
   uncommon: number; // 1 | 0
   linked_trip_id: string; // uuid
@@ -147,11 +142,11 @@ export async function updateTrip(username: string, input: TripEditInput): Promis
   ]);
 }
 
-// Deletes the trip and unlinks it from any spend transactions. Two statements run as one
-// multi-statement query (the connection enables `multipleStatements`), mirroring the legacy delete.
+// Deletes the trip and unlinks it from any spend transactions, in one transaction so a failed
+// unlink can't leave transactions pointing at a deleted trip.
 export async function deleteTrip(username: string, tripId: string): Promise<void> {
-  await queryAsync(
-    'DELETE FROM trips WHERE username=? AND trip_id=?;UPDATE spend_transactions SET linked_trip_id=NULL WHERE linked_trip_id=?;',
-    [username, tripId, tripId],
-  );
+  await queryTransactionAsync([
+    { sql: 'DELETE FROM trips WHERE username=? AND trip_id=?', params: [username, tripId] },
+    { sql: 'UPDATE spend_transactions SET linked_trip_id=NULL WHERE linked_trip_id=?', params: [tripId] },
+  ]);
 }

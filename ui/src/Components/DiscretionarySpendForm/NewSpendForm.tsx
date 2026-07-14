@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import AlertMessage from 'Components/AlertMessage/AlertMessage';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
@@ -13,8 +13,7 @@ import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
-import { SpendingCategory } from '@spend-watcher/contract';
+import { discretionaryInputSchema, SpendingCategory } from '@spend-watcher/contract';
 import styles from './DiscretionarySpendForm.module.css';
 import { SpendFormAttributes } from './EditSpendForm';
 
@@ -34,7 +33,7 @@ export default function NewSpendForm({ onCancel, onSubmit }: NewSpendFormPropTyp
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
-    resolver: zodResolver(v1DiscretionaryAddSchema),
+    resolver: zodResolver(discretionaryInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       category: SpendingCategory.OTHER,

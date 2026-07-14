@@ -6,14 +6,14 @@ import createContentGetter from 'Content/createContentGetter';
 import { accountHistoryQueryOptions } from 'queryOptions/accountHistoryQueryOptions';
 import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
-import { Account } from 'Types/Services/accounts.model';
+import { AccountWithStatus } from '@spend-watcher/contract';
 import AddAccountUpdateRow from './AddAccountUpdateRow/AddAccountUpdateRow';
 import EditAccountUpdateRow from './EditAccountUpdateRow/EditAccountUpdateRow';
 
 const formatDate = (date: string) => format(parse(date, monthYearDbDateFormat, new Date()), 'MMMM yyyy');
 
 type AccountUpdateHistoryPropTypes = {
-  accountId: Account['id'];
+  accountId: AccountWithStatus['id'];
   onBack: () => void;
 };
 

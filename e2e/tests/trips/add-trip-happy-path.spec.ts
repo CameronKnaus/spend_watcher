@@ -79,9 +79,6 @@ test.describe('Add Trip — Happy Path', () => {
     await expect(page.getByText('$0.00').first()).toBeVisible();
   });
 
-  // KNOWN APP BUG: the contract allows tripName up to 100 chars (z.string().max(100)) but the DB
-  // column is trip_name varchar(30), so a 31–100 char name passes validation then 500s on insert.
-  // 30 is the real working maximum — extend this to the contract max once the mismatch is fixed.
   test('Trip name at the DB maximum length (30 characters) is accepted', async ({ page }) => {
     const maxLengthName = 'x'.repeat(30);
 

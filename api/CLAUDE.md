@@ -15,8 +15,4 @@ New code follows a three-layer pattern under `src/modules/<domain>/`, one file p
 
 ## Reference slice
 
-`modules/spending/transactions.*` (`GET /api/spending/transactions`) is the canonical example — copy its structure for new work.
-
-## Legacy code
-
-`src/routes/` is the old controller/service/model layout. It still runs, but **do not use it as a pattern for new work** — new domains go under `src/modules/`.
+`modules/trips/trips.*` is the canonical example — copy its structure for new work.

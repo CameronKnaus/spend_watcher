@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import TripForm from 'Components/TripForm/TripForm';
 import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
-import { Trip } from 'Types/Services/trips.model';
+import { Trip } from '@spend-watcher/contract';
 import TripDetails from './TripDetails/TripDetails';
 
 type TripDetailsPanelPropTypes = {

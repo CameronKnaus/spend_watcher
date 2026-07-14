@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { captureRequests, renderWithProviders, screen } from 'test/testUtils';
 import { SpendingCategory } from '@spend-watcher/contract';
-import type { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import type { RecurringSpendTransaction } from '@spend-watcher/contract';
 import ManageRecurringSpendPanel from './ManageRecurringSpendPanel';
 
 const INTERNET: RecurringSpendTransaction = {

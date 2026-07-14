@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { renderWithProviders, screen } from 'test/testUtils';
 import { SpendingCategory } from '@spend-watcher/contract';
-import type { DiscretionarySpendTransaction, RecurringSpendTransaction } from 'Types/Services/spending.model';
+import type { DiscretionarySpendTransaction, RecurringSpendTransaction } from '@spend-watcher/contract';
 import CategoryTransactionListPanel from './CategoryTransactionListPanel';
 
 const DICTIONARY: Record<string, DiscretionarySpendTransaction | RecurringSpendTransaction> = {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import RecurringExpenseForm from 'Components/RecurringExpenseForm/RecurringExpenseForm';
@@ -12,7 +12,7 @@ import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { FaEdit, FaHistory, FaTrashAlt } from 'react-icons/fa';
 import { MdUpdate, MdUpdateDisabled } from 'react-icons/md';
-import { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import { RecurringSpendTransaction } from '@spend-watcher/contract';
 import styles from './ManageRecurringSpendPanel.module.css';
 
 type ManageRecurringSpendPanelPropTypes = {

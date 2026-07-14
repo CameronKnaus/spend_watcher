@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { captureRequests, renderWithProviders, screen, waitFor } from 'test/testUtils';
 import { SpendingCategory } from '@spend-watcher/contract';
-import type { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import type { RecurringSpendTransaction } from '@spend-watcher/contract';
 import RecurringExpenseForm from './RecurringExpenseForm';
 
 const INTERNET_EXPENSE: RecurringSpendTransaction = {
@@ -62,10 +62,10 @@ describe('RecurringExpenseForm add mode', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('blocks submit when the name exceeds 60 characters', async () => {
+  it('blocks submit when the name exceeds 30 characters', async () => {
     const { user, onSubmit, adds } = renderForm();
 
-    await user.type(screen.getByPlaceholderText('Rent payment'), 'N'.repeat(61));
+    await user.type(screen.getByPlaceholderText('Rent payment'), 'N'.repeat(31));
     await user.type(screen.getByPlaceholderText('$0.00'), '50');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 

@@ -1,8 +1,10 @@
 import { DiscretionarySpendTransaction, SpendingDetailsResponse, SpendTransaction } from '@spend-watcher/contract';
 import { DbDate } from '@type/dateTypes';
+import { formatDiscretionaryTransactionId } from '@utils/transactionId';
 import { formatISO } from 'date-fns';
-import { DiscretionaryHistoryRow, RecurringHistoryRow } from '../details.types';
-import { formatDiscretionaryTransactionId, formatRecurringSpend } from './formatHelpers';
+import { DiscretionaryHistoryRow } from '../details.types';
+import { toRecurringSpendTransaction } from '../recurring.repository';
+import { RecurringSpendWithTransactionRow } from '../recurring.types';
 
 type TransactionDictionary = SpendingDetailsResponse['transactionDictionary'];
 
@@ -11,7 +13,7 @@ type TransactionDictionary = SpendingDetailsResponse['transactionDictionary'];
    flat list of all transaction data for further aggregation. */
 export default function formatTransactions(
   discretionaryTransactions: DiscretionaryHistoryRow[],
-  recurringTransactions: RecurringHistoryRow[],
+  recurringTransactions: RecurringSpendWithTransactionRow[],
 ) {
   const transactionDictionary: TransactionDictionary = {};
   const discretionaryTransactionIdList: SpendingDetailsResponse['discretionaryTransactionIdList'] = [];
@@ -25,7 +27,7 @@ export default function formatTransactions(
       transactionId: identifier,
       category: transaction.category,
       amountSpent: transaction.amount,
-      spentDate: formatISO(new Date(transaction.date), { representation: 'date' }) as DbDate,
+      spentDate: formatISO(transaction.date, { representation: 'date' }) as DbDate,
       note: transaction.note ?? '',
     };
 
@@ -39,7 +41,7 @@ export default function formatTransactions(
   });
 
   recurringTransactions.forEach((transaction) => {
-    const formattedTransaction = formatRecurringSpend(transaction);
+    const formattedTransaction = toRecurringSpendTransaction(transaction);
     transactionDictionary[formattedTransaction.transactionId] = formattedTransaction;
     recurringTransactionIdList.push(formattedTransaction.transactionId);
     transactionDataList.push(formattedTransaction);

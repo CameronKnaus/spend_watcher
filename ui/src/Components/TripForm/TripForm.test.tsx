@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { captureRequests, renderWithProviders, screen, waitFor, within } from 'test/testUtils';
-import type { Trip } from 'Types/Services/trips.model';
+import type { Trip } from '@spend-watcher/contract';
 import TripForm from './TripForm';
 
 const TEST_TRIP: Trip = {
@@ -49,6 +49,18 @@ describe('TripForm add mode', () => {
   it('blocks submit while the trip name is empty', async () => {
     const { user, onSubmit, adds } = renderAddForm();
 
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(adds).toHaveLength(0);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  // The trip_name DB column is varchar(30); the contract schema the form now resolves against
+  // caps the name at the same bound.
+  it('blocks submit when the trip name exceeds 30 characters', async () => {
+    const { user, onSubmit, adds } = renderAddForm();
+
+    await user.type(screen.getByPlaceholderText('Europe summer trip'), 'T'.repeat(31));
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(adds).toHaveLength(0);

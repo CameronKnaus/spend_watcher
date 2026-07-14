@@ -15,8 +15,23 @@ export const appContract = {
 // Shared building blocks (enums + zod helpers) for anyone who needs them directly.
 export { AccountCategory, SpendingCategory } from './enums';
 export * from './shared';
-// Auth input schemas (the ui reuses these for its login/register form validation).
+// Input schemas (the ui reuses these for its form validation via zodResolver).
 export { loginInputSchema, registerInputSchema } from './auth.contract';
+export {
+  discretionaryInputSchema,
+  recurringSpendInputSchema,
+  recurringTransactionAddInputSchema,
+  recurringTransactionEditInputSchema,
+} from './spending.contract';
+export {
+  accountAddInputSchema,
+  accountEditInputSchema,
+  accountUpdateAddInputSchema,
+  accountUpdateEditInputSchema,
+  accountWithStatusSchema,
+  type AccountWithStatus,
+} from './accounts.contract';
+export { tripInputSchema, type Trip, type TripCostTotals } from './trips.contract';
 // Spending-details schemas + working types (the api transform infers its types from these).
 export * from './spendingDetails';
 
@@ -27,7 +42,6 @@ export type AppOutputs = InferContractRouterOutputs<AppContract>;
 
 // Named response types, re-derived from the contract, so the api can keep its existing type names
 // (`*.types.ts` re-exports these instead of hand-maintaining the response shapes).
-export type CombinedTransactionsResponse = AppOutputs['spending']['transactions'];
 export type RecurringSummaryResponse = AppOutputs['spending']['recurringSummary'];
 export type RecurringTransactionsListResponse = AppOutputs['spending']['recurringTransactions'];
 export type HistoryStartResponse = AppOutputs['spending']['historyStart'];

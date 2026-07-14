@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import AccountUpdateHistory from 'Components/AccountUpdateHistory/AccountUpdateHistory';
 import EditAccountForm from 'Components/EditAccountForm/EditAccountForm';
 import SpeedBump from 'Components/SlideUpPanel/Addons/SpeedBump/SpeedBump';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
-import { AccountWithStatus } from 'Types/Services/accounts.model';
+import { AccountWithStatus } from '@spend-watcher/contract';
 import ManageAccountBasePanel from './ManageAccountBasePanel';
 
 type ManageAccountPanelPropTypes = {

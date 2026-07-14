@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zAccountCategory, zMonthYearDate } from './shared';
 
 // A single account joined to its latest update, with derived status.
-const accountWithStatusSchema = z.object({
+export const accountWithStatusSchema = z.object({
   id: z.string(),
   name: z.string(),
   currentAccountValue: z.number(),
@@ -13,6 +13,7 @@ const accountWithStatusSchema = z.object({
   lastUpdated: zMonthYearDate,
   requiresNewUpdate: z.boolean(),
 });
+export type AccountWithStatus = z.infer<typeof accountWithStatusSchema>;
 
 // GET /accounts/summary
 export const accountsSummaryContract = oc.route({ method: 'GET', path: '/accounts/summary' }).output(
@@ -54,29 +55,30 @@ export const accountsHistoryContract = oc
     }),
   );
 
-const accountName = z.string().min(3, 'Account names must be at least 3 characters');
+// The `account_name` DB column is varchar(50).
+const accountName = z.string().min(3, 'Account names must be at least 3 characters').max(50);
 
 // POST /accounts/add
-export const accountAddContract = oc.route({ method: 'POST', path: '/accounts/add' }).input(
-  z.object({
-    accountName,
-    startingAccountValue: z.number(),
-    accountCategory: zAccountCategory,
-    isFixedRate: z.boolean(),
-    annualPercentageRate: z.number().optional(),
-  }),
-);
+export const accountAddInputSchema = z.object({
+  accountName,
+  startingAccountValue: z.number(),
+  accountCategory: zAccountCategory,
+  isFixedRate: z.boolean(),
+  annualPercentageRate: z.number().optional(),
+});
+
+export const accountAddContract = oc.route({ method: 'POST', path: '/accounts/add' }).input(accountAddInputSchema);
 
 // POST /accounts/edit
-export const accountEditContract = oc.route({ method: 'POST', path: '/accounts/edit' }).input(
-  z.object({
-    accountId: z.uuid(),
-    accountName,
-    accountCategory: zAccountCategory,
-    isFixedRate: z.boolean(),
-    annualPercentageRate: z.number().optional(),
-  }),
-);
+export const accountEditInputSchema = z.object({
+  accountId: z.uuid(),
+  accountName,
+  accountCategory: zAccountCategory,
+  isFixedRate: z.boolean(),
+  annualPercentageRate: z.number().optional(),
+});
+
+export const accountEditContract = oc.route({ method: 'POST', path: '/accounts/edit' }).input(accountEditInputSchema);
 
 // POST /accounts/set-active
 export const accountSetActiveContract = oc
@@ -89,14 +91,26 @@ export const accountDeleteContract = oc
   .input(z.object({ accountId: z.uuid() }));
 
 // POST /accounts/update/add
+export const accountUpdateAddInputSchema = z.object({
+  accountId: z.uuid(),
+  amount: z.number(),
+  date: zMonthYearDate,
+});
+
 export const accountUpdateAddContract = oc
   .route({ method: 'POST', path: '/accounts/update/add' })
-  .input(z.object({ accountId: z.uuid(), amount: z.number(), date: zMonthYearDate }));
+  .input(accountUpdateAddInputSchema);
 
 // POST /accounts/update/edit
+export const accountUpdateEditInputSchema = z.object({
+  accountId: z.uuid(),
+  updateId: z.number(),
+  amount: z.number(),
+});
+
 export const accountUpdateEditContract = oc
   .route({ method: 'POST', path: '/accounts/update/edit' })
-  .input(z.object({ accountId: z.uuid(), updateId: z.number(), amount: z.number() }));
+  .input(accountUpdateEditInputSchema);
 
 export const accountsContract = {
   summary: accountsSummaryContract,

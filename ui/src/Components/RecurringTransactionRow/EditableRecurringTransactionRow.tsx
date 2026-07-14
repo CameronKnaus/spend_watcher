@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { RecurringTransactionId, v1EditRecurringTransactionSchema } from 'Types/Services/spending.model';
+import { RecurringTransactionId, recurringTransactionEditInputSchema } from '@spend-watcher/contract';
 import { z as zod } from 'zod';
 
-const editRecurringFormSchema = v1EditRecurringTransactionSchema.partial({ amountSpent: true });
+const editRecurringFormSchema = recurringTransactionEditInputSchema.partial({ amountSpent: true });
 type EditRecurringFormValues = zod.infer<typeof editRecurringFormSchema>;
 
 type EditableRecurringTransactionRowPropTypes = {

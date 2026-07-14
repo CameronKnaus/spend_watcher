@@ -19,8 +19,11 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
+    // Backend integration tests: drive the api directly with APIRequestContext, no browser. Kept
+    // out of the browser projects so they don't triple-run per device.
+    { name: 'api', testMatch: '**/tests/api/**/*.spec.ts' },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: '**/tests/api/**' },
+    { name: 'mobile-chrome', use: { ...devices['Pixel 5'] }, testIgnore: '**/tests/api/**' },
   ],
   // Two servers, started fresh for the run. The api command also owns the test-DB lifecycle: it
   // generates the schema, brings up the Docker MySQL and waits for it to be healthy *before* the api

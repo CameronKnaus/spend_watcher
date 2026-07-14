@@ -1,10 +1,10 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
 import styles from './DesktopNavigation.module.css';
 import { animated, SpringValues } from '@react-spring/web';
 import useNavSelectionSpring from '../useNavSelectionSpring';
 
 type DesktopNavItemPropTypes = {
-  to: string;
+  to: LinkProps['to'];
   icon: React.ReactNode;
   text: string;
   textSprings: SpringValues<{
@@ -15,11 +15,11 @@ type DesktopNavItemPropTypes = {
 };
 
 export default function DesktopNavItem({ to, icon, text, textSprings, openMenu, onBlur }: DesktopNavItemPropTypes) {
-  const isCurrentRoute = useLocation().pathname === to;
+  const isCurrentRoute = useLocation({ select: (location) => location.pathname }) === to;
   const selectionSprings = useNavSelectionSpring(isCurrentRoute);
 
   return (
-    <NavLink to={to} className={styles.menuItem} onFocus={openMenu} onBlur={onBlur}>
+    <Link to={to} className={styles.menuItem} onFocus={openMenu} onBlur={onBlur}>
       <div className={styles.icon}>
         <animated.div
           data-testid={`${text}-icon-selection`}
@@ -39,6 +39,6 @@ export default function DesktopNavItem({ to, icon, text, textSprings, openMenu, 
       <div className={styles.navTextContainer}>
         <animated.span style={textSprings}>{text}</animated.span>
       </div>
-    </NavLink>
+    </Link>
   );
 }

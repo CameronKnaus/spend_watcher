@@ -1,6 +1,8 @@
 import { SpendingDetailsResponse } from '@spend-watcher/contract';
-import { DiscretionaryHistoryRow, RecurringHistoryRow, TotalsByCategory } from '../details.types';
+import { DiscretionaryHistoryRow, TotalsByCategory } from '../details.types';
+import { RecurringSpendWithTransactionRow } from '../recurring.types';
 import addToCategoryTotals from './addToCategoryTotals';
+import { ratioOf } from './calcHelpers';
 import formatTransactions from './formatTransactions';
 import generateCategoryOverview from './generateCategoryOverview';
 import mutateTransactionsByDate from './generateDateBreakdown';
@@ -10,7 +12,7 @@ import initSummaryTotals from './initSummaryTotals';
 // Builds the rich spending-details payload from raw discretionary + recurring history rows.
 export default function spendingDetailsTransform(
   discretionaryTransactions: DiscretionaryHistoryRow[],
-  recurringTransactions: RecurringHistoryRow[],
+  recurringTransactions: RecurringSpendWithTransactionRow[],
 ): SpendingDetailsResponse {
   const { discretionaryTransactionIdList, recurringTransactionIdList, transactionDataList, transactionDictionary } =
     formatTransactions(discretionaryTransactions, recurringTransactions);
@@ -31,8 +33,8 @@ export default function spendingDetailsTransform(
     // Lookup map so the rest of the response can reference transactions by id.
     transactionDictionary,
     spendTypeRatio: {
-      discretionary: summary.discretionaryTotals.amount / summary.total.amount,
-      recurring: summary.recurringTotals.amount / summary.total.amount,
+      discretionary: ratioOf(summary.discretionaryTotals.amount, summary.total.amount),
+      recurring: ratioOf(summary.recurringTotals.amount, summary.total.amount),
     },
     summary,
     discretionaryTransactionIdList,

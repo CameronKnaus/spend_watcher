@@ -1,3 +1,3 @@
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 
 export const tripsListQueryOptions = orpc.trips.list.queryOptions();

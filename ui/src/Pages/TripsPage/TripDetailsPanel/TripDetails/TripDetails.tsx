@@ -4,8 +4,7 @@ import EditSpendForm from 'Components/DiscretionarySpendForm/EditSpendForm';
 import TripExpenseList from 'Components/TripExpenseList/TripExpenseList';
 import createContentGetter from 'Content/createContentGetter';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
-import { Trip } from 'Types/Services/trips.model';
+import { DiscretionarySpendTransaction, Trip } from '@spend-watcher/contract';
 import { TripPanelState } from '../TripDetailsPanel';
 import styles from './TripDetails.module.css';
 

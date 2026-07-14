@@ -1,6 +1,6 @@
 import { AppInputs } from '@spend-watcher/contract';
 import { deleteDiscretionary, insertDiscretionary, updateDiscretionary } from './discretionary.repository';
-import { parseTransactionIdNumber } from './parseTransactionId';
+import { parseTransactionIdNumber } from '@utils/transactionId';
 
 type DiscretionaryAddInput = AppInputs['spending']['discretionaryAdd'];
 type DiscretionaryEditInput = AppInputs['spending']['discretionaryEdit'];

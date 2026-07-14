@@ -9,25 +9,6 @@ export const detailsContract = oc
   .input(z.object({ startDate: z.iso.date(), endDate: z.iso.date() }))
   .output(spendingDetailsOutputSchema);
 
-// GET /spending/transactions — combined discretionary + recurring flat list over a date range.
-const combinedTransactionSchema = z.object({
-  transactionId: z.number(),
-  category: zSpendingCategory,
-  amount: z.number(),
-  date: z.iso.date(),
-  isRecurring: z.boolean(),
-});
-
-export const transactionsContract = oc
-  .route({ method: 'GET', path: '/spending/transactions' })
-  .input(z.object({ startDate: z.iso.date(), endDate: z.iso.date() }))
-  .output(
-    z.object({
-      presentCategories: z.array(zSpendingCategory),
-      transactions: z.array(combinedTransactionSchema),
-    }),
-  );
-
 // A single recurring spend group as surfaced in the summary.
 const recurringSpendTransactionSchema = z.object({
   transactionId: zRecurringTransactionId,
@@ -98,12 +79,19 @@ export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/
 // All write endpoints respond with an empty body, so the procedures declare no output.
 
 // POST /spending/discretionary/add
-const discretionaryInputSchema = z.object({
+export const discretionaryInputSchema = z.object({
   category: zSpendingCategory,
   amountSpent: z.number().safe().positive(),
   spentDate: z.iso.date(),
-  note: z.string().trim().max(100),
-  linkedTripId: z.uuid().optional(),
+  // The `note` DB column is varchar(60).
+  note: z.string().trim().max(60),
+  // The ui's trip select submits '' when no trip is chosen (its clear action can't emit
+  // `undefined` — see FilterableSelect); treat '' the same as an absent field so the forms
+  // can validate against this schema directly instead of maintaining a diverged copy.
+  linkedTripId: z
+    .uuid()
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
 });
 
 export const discretionaryAddContract = oc
@@ -121,9 +109,10 @@ export const discretionaryDeleteContract = oc
   .input(z.object({ transactionId: zDiscretionaryTransactionId }));
 
 // POST /spending/recurring/add
-const recurringSpendInputSchema = z.object({
+export const recurringSpendInputSchema = z.object({
   category: zSpendingCategory,
-  recurringSpendName: z.string().trim().max(60),
+  // The `spend_name` DB column is varchar(30).
+  recurringSpendName: z.string().trim().min(1).max(30),
   expectedMonthlyAmount: z.number().safe().positive(),
   isVariableRecurring: z.boolean(),
 });
@@ -148,17 +137,27 @@ export const recurringSpendSetActiveContract = oc
   .input(z.object({ recurringSpendId: z.uuid(), isActive: z.boolean() }));
 
 // POST /spending/recurring/transactions/add
+export const recurringTransactionAddInputSchema = z.object({
+  recurringSpendId: z.uuid(),
+  amountSpent: z.number().safe().nonnegative(),
+  date: zMonthYearDate,
+});
+
 export const recurringTransactionAddContract = oc
   .route({ method: 'POST', path: '/spending/recurring/transactions/add' })
-  .input(z.object({ recurringSpendId: z.uuid(), amountSpent: z.number().safe().nonnegative(), date: zMonthYearDate }));
+  .input(recurringTransactionAddInputSchema);
 
 // POST /spending/recurring/transactions/edit
+export const recurringTransactionEditInputSchema = z.object({
+  transactionId: zRecurringTransactionId,
+  amountSpent: z.number().safe().positive(),
+});
+
 export const recurringTransactionEditContract = oc
   .route({ method: 'POST', path: '/spending/recurring/transactions/edit' })
-  .input(z.object({ transactionId: zRecurringTransactionId, amountSpent: z.number().safe().positive() }));
+  .input(recurringTransactionEditInputSchema);
 
 export const spendingContract = {
-  transactions: transactionsContract,
   details: detailsContract,
   recurringSummary: recurringSummaryContract,
   recurringTransactions: recurringTransactionsContract,

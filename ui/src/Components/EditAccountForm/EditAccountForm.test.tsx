@@ -66,4 +66,18 @@ describe('EditAccountForm submit gating', () => {
     expect(edits).toHaveLength(0);
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  // The account_name DB column is varchar(50); the contract schema the form now resolves against
+  // caps the name at the same bound.
+  it('does not submit a name over the 50-character maximum', async () => {
+    const { user, onSubmit, edits } = renderForm();
+    const nameInput = screen.getByDisplayValue('Test Checking');
+
+    await user.clear(nameInput);
+    await user.type(nameInput, 'A'.repeat(51));
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(edits).toHaveLength(0);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });

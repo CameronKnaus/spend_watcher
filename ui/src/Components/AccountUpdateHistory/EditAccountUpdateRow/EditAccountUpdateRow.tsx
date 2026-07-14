@@ -1,18 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Account,
-  editAccountUpdateRequestParamSchema,
-  EditAccountUpdateV1RequestParams,
-} from 'Types/Services/accounts.model';
+import { AccountWithStatus, accountUpdateEditInputSchema, AppInputs } from '@spend-watcher/contract';
+
+type EditAccountUpdateV1RequestParams = AppInputs['accounts']['updateEdit'];
 
 type EditAccountUpdateRowPropTypes = {
-  accountId: Account['id'];
+  accountId: AccountWithStatus['id'];
   updateId: number;
   dateLabel: string;
   currentAmount: number;
@@ -39,7 +37,7 @@ export default function EditAccountUpdateRow({
   );
 
   const form = useForm<EditAccountUpdateV1RequestParams>({
-    resolver: zodResolver(editAccountUpdateRequestParamSchema),
+    resolver: zodResolver(accountUpdateEditInputSchema),
     defaultValues: {
       accountId,
       updateId,

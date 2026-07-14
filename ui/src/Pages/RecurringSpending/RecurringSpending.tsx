@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
 import { recurringSummaryQueryOptions } from 'queryOptions/recurringSummaryQueryOptions';
 import { useState } from 'react';
-import { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import { RecurringSpendTransaction } from '@spend-watcher/contract';
 import ManageRecurringSpendPanel from './ManageRecurringSpendPanel/ManageRecurringSpendPanel';
 import styles from './RecurringSpending.module.css';
 import RecurringTransactionCard from './RecurringTransactionCard/RecurringTransactionCard';

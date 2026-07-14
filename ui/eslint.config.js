@@ -1,5 +1,6 @@
 import eslintReact from '@eslint-react/eslint-plugin';
 import js from '@eslint/js';
+import pluginRouter from '@tanstack/eslint-plugin-router';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
@@ -7,6 +8,7 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   ...tsPlugin.configs['flat/recommended'],
+  ...pluginRouter.configs['flat/recommended'],
   eslintReact.configs['recommended-typescript'],
   {
     languageOptions: {
@@ -33,6 +35,6 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**', 'dist/**'],
+    ignores: ['node_modules/**', 'dist/**', 'src/routeTree.gen.ts'],
   },
 ];

@@ -7,7 +7,7 @@ import createContentGetter from 'Content/createContentGetter';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useMemo, useState } from 'react';
 import { DbDate } from 'Types/dateTypes';
-import { DiscretionarySpendTransaction, TransactionsByDate } from 'Types/Services/spending.model';
+import { DiscretionarySpendTransaction, TransactionsByDate } from '@spend-watcher/contract';
 import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowIdType';
 import styles from './RecentTransactions.module.css';
 

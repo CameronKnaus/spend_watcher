@@ -8,7 +8,7 @@ import createContentGetter from 'Content/createContentGetter';
 import { recurringTransactionsQueryOptions } from 'queryOptions/recurringTransactionsQueryOptions';
 import { useState } from 'react';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
-import { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import { RecurringSpendTransaction } from '@spend-watcher/contract';
 
 type RecurringTransactionsListPropTypes = {
   recurringSpendTransaction: RecurringSpendTransaction;

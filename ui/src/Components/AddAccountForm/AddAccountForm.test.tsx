@@ -54,6 +54,19 @@ describe('AddAccountForm validation', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  // The account_name DB column is varchar(50); the contract schema the form now resolves against
+  // caps the name at the same bound.
+  it('blocks a 51-character name (maximum is 50)', async () => {
+    const { user, onSubmit, adds } = renderForm();
+
+    await user.type(screen.getByPlaceholderText('Account name'), 'A'.repeat(51));
+    await user.type(screen.getByPlaceholderText('$0.00'), '2500');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(adds).toHaveLength(0);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it('blocks submit while the account value is empty', async () => {
     const { user, onSubmit, adds } = renderForm();
 

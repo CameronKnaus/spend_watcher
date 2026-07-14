@@ -1,5 +1,10 @@
-import { AppInputs, RecurringSummaryResponse, RecurringTransactionsListResponse } from '@spend-watcher/contract';
-import { parseTransactionIdNumber } from './parseTransactionId';
+import {
+  AppInputs,
+  RecurringSpendTransaction,
+  RecurringSummaryResponse,
+  RecurringTransactionsListResponse,
+} from '@spend-watcher/contract';
+import { parseTransactionIdNumber } from '@utils/transactionId';
 import {
   backfillRecurringTransactions,
   deleteRecurringSpend,
@@ -11,14 +16,16 @@ import {
   updateRecurringSpend,
   updateRecurringTransaction,
 } from './recurring.repository';
-import { RecurringSpendTransaction } from './recurring.types';
 
-// Builds the recurring summary. The backfill stored-proc write must run first — the summary read
-// depends on this month's fixed recurring transactions having been materialized. The aggregation
-// mirrors the legacy `recurringSummaryTransform` (kept here since it operated on legacy row types).
+// Wrapped here so the auth controller composes a spending service
+// rather than reaching into the repository layer.
+export function ensureRecurringTransactionsBackfilled(username: string): Promise<void> {
+  return backfillRecurringTransactions(username);
+}
+
+// Builds the recurring summary. The aggregation mirrors the legacy `recurringSummaryTransform`
+// (kept here since it operated on legacy row types).
 export async function getRecurringSummary(username: string): Promise<RecurringSummaryResponse> {
-  await backfillRecurringTransactions(username);
-
   const recurringSpends = await findRecurringSummary(username);
 
   let averageEstimatedMonthlyTotal = 0;
@@ -53,9 +60,10 @@ export async function getRecurringSummary(username: string): Promise<RecurringSu
 }
 
 export async function getRecurringTransactionsList(
+  username: string,
   recurringSpendId: string,
 ): Promise<RecurringTransactionsListResponse> {
-  const transactions = await findRecurringTransactionsList(recurringSpendId);
+  const transactions = await findRecurringTransactionsList(username, recurringSpendId);
   return { transactions };
 }
 
@@ -81,10 +89,16 @@ export function setRecurringSpendActive(
   return updateRecurringActiveStatus(username, input.recurringSpendId, input.isActive);
 }
 
-export function addRecurringTransaction(input: AppInputs['spending']['recurringTransactionAdd']): Promise<void> {
-  return insertRecurringTransaction(input.recurringSpendId, input.amountSpent, input.date);
+export function addRecurringTransaction(
+  username: string,
+  input: AppInputs['spending']['recurringTransactionAdd'],
+): Promise<void> {
+  return insertRecurringTransaction(username, input.recurringSpendId, input.amountSpent, input.date);
 }
 
-export function editRecurringTransaction(input: AppInputs['spending']['recurringTransactionEdit']): Promise<void> {
-  return updateRecurringTransaction(parseTransactionIdNumber(input.transactionId), input.amountSpent);
+export function editRecurringTransaction(
+  username: string,
+  input: AppInputs['spending']['recurringTransactionEdit'],
+): Promise<void> {
+  return updateRecurringTransaction(username, parseTransactionIdNumber(input.transactionId), input.amountSpent);
 }

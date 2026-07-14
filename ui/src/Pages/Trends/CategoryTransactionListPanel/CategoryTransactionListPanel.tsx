@@ -7,7 +7,7 @@ import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import SlideUpPanel from 'Components/SlideUpPanel/SlideUpPanel';
 import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
-import { DiscretionarySpendTransaction, RecurringSpendTransaction } from 'Types/Services/spending.model';
+import { DiscretionarySpendTransaction, RecurringSpendTransaction } from '@spend-watcher/contract';
 import { SpendingCategory } from '@spend-watcher/contract';
 import { formatToMonthDayYear } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './CategoryTransactionListPanel.module.css';

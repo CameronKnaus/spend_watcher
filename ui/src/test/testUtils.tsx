@@ -8,11 +8,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  createMemoryHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  RouterContextProvider,
+} from '@tanstack/react-router';
 import { render, type RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse, type JsonBodyType } from 'msw';
 import { type ReactElement, type ReactNode } from 'react';
-import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import { server } from '@msw/server';
 import {
@@ -52,6 +58,18 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
   const theme = createTheme();
   const { queryClient = createTestQueryClient(), route = '/', isMobile = false, timeFrame, ...renderOptions } = options;
 
+  // RouterContextProvider supplies router context to arbitrary children without mounting the
+  // route tree, so the component under test renders synchronously — same semantics the old
+  // MemoryRouter wrapper had. The throwaway tree's index and splat routes exist only so the
+  // initial `route` and any in-test navigation resolve to a match.
+  const rootRoute = createRootRoute();
+  const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: () => null });
+  const catchAllRoute = createRoute({ getParentRoute: () => rootRoute, path: '$', component: () => null });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([indexRoute, catchAllRoute]),
+    history: createMemoryHistory({ initialEntries: [route] }),
+  });
+
   function Wrapper({ children }: { children: ReactNode }) {
     const timeFrameLayer = timeFrame ? (
       <SelectedTimeFrameContext value={timeFrame}>{children}</SelectedTimeFrameContext>
@@ -64,7 +82,7 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <QueryClientProvider client={queryClient}>
             <IsMobileContext value={isMobile}>
-              <MemoryRouter initialEntries={[route]}>{timeFrameLayer}</MemoryRouter>
+              <RouterContextProvider router={router}>{timeFrameLayer}</RouterContextProvider>
             </IsMobileContext>
           </QueryClientProvider>
         </LocalizationProvider>
@@ -74,6 +92,7 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
 
   return {
     queryClient,
+    router,
     user: userEvent.setup(),
     ...render(ui, { wrapper: Wrapper, ...renderOptions }),
   };

@@ -6,6 +6,7 @@
   "description": "Playwright end-to-end tests. Drives the real api + ui against a throwaway container MySQL.",
   "scripts": {
     "test": "playwright test",
+    "test:api": "playwright test --project=api",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
+    "@spend-watcher/contract": "workspace:*",
     "@types/node": "^22.19.18",
     "date-fns": "^4.1.0",
     "typescript": "^6.0.3"

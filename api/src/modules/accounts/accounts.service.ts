@@ -1,9 +1,4 @@
-import {
-  AccountCategory,
-  AccountGrowthOverTimeResponse,
-  AccountsSummaryResponse,
-  AppInputs,
-} from '@spend-watcher/contract';
+import { AccountCategory, AccountsSummaryResponse, AppInputs } from '@spend-watcher/contract';
 import { MonthYearDbDate, monthYearDbDateFormat } from '@type/dateTypes';
 import { format, isBefore } from 'date-fns';
 import {
@@ -17,7 +12,7 @@ import {
   updateAccountActiveStatus,
   updateAccountUpdate,
 } from './accounts.repository';
-import { AccountUpdate, AccountWithStatus } from './accounts.types';
+import { AccountUpdate, AccountValueDataPoint, AccountWithStatus } from './accounts.types';
 
 function emptyCategoryRecord(): Record<AccountCategory, number> {
   return {
@@ -69,12 +64,13 @@ export async function getAccountsSummary(username: string): Promise<AccountsSumm
   };
 }
 
-export function getAccountGrowthOverTime(username: string): Promise<AccountGrowthOverTimeResponse> {
+// Raw domain points — the controller owns shaping `date` into the response's yyyy-MM-dd string.
+export function getAccountGrowthOverTime(username: string): Promise<AccountValueDataPoint[]> {
   return findAccountGrowthOverTime(username);
 }
 
-export function getAccountUpdates(accountId: string): Promise<AccountUpdate[]> {
-  return findAccountUpdates(accountId);
+export function getAccountUpdates(username: string, accountId: string): Promise<AccountUpdate[]> {
+  return findAccountUpdates(username, accountId);
 }
 
 export function addAccount(username: string, input: AppInputs['accounts']['add']): Promise<void> {
@@ -93,10 +89,10 @@ export function removeAccount(username: string, accountId: string): Promise<void
   return deleteAccount(username, accountId);
 }
 
-export function addAccountUpdate(input: AppInputs['accounts']['updateAdd']): Promise<void> {
-  return insertAccountUpdate(input);
+export function addAccountUpdate(username: string, input: AppInputs['accounts']['updateAdd']): Promise<void> {
+  return insertAccountUpdate(username, input);
 }
 
-export function editAccountUpdate(input: AppInputs['accounts']['updateEdit']): Promise<void> {
-  return updateAccountUpdate(input);
+export function editAccountUpdate(username: string, input: AppInputs['accounts']['updateEdit']): Promise<void> {
+  return updateAccountUpdate(username, input);
 }

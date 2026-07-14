@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import EditableAmountRow from 'Components/EditableAmountRow/EditableAmountRow';
 import { format, parse } from 'date-fns';
@@ -8,15 +8,13 @@ import createContentGetter from 'Content/createContentGetter';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MonthYearDbDate, monthYearDbDateFormat } from 'Types/dateTypes';
-import {
-  Account,
-  addAccountUpdateRequestParamSchema,
-  AddAccountUpdateV1RequestParams,
-} from 'Types/Services/accounts.model';
+import { AccountWithStatus, accountUpdateAddInputSchema, AppInputs } from '@spend-watcher/contract';
 import styles from './AddAccountUpdateRow.module.css';
 
+type AddAccountUpdateV1RequestParams = AppInputs['accounts']['updateAdd'];
+
 type AddAccountUpdateRowPropTypes = {
-  accountId: Account['id'];
+  accountId: AccountWithStatus['id'];
   date: MonthYearDbDate;
 };
 
@@ -37,7 +35,7 @@ export default function AddAccountUpdateRow({ accountId, date }: AddAccountUpdat
   );
 
   const form = useForm<AddAccountUpdateV1RequestParams>({
-    resolver: zodResolver(addAccountUpdateRequestParamSchema),
+    resolver: zodResolver(accountUpdateAddInputSchema),
     defaultValues: {
       accountId,
       date,

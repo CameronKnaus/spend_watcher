@@ -1,13 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { sessionQueryOptions } from 'queryOptions/sessionQueryOptions';
 
 export default function useSessionStatus() {
-  const { isSuccess, isLoading } = useQuery({
-    ...orpc.auth.verify.queryOptions({
-      staleTime: 100 * 60 * 30,
-      retry: 0,
-    }),
-  });
+  const { isSuccess, isLoading } = useQuery(sessionQueryOptions());
 
   return {
     isAuthenticating: isLoading,

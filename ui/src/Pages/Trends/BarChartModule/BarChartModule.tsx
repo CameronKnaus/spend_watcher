@@ -1,12 +1,12 @@
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
-import useTransactions from 'Hooks/useTransactions/useTransactions';
+import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { useMeasure } from 'react-use';
 import BarChart from './BarChart';
 import styles from './BarChartModule.module.css';
 
 export default function BarChartModule() {
   const [containerRef, containerMeasurement] = useMeasure();
-  const { isLoading, data } = useTransactions();
+  const { isLoading, data } = useSpendingDetailsService();
 
   return (
     <ModuleContainer
@@ -17,7 +17,12 @@ export default function BarChartModule() {
       padding="0 10px"
     >
       <h3 className={styles.header}>Bar chart</h3>
-      {data && <BarChart transactionResponse={data} containerMeasurement={containerMeasurement} />}
+      {data && (
+        <BarChart
+          categoryDetailsList={data.spendCategoryOverview.categoryDetailsList}
+          containerMeasurement={containerMeasurement}
+        />
+      )}
     </ModuleContainer>
   );
 }

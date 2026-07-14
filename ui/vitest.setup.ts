@@ -24,7 +24,7 @@ class ResizeObserverStub {
 }
 globalThis.ResizeObserver = globalThis.ResizeObserver ?? (ResizeObserverStub as unknown as typeof ResizeObserver);
 
-// jsdom implements no scrolling APIs; PageRoutes scrolls the document to the top on navigation.
+// jsdom implements no scrolling APIs; the root route scrolls the document to the top on navigation.
 Element.prototype.scrollTo = Element.prototype.scrollTo ?? (() => {});
 
 // React Testing Library auto-cleanup between tests (globals/afterEach are configured by vitest).

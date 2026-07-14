@@ -6,6 +6,16 @@ export function roundNumber(givenNumber: number, decimalPlaces = 2): number {
   return Math.round(givenNumber * pow) / pow;
 }
 
+// A range can have zero transactions of a given kind (e.g. no discretionary spends yet this
+// month), so 0/0 must become 0 — the contract's output validation rejects NaN.
+export function percentageOf(part: number, total: number): number {
+  return total === 0 ? 0 : roundNumber((part / total) * 100);
+}
+
+export function ratioOf(part: number, total: number): number {
+  return total === 0 ? 0 : part / total;
+}
+
 export function initTransactionTotal(): TransactionTotal {
   return { amount: 0, count: 0 };
 }

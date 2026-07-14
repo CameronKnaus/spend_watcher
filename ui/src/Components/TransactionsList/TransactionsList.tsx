@@ -7,7 +7,7 @@ import { format, parseISO } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
 import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetailsService';
 import { Fragment, useState } from 'react';
-import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
+import { DiscretionarySpendTransaction } from '@spend-watcher/contract';
 import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowIdType';
 import styles from './TransactionsList.module.css';
 

@@ -4,7 +4,7 @@ import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveR
 import TransactionRow from 'Components/TransactionRow/TransactionRow';
 import createContentGetter from 'Content/createContentGetter';
 import { tripExpensesQueryOptions } from 'queryOptions/tripExpensesQueryOptions';
-import { DiscretionarySpendTransaction } from 'Types/Services/spending.model';
+import { DiscretionarySpendTransaction } from '@spend-watcher/contract';
 import { formatToMonthDay } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './TripExpenseList.module.css';
 

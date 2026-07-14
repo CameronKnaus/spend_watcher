@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import DeleteButton from 'Components/DeleteButton/DeleteButton';
@@ -12,8 +12,7 @@ import LoadingSpinner from 'Components/LoadingSpinner/LoadingSpinner';
 import createContentGetter from 'Content/createContentGetter';
 import { tripsListQueryOptions } from 'queryOptions/tripsListQueryOptions';
 import { useForm } from 'react-hook-form';
-import { DiscretionarySpendTransaction, v1DiscretionaryAddSchema } from 'Types/Services/spending.model';
-import { SpendingCategory } from '@spend-watcher/contract';
+import { DiscretionarySpendTransaction, discretionaryInputSchema, SpendingCategory } from '@spend-watcher/contract';
 import styles from './DiscretionarySpendForm.module.css';
 
 export type SpendFormAttributes = Omit<DiscretionarySpendTransaction, 'transactionId' | 'isRecurring'>;
@@ -53,7 +52,7 @@ export default function EditSpendForm({ transactionToEdit, onCancel, onSubmit }:
 
   // All form handling managed here
   const form = useForm<SpendFormAttributes>({
-    resolver: zodResolver(v1DiscretionaryAddSchema),
+    resolver: zodResolver(discretionaryInputSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: transactionToEdit,
   });

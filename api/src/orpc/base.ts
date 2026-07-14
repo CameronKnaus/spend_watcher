@@ -1,9 +1,8 @@
 import { env } from '@lib/env';
 import { implement, ORPCError } from '@orpc/server';
 import { appContract } from '@spend-watcher/contract';
-import getUsernameFromToken from '@utils/TokenUtils/getUsernameFromToken';
 import { Response } from 'express';
-import jwt, { Algorithm, Secret } from 'jsonwebtoken';
+import jwt, { Algorithm, JwtPayload, Secret } from 'jsonwebtoken';
 
 export type ORPCContext = {
   cookies: Record<string, string | undefined>;
@@ -20,11 +19,17 @@ export const authed = pub.use(({ context, next }) => {
     throw new ORPCError('UNAUTHORIZED', { message: 'Not authorized to access this endpoint' });
   }
 
+  let payload: JwtPayload | string;
   try {
-    jwt.verify(token, env.SECRET_KEY as Secret, { algorithms: [env.JWT_ALGORITHM as Algorithm] });
+    payload = jwt.verify(token, env.SECRET_KEY as Secret, { algorithms: [env.JWT_ALGORITHM as Algorithm] });
   } catch {
     throw new ORPCError('UNAUTHORIZED', { message: 'Please login again' });
   }
 
-  return next({ context: { username: getUsernameFromToken(token) } });
+  const username = typeof payload === 'string' ? undefined : payload.sub;
+  if (!username) {
+    throw new ORPCError('UNAUTHORIZED', { message: 'Please login again' });
+  }
+
+  return next({ context: { username } });
 });

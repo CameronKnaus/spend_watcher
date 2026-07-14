@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { orpc } from 'api/orpc';
+import { orpc } from 'apiClient/orpc';
 import BottomSheet from 'Components/BottomSheet/BottomSheet';
 import CustomButton from 'Components/CustomButton/CustomButton';
 import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableSelectController';
@@ -10,12 +10,14 @@ import createContentGetter from 'Content/createContentGetter';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  AddRecurringSpendRequestParams,
+  AppInputs,
   RecurringSpendTransaction,
-  v1AddRecurringSpendSchema,
-} from 'Types/Services/spending.model';
-import { SpendingCategory } from '@spend-watcher/contract';
+  recurringSpendInputSchema,
+  SpendingCategory,
+} from '@spend-watcher/contract';
 import styles from './RecurringExpenseForm.module.css';
+
+type AddRecurringSpendRequestParams = AppInputs['spending']['recurringSpendAdd'];
 
 type RecurringExpenseFormPropTypes = {
   onSubmit: () => void;
@@ -30,7 +32,7 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
   const queryClient = useQueryClient();
 
   const form = useForm<AddRecurringSpendRequestParams>({
-    resolver: zodResolver(v1AddRecurringSpendSchema),
+    resolver: zodResolver(recurringSpendInputSchema),
     mode: 'onChange',
     defaultValues: {
       isVariableRecurring: false,
@@ -93,7 +95,7 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
           className={styles.textInput}
           placeholder={getContent('newSpendNamePlaceholder')}
           autoComplete="off"
-          {...form.register('recurringSpendName', { required: true, maxLength: 60 })}
+          {...form.register('recurringSpendName', { required: true, maxLength: 30 })}
         />
 
         {/* Spend category */}

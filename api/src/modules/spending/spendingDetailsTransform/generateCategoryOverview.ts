@@ -6,7 +6,7 @@ import {
   TransactionTotalWithPercentage,
 } from '@spend-watcher/contract';
 import { TotalsByCategory } from '../details.types';
-import { initTransactionTotalWithPercentage, roundNumber } from './calcHelpers';
+import { initTransactionTotalWithPercentage, percentageOf, roundNumber } from './calcHelpers';
 
 // Returns a list of category details sorted by amount spent, plus top-four / remaining rollups.
 export default function generateCategoryOverview(
@@ -41,20 +41,20 @@ export default function generateCategoryOverview(
       combinedTotals: {
         amount: categoryTotals.total.amount,
         count: categoryTotals.total.count,
-        percentageOfTotalAmount: roundNumber((categoryTotals.total.amount / totalAmount) * 100),
-        percentageOfTotalCount: roundNumber((categoryTotals.total.count / totalCount) * 100),
+        percentageOfTotalAmount: percentageOf(categoryTotals.total.amount, totalAmount),
+        percentageOfTotalCount: percentageOf(categoryTotals.total.count, totalCount),
       },
       discretionaryTotals: {
         amount: categoryTotals.discretionaryTotals.amount,
         count: categoryTotals.discretionaryTotals.count,
-        percentageOfTotalAmount: roundNumber((categoryTotals.discretionaryTotals.amount / discretionaryTotal) * 100),
-        percentageOfTotalCount: roundNumber((categoryTotals.discretionaryTotals.count / discretionaryTotalCount) * 100),
+        percentageOfTotalAmount: percentageOf(categoryTotals.discretionaryTotals.amount, discretionaryTotal),
+        percentageOfTotalCount: percentageOf(categoryTotals.discretionaryTotals.count, discretionaryTotalCount),
       },
       recurringTotals: {
         amount: categoryTotals.recurringTotals.amount,
         count: categoryTotals.recurringTotals.count,
-        percentageOfTotalAmount: roundNumber((categoryTotals.recurringTotals.amount / recurringTotal) * 100),
-        percentageOfTotalCount: roundNumber((categoryTotals.recurringTotals.count / recurringTotalCount) * 100),
+        percentageOfTotalAmount: percentageOf(categoryTotals.recurringTotals.amount, recurringTotal),
+        percentageOfTotalCount: percentageOf(categoryTotals.recurringTotals.count, recurringTotalCount),
       },
     };
   });

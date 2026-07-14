@@ -3,7 +3,6 @@ import { currentMonth } from '../utils';
 import { recurringSummaryResponse } from '../mocks/spending/recurringSummaryResponse';
 import { spendingDetailsResponse } from '../mocks/spending/spendingDetailsResponse';
 import { spendingHistoryStartResponse } from '../mocks/spending/spendingHistoryStartResponse';
-import { spendingTransactionsResponse } from '../mocks/spending/spendingTransactionsResponse';
 import { spendingYearlyAverageResponse } from '../mocks/spending/spendingYearlyAverageResponse';
 
 export const spendingHandlers = [
@@ -16,6 +15,4 @@ export const spendingHandlers = [
       transactions: [{ transactionId: 'Recurring-3', date: currentMonth(), amountSpent: 60 }],
     }),
   ),
-  // Legacy transactions endpoint still consumed by the Trends bar chart module.
-  http.get('*/api/spending/transactions', () => HttpResponse.json(spendingTransactionsResponse)),
 ];

@@ -1,20 +1,20 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, type LinkProps, useLocation } from '@tanstack/react-router';
 import styles from './MobileNavigation.module.css';
 import { animated } from '@react-spring/web';
 import useNavSelectionSpring from '../useNavSelectionSpring';
 
 type MobileNavItemPropTypes = {
-  to: string;
+  to: LinkProps['to'];
   icon: React.ReactNode;
   text: string;
 };
 
 export default function MobileNavItem({ to, icon, text }: MobileNavItemPropTypes) {
-  const isCurrentRoute = useLocation().pathname === to;
+  const isCurrentRoute = useLocation({ select: (location) => location.pathname }) === to;
   const selectionSprings = useNavSelectionSpring(isCurrentRoute);
 
   return (
-    <NavLink to={to} className={styles.menuItem}>
+    <Link to={to} className={styles.menuItem}>
       <div className={styles.icon}>
         <animated.div
           data-testid={`${text}-icon-selection`}
@@ -32,6 +32,6 @@ export default function MobileNavItem({ to, icon, text }: MobileNavItemPropTypes
         </span>
       </div>
       <div className={styles.navLabel}>{text}</div>
-    </NavLink>
+    </Link>
   );
 }

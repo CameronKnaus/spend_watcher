@@ -4,7 +4,7 @@ import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import createContentGetter from 'Content/createContentGetter';
 import { ComponentProps } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
-import { RecurringSpendTransaction } from 'Types/Services/spending.model';
+import { RecurringSpendTransaction } from '@spend-watcher/contract';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import styles from './RecurringTransactionCard.module.css';
 
