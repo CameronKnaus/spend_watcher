@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-interface AxisBottomProps {
+type AxisBottomProps = {
   /** A D3 time scale that maps Date objects to x coordinates */
   scale: d3.ScaleTime<number, number>;
   /** A translation to position the axis */
@@ -9,7 +9,7 @@ interface AxisBottomProps {
   tickCount?: number;
   /** A D3 time format specifier for the tick labels (optional) */
   tickFormat?: string;
-}
+};
 
 export default function AxisBottom({ scale, transform, tickCount = 5, tickFormat = '%b %Y' }: AxisBottomProps) {
   const ticks = scale.ticks(tickCount);

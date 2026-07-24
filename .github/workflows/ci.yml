@@ -37,7 +37,7 @@ jobs:
         run: pnpm lint
 
       - name: Typecheck
-        run: pnpm --filter @spend-watcher/contract --filter @spend-watcher/e2e run typecheck
+        run: pnpm --filter @spend-watcher/contract --filter @spend-watcher/e2e --filter @spend-watcher/ui run typecheck
 
       - name: Unit & component tests (vitest)
         run: pnpm --filter @spend-watcher/ui run test:run
