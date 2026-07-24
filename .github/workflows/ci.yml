@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v5
 
       # pnpm must be installed before setup-node so its `cache: pnpm` can find the store.
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - uses: actions/setup-node@v6
         with:
