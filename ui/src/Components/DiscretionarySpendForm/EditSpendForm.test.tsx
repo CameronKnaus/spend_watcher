@@ -80,7 +80,7 @@ describe('EditSpendForm submission', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(edits).toHaveLength(1);
-    expect(edits[0].body).toMatchObject({
+    expect(edits[0]?.body).toMatchObject({
       transactionId: 'Discretionary-17',
       amountSpent: 35,
       category: 'RESTAURANTS',
@@ -98,6 +98,6 @@ describe('EditSpendForm delete', () => {
 
     await waitFor(() => expect(onCancel).toHaveBeenCalledTimes(1));
     expect(deletes).toHaveLength(1);
-    expect(deletes[0].body).toMatchObject({ transactionId: 'Discretionary-17' });
+    expect(deletes[0]?.body).toMatchObject({ transactionId: 'Discretionary-17' });
   });
 });

@@ -21,15 +21,19 @@ describe('CategoryLedgerTile', () => {
     expect(await screen.findByRole('heading', { name: 'Categories' })).toBeInTheDocument();
     const rows = await screen.findAllByTestId('ledger-category-row');
     expect(rows).toHaveLength(4);
+    const [groceriesRow, utilitiesRow, restaurantsRow, entertainmentRow] = rows;
+    if (!groceriesRow || !utilitiesRow || !restaurantsRow || !entertainmentRow) {
+      throw new Error('expected four ledger category rows');
+    }
 
     // Trends mock: GROCERIES +16%, UTILITIES 0%, RESTAURANTS −19%, ENTERTAINMENT no baseline.
-    expect(within(rows[0]).getByText('Groceries')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('+16%')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('avg $74.3/mo')).toBeInTheDocument();
-    expect(within(rows[1]).getByText('Utilities')).toBeInTheDocument();
-    expect(within(rows[2]).getByText('Dining out')).toBeInTheDocument();
-    expect(within(rows[2]).getByText('−19%')).toBeInTheDocument();
-    expect(within(rows[3]).getByText('Entertainment')).toBeInTheDocument();
+    expect(within(groceriesRow).getByText('Groceries')).toBeInTheDocument();
+    expect(within(groceriesRow).getByText('+16%')).toBeInTheDocument();
+    expect(within(groceriesRow).getByText('avg $74.3/mo')).toBeInTheDocument();
+    expect(within(utilitiesRow).getByText('Utilities')).toBeInTheDocument();
+    expect(within(restaurantsRow).getByText('Dining out')).toBeInTheDocument();
+    expect(within(restaurantsRow).getByText('−19%')).toBeInTheDocument();
+    expect(within(entertainmentRow).getByText('Entertainment')).toBeInTheDocument();
   });
 
   it('opens the biggest mover by default with its six-month history', async () => {
@@ -45,7 +49,11 @@ describe('CategoryLedgerTile', () => {
     const { user } = renderWithProviders(<CategoryLedgerTile />, { timeFrame: makeTimeFrame() });
 
     const rows = await screen.findAllByTestId('ledger-category-row');
-    await user.click(rows[2]);
+    const restaurantsRow = rows[2];
+    if (!restaurantsRow) {
+      throw new Error('expected a third ledger category row');
+    }
+    await user.click(restaurantsRow);
 
     // The detail header now shows Dining out's numbers: $25 current (also in its list row),
     // −19% vs its average (list badge + header badge).

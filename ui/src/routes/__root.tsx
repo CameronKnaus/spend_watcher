@@ -1,7 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, Outlet, useLocation } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import SelectedTimeFrameProvider from 'Contexts/SelectedTimeFrame.context';
-import { lazy, Suspense, useLayoutEffect } from 'react';
+import { lazy, Suspense } from 'react';
 
 // The e2e server runs `vite --mode test`, so the mode check keeps the
 // floating devtools button out of Playwright runs as well as vitest.

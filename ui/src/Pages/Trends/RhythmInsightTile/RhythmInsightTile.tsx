@@ -73,8 +73,8 @@ export default function RhythmInsightTile() {
               key={day.date}
               data-testid="rhythm-day"
               className={clsx(styles.dayCell, {
-                [styles.unusualDay]: unusual,
-                [styles.todayDay]: isToday && !unusual,
+                [styles.unusualDay ?? '']: unusual,
+                [styles.todayDay ?? '']: isToday && !unusual,
               })}
             >
               {unusual && <span className={styles.dayNumber}>{getDate(parseDbDate(day.date))}</span>}

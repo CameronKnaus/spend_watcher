@@ -29,7 +29,11 @@ describe('SpendingByMonthTile', () => {
     const { user } = renderWithProviders(<SpendingByMonthTile />, { timeFrame: makeTimeFrame() });
 
     await screen.findByText('June 2026');
-    await user.click(screen.getAllByTestId('month-bar')[0]);
+    const [firstMonthBar] = screen.getAllByTestId('month-bar');
+    if (!firstMonthBar) {
+      throw new Error('expected at least one month bar');
+    }
+    await user.click(firstMonthBar);
 
     expect(await screen.findByText('January 2026')).toBeInTheDocument();
     expect(screen.getByTestId('month-delta-badge')).toHaveTextContent('$0.33 below your average');

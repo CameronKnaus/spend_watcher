@@ -88,7 +88,7 @@ describe('AddAccountForm submission', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(adds).toHaveLength(1);
-    expect(adds[0].body).toMatchObject({
+    expect(adds[0]?.body).toMatchObject({
       accountName: 'abc',
       accountCategory: 'CHECKING',
       startingAccountValue: 2500,

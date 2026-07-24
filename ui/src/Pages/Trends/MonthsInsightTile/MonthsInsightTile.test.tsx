@@ -15,14 +15,18 @@ describe('MonthsInsightTile', () => {
     const bars = screen.getAllByTestId('months-insight-bar');
     expect(bars).toHaveLength(6);
     // The priciest month wins the loss color even when it is also the selected month.
-    expect(bars[5].getAttribute('style')).toContain('semantic-loss');
-    expect(bars[0].getAttribute('style')).toContain('neutral-600');
+    expect(bars[5]?.getAttribute('style')).toContain('semantic-loss');
+    expect(bars[0]?.getAttribute('style')).toContain('neutral-600');
   });
 
   it('shows the empty state when fewer than two months have data', async () => {
     const singleMonth = buildCategoryTrendsResponse('2026-06');
+    const [firstCategory] = singleMonth.categories;
+    if (!firstCategory) {
+      throw new Error('expected buildCategoryTrendsResponse to seed at least one category');
+    }
     singleMonth.categories = [
-      { category: singleMonth.categories[0].category, monthlyTotals: [0, 0, 0, 0, 0, 50], percentChange: null },
+      { category: firstCategory.category, monthlyTotals: [0, 0, 0, 0, 0, 50], percentChange: null },
     ];
     server.use(http.get('*/api/spending/category-trends', () => HttpResponse.json(singleMonth)));
     renderWithProviders(<MonthsInsightTile />, { timeFrame: makeTimeFrame() });

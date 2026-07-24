@@ -27,9 +27,9 @@ describe('NetWorthSummaryTile', () => {
 
     const segments = screen.getAllByTestId('allocation-segment');
     expect(segments).toHaveLength(4);
-    expect(segments[0].getAttribute('style')).toContain('INVESTING');
-    expect(segments[0].getAttribute('style')).toContain('width: 45.2');
-    expect(segments[3].getAttribute('style')).toContain('BONDS');
+    expect(segments[0]?.getAttribute('style')).toContain('INVESTING');
+    expect(segments[0]?.getAttribute('style')).toContain('width: 45.2');
+    expect(segments[3]?.getAttribute('style')).toContain('BONDS');
 
     const legendTexts = screen.getAllByTestId('allocation-legend-item').map((item) => item.textContent);
     expect(legendTexts).toEqual([
@@ -76,7 +76,7 @@ describe('NetWorthSummaryTile', () => {
     expect(await screen.findAllByText('$5,000.00')).toHaveLength(2);
     const segments = screen.getAllByTestId('allocation-segment');
     expect(segments).toHaveLength(1);
-    expect(segments[0].getAttribute('style')).toContain('width: 100%');
+    expect(segments[0]?.getAttribute('style')).toContain('width: 100%');
     expect(screen.getAllByTestId('allocation-legend-item').map((item) => item.textContent)).toEqual([
       'Checking $5,000.00 · 100%',
     ]);
