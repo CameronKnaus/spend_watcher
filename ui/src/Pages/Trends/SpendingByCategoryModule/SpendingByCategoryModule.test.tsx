@@ -13,13 +13,17 @@ describe('SpendingByCategoryModule', () => {
 
     // The mock list is intentionally unsorted; rows must sort by combined total descending.
     const rows = screen.getAllByRole('row').slice(1);
-    expect(within(rows[0]).getByText('Groceries')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('-$86.00')).toBeInTheDocument();
-    expect(within(rows[0]).getByText('46%')).toBeInTheDocument();
-    expect(within(rows[1]).getByText('Utilities')).toBeInTheDocument();
-    expect(within(rows[2]).getByText('Dining out')).toBeInTheDocument();
-    expect(within(rows[3]).getByText('Entertainment')).toBeInTheDocument();
-    expect(within(rows[3]).getByText('8%')).toBeInTheDocument();
+    const [groceriesRow, utilitiesRow, restaurantsRow, entertainmentRow] = rows;
+    if (!groceriesRow || !utilitiesRow || !restaurantsRow || !entertainmentRow) {
+      throw new Error('expected four category rows');
+    }
+    expect(within(groceriesRow).getByText('Groceries')).toBeInTheDocument();
+    expect(within(groceriesRow).getByText('-$86.00')).toBeInTheDocument();
+    expect(within(groceriesRow).getByText('46%')).toBeInTheDocument();
+    expect(within(utilitiesRow).getByText('Utilities')).toBeInTheDocument();
+    expect(within(restaurantsRow).getByText('Dining out')).toBeInTheDocument();
+    expect(within(entertainmentRow).getByText('Entertainment')).toBeInTheDocument();
+    expect(within(entertainmentRow).getByText('8%')).toBeInTheDocument();
   });
 
   it('labels the total column with the selected month', async () => {
@@ -38,10 +42,14 @@ describe('SpendingByCategoryModule', () => {
     // ENTERTAINMENT null. Rows sort GROCERIES, UTILITIES, RESTAURANTS, ENTERTAINMENT.
     await screen.findByText('Groceries');
     const rows = screen.getAllByRole('row').slice(1);
-    expect(within(rows[0]).getByText('8%')).toBeInTheDocument();
-    expect(within(rows[1]).getByText('0%')).toBeInTheDocument();
-    expect(within(rows[2]).getByText('11%')).toBeInTheDocument();
-    expect(within(rows[3]).getByText('—')).toBeInTheDocument();
+    const [groceriesRow, utilitiesRow, restaurantsRow, entertainmentRow] = rows;
+    if (!groceriesRow || !utilitiesRow || !restaurantsRow || !entertainmentRow) {
+      throw new Error('expected four category rows');
+    }
+    expect(within(groceriesRow).getByText('8%')).toBeInTheDocument();
+    expect(within(utilitiesRow).getByText('0%')).toBeInTheDocument();
+    expect(within(restaurantsRow).getByText('11%')).toBeInTheDocument();
+    expect(within(entertainmentRow).getByText('—')).toBeInTheDocument();
     expect(container.querySelectorAll('polyline')).toHaveLength(4);
   });
 

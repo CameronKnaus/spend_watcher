@@ -83,7 +83,7 @@ describe('RecurringExpenseForm add mode', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(adds).toHaveLength(1);
-    expect(adds[0].body).toMatchObject({
+    expect(adds[0]?.body).toMatchObject({
       recurringSpendName: 'Electric bill',
       category: 'OTHER',
       expectedMonthlyAmount: 80,
@@ -115,7 +115,7 @@ describe('RecurringExpenseForm edit mode', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(edits).toHaveLength(1);
-    expect(edits[0].body).toMatchObject({
+    expect(edits[0]?.body).toMatchObject({
       recurringSpendName: 'Internet + TV',
       recurringSpendId: '33333333-3333-4333-8333-333333333333',
     });

@@ -10,6 +10,7 @@ import createContentGetter from 'Content/createContentGetter';
 import SummaryTotals from 'Pages/Dashboard/SummaryTotals/SummaryTotals';
 import TopDiscretionaryCategories from 'Pages/Dashboard/TopDiscretionaryCategories/TopDiscretionaryCategories';
 import BarChartModule from './BarChartModule/BarChartModule';
+import CategoryLedgerTile from './CategoryLedgerTile/CategoryLedgerTile';
 import SpendingByCategoryModule from './SpendingByCategoryModule/SpendingByCategoryModule';
 import SpendingByMonthTile from './SpendingByMonthTile/SpendingByMonthTile';
 import styles from './Trends.module.css';
@@ -37,6 +38,7 @@ export default function Trends() {
         <LogSpendButton />
         <TransactionsList />
         <SpendingByMonthTile />
+        <CategoryLedgerTile />
         <AlertMessage
           variant="error"
           title="Recurring transactions are not shown on this page yet."

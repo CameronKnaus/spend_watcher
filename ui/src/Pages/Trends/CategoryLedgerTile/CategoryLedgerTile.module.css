@@ -1,0 +1,251 @@
+.module {
+  width: 100%;
+}
+
+.subheading {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+  margin-bottom: 14px;
+}
+
+.contentRow {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.listColumn {
+  width: 400px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .listColumn {
+    width: 100%;
+  }
+}
+
+.categoryRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.selectedRow {
+  background: var(--token-color-background-primary);
+  outline: 1px solid var(--token-color-border-secondary);
+}
+
+.categoryText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryName {
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.categoryAverage {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.categoryAmounts {
+  width: 90px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
+}
+
+.changeBadge {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-medium);
+}
+
+.newBadge {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.recurringNote {
+  padding: 14px 12px 0;
+  border-top: 1px solid var(--token-color-border-tertiary);
+  margin-top: 8px;
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.detailColumn {
+  flex: 1;
+  min-width: 320px;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.detailIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detailName {
+  font-size: var(--font-heading-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-standard);
+}
+
+.detailSubline {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.detailTotals {
+  text-align: right;
+}
+
+.detailTotal {
+  font-size: var(--font-heading-medium);
+  font-weight: var(--font-weight-thin);
+  font-variant-numeric: tabular-nums;
+  color: var(--token-color-text-dark);
+}
+
+.detailChange {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.detailChangeSuffix {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.historyCard,
+.transactionsCard {
+  background: var(--token-color-background-primary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: var(--font-body-medium);
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+}
+
+.historyHint {
+  font-size: var(--font-body-small);
+  font-weight: var(--font-weight-normal);
+  color: var(--token-color-text-subdued);
+}
+
+.historyChart {
+  position: relative;
+}
+
+.historyAverageLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed var(--theme-color-neutral-400);
+  pointer-events: none;
+}
+
+.historyBars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.historyBarColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.historyBar {
+  width: 38px;
+  border-radius: 5px;
+}
+
+.historyBarLabel {
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.currentBarLabel {
+  font-weight: var(--font-weight-medium);
+  color: var(--token-color-text-dark);
+}
+
+.transactionRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--token-color-border-tertiary);
+  font-size: var(--font-body-medium);
+}
+
+.transactionDate {
+  width: 48px;
+  flex: none;
+  font-size: var(--font-body-small);
+  color: var(--token-color-text-subdued);
+}
+
+.transactionLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--token-color-text-standard);
+}
+
+.noTransactions {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+  padding: 9px 0;
+}
+
+.emptyMessage {
+  font-size: var(--font-body-medium);
+  color: var(--token-color-text-subdued);
+}

@@ -31,11 +31,13 @@ export default function RecentTransactions() {
     // The absolute maximum number of transactions to show
     const absoluteMaxTransactionCount = 10;
 
-    let index = 0;
     let transactionCount = 0;
     const allDateEntries = Object.entries(spendingData.transactionsByDate);
-    while (index < allDateEntries.length && transactionCount <= targetTransactionCount) {
-      const [date, dateSpendSummary] = allDateEntries[index];
+    for (const [date, dateSpendSummary] of allDateEntries) {
+      if (transactionCount > targetTransactionCount) {
+        break;
+      }
+
       const transactionsCountForDate = dateSpendSummary.discretionaryTotals.count;
 
       // Add date's transactions to transaction count
@@ -49,8 +51,6 @@ export default function RecentTransactions() {
 
       transactionCount = newCount;
       applicableTransactions[date as DbDate] = dateSpendSummary;
-
-      index++;
     }
 
     return applicableTransactions;
@@ -92,7 +92,7 @@ export default function RecentTransactions() {
                   {dateSpendSummary.includedTransactions.filter(isDiscretionaryTransactionId).map((transactionId) => {
                     const transaction = spendingData.transactionDictionary[transactionId];
                     // Ids were filtered to discretionary, so narrow the union value to match.
-                    if (transaction.isRecurring) {
+                    if (!transaction || transaction.isRecurring) {
                       return null;
                     }
 

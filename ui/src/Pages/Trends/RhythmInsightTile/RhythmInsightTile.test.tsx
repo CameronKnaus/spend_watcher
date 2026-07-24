@@ -14,10 +14,10 @@ describe('RhythmInsightTile', () => {
     const cells = screen.getAllByTestId('rhythm-day');
     expect(cells).toHaveLength(7);
     // Jun 24 is the 4th cell of the Jun 21–27 strip and carries its day number.
-    expect(cells[3].textContent).toBe('24');
-    expect(cells[3].className).toContain('unusualDay');
+    expect(cells[3]?.textContent).toBe('24');
+    expect(cells[3]?.className).toContain('unusualDay');
     // The last cell is today (present month) and gets the today outline instead.
-    expect(cells[6].className).toContain('todayDay');
+    expect(cells[6]?.className).toContain('todayDay');
   });
 
   it('reads as calm when no day breaks the threshold', async () => {

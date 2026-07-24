@@ -28,7 +28,9 @@ export default function BreakdownInsightTile() {
     .filter((categoryDetails) => categoryDetails.combinedTotals.amount > 0)
     .sort((a, b) => b.combinedTotals.amount - a.combinedTotals.amount);
 
-  if (sortedList.length === 0) {
+  const [firstCategory, secondCategory] = sortedList;
+
+  if (!firstCategory) {
     return (
       <ModuleContainer className={styles.tile} elevation="low">
         <div className={styles.label}>{getContent('breakdownInsightLabel')}</div>
@@ -44,22 +46,21 @@ export default function BreakdownInsightTile() {
   );
   const remainderShare = Math.max(100 - namedShare, 0);
 
-  const topLabel = getCategoryLabel(sortedList[0].category);
-  const headline =
-    sortedList.length === 1
-      ? getContent('breakdownInsightHeadlineSingle', [
-          topLabel,
-          Math.round(sortedList[0].combinedTotals.percentageOfTotalAmount),
-          currentMonthLabel,
-        ])
-      : getContent('breakdownInsightHeadlinePair', [
-          topLabel,
-          getCategoryLabel(sortedList[1].category),
-          Math.round(
-            sortedList[0].combinedTotals.percentageOfTotalAmount + sortedList[1].combinedTotals.percentageOfTotalAmount,
-          ),
-          currentMonthLabel,
-        ]);
+  const topLabel = getCategoryLabel(firstCategory.category);
+  const headline = !secondCategory
+    ? getContent('breakdownInsightHeadlineSingle', [
+        topLabel,
+        Math.round(firstCategory.combinedTotals.percentageOfTotalAmount),
+        currentMonthLabel,
+      ])
+    : getContent('breakdownInsightHeadlinePair', [
+        topLabel,
+        getCategoryLabel(secondCategory.category),
+        Math.round(
+          firstCategory.combinedTotals.percentageOfTotalAmount + secondCategory.combinedTotals.percentageOfTotalAmount,
+        ),
+        currentMonthLabel,
+      ]);
 
   return (
     <ModuleContainer className={styles.tile} elevation="low">

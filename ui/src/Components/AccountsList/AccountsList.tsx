@@ -19,6 +19,7 @@ const ACCOUNT_SKELETON_KEYS = Array.from({ length: 3 }, (_, i) => `account-loadi
 export default function AccountsList() {
   const [accountToEdit, setAccountToEdit] = useState<AccountWithStatus | null>(null);
   const { isLoading, data: accountsSummary } = useQuery(accountsSummaryQueryOptions);
+  const showSkeleton = isLoading || !accountsSummary;
   const getCategoryLabel = createContentGetter('ACCOUNT_CATEGORIES');
   const getContent = createContentGetter('accounts');
 
@@ -26,16 +27,16 @@ export default function AccountsList() {
     <>
       <ModuleContainer heading={getContent('accountsList')} elevation="low">
         <div className={styles.totalAmount}>
-          {isLoading ? (
+          {showSkeleton ? (
             <SkeletonLoader className={styles.totalSkeleton} />
           ) : (
-            <Currency amount={accountsSummary!.totalEquity} />
+            <Currency amount={accountsSummary.totalEquity} />
           )}
         </div>
         <div className={styles.accountsList}>
-          {isLoading
+          {showSkeleton
             ? ACCOUNT_SKELETON_KEYS.map((key) => <LoadingInteractiveRow key={key} />)
-            : accountsSummary?.accountsList.map((account) => (
+            : accountsSummary.accountsList.map((account) => (
                 <InteractiveRow
                   key={`account--row-${account.id}`}
                   icon={<AccountCategoryIcon category={account.category} size={36} />}

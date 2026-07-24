@@ -117,7 +117,7 @@ describe('NewSpendForm submission', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(adds).toHaveLength(1);
-    expect(adds[0].body).toMatchObject({
+    expect(adds[0]?.body).toMatchObject({
       category: 'OTHER',
       amountSpent: 50,
       spentDate: '2026-06-15',

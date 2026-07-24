@@ -5,13 +5,13 @@ import BarChart from './BarChart';
 import styles from './BarChartModule.module.css';
 
 export default function BarChartModule() {
-  const [containerRef, containerMeasurement] = useMeasure();
+  const [containerRef, containerMeasurement] = useMeasure<HTMLDivElement>();
   const { isLoading, data } = useSpendingDetailsService();
 
   return (
     <ModuleContainer
       className={styles.container}
-      forwardRef={containerRef}
+      ref={containerRef}
       isLoading={isLoading}
       elevation="low"
       padding="0 10px"

@@ -38,7 +38,9 @@ export default function CategoriesInsightTile() {
       const current = trend.monthlyTotals[windowLength - 1];
       const baseline = trend.monthlyTotals.slice(windowLength - 1 - BASELINE_MONTHS, windowLength - 1);
       const baselineAverage = baseline.reduce((sum, amount) => sum + amount, 0) / BASELINE_MONTHS;
-      return { trend, change: baselineAverage > 0 ? (current - baselineAverage) / baselineAverage : null };
+      const change =
+        current !== undefined && baselineAverage > 0 ? (current - baselineAverage) / baselineAverage : null;
+      return { trend, change };
     })
     .filter((mover): mover is { trend: (typeof trendsData.categories)[number]; change: number } => {
       return mover.change !== null;

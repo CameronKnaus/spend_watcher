@@ -45,7 +45,7 @@ export default function SpendingByMonthTile() {
   const monthTotals =
     trendsData?.months.map((month, index) => ({
       month,
-      total: trendsData.categories.reduce((sum, category) => sum + category.monthlyTotals[index], 0),
+      total: trendsData.categories.reduce((sum, category) => sum + (category.monthlyTotals[index] ?? 0), 0),
     })) ?? [];
   const monthsWithData = monthTotals.filter((entry) => entry.total > 0);
   const priciestMonth = monthsWithData.reduce(
@@ -76,7 +76,9 @@ export default function SpendingByMonthTile() {
     );
   }
 
-  if (monthsWithData.length === 0 || !activeMonth || activeIndex === -1) {
+  const activeMonthEntry = monthTotals[activeIndex];
+
+  if (monthsWithData.length === 0 || !activeMonth || activeIndex === -1 || !activeMonthEntry) {
     return (
       <ModuleContainer heading={getContent('spendingByMonthHeading')} className={styles.module} elevation="medium">
         <div className={styles.emptyMessage}>{getContent('spendingByMonthEmpty')}</div>
@@ -105,7 +107,7 @@ export default function SpendingByMonthTile() {
             label: getContent('everythingElseLabel'),
             color: 'var(--theme-color-neutral-300)',
             amounts: trendsData.months.map((_, index) =>
-              restCategories.reduce((sum, trend) => sum + trend.monthlyTotals[index], 0),
+              restCategories.reduce((sum, trend) => sum + (trend.monthlyTotals[index] ?? 0), 0),
             ),
           },
         ]
@@ -114,7 +116,7 @@ export default function SpendingByMonthTile() {
 
   const maxTotal = Math.max(...monthTotals.map((entry) => entry.total), 1);
   const averageTotal = monthsWithData.reduce((sum, entry) => sum + entry.total, 0) / monthsWithData.length;
-  const activeTotal = monthTotals[activeIndex].total;
+  const activeTotal = activeMonthEntry.total;
   const activeDelta = activeTotal - averageTotal;
   const activeMonthLabel = format(parseDbDate(`${activeMonth}-01`), 'LLLL yyyy');
 
@@ -124,7 +126,7 @@ export default function SpendingByMonthTile() {
     .slice(0, TOP_TRANSACTIONS);
 
   const comparisonRows = layers.map((layer) => {
-    const selectedAmount = layer.amounts[activeIndex];
+    const selectedAmount = layer.amounts[activeIndex] ?? 0;
     const otherAmounts = layer.amounts.filter((_, index) => index !== activeIndex);
     const otherAverage = otherAmounts.reduce((sum, amount) => sum + amount, 0) / Math.max(otherAmounts.length, 1);
     const rowMax = Math.max(selectedAmount, otherAverage, 1);
@@ -169,24 +171,26 @@ export default function SpendingByMonthTile() {
                   >
                     <span className={styles.barTotal}>{formatCurrency(entry.total, false, true)}</span>
                     <span
-                      className={clsx(styles.barStack, { [styles.selectedStack]: isSelected })}
+                      className={clsx(styles.barStack, { [styles.selectedStack ?? '']: isSelected })}
                       style={{ height: `${Math.max((entry.total / maxTotal) * MAX_BAR_HEIGHT, 2)}px` }}
                     >
-                      {layers.map(
-                        (layer) =>
-                          layer.amounts[monthIndex] > 0 &&
+                      {layers.map((layer) => {
+                        const layerAmount = layer.amounts[monthIndex] ?? 0;
+                        return (
+                          layerAmount > 0 &&
                           entry.total > 0 && (
                             <span
                               key={layer.key}
                               style={{
-                                height: `${(layer.amounts[monthIndex] / entry.total) * 100}%`,
+                                height: `${(layerAmount / entry.total) * 100}%`,
                                 background: layer.color,
                               }}
                             />
-                          ),
-                      )}
+                          )
+                        );
+                      })}
                     </span>
-                    <span className={clsx(styles.barLabel, { [styles.selectedBarLabel]: isSelected })}>
+                    <span className={clsx(styles.barLabel, { [styles.selectedBarLabel ?? '']: isSelected })}>
                       {monthLabel}
                       {isCurrentCalendarMonth && getContent('spendingByMonthSoFarSuffix')}
                     </span>
