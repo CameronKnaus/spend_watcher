@@ -23,7 +23,7 @@ export default function NetWorthTile() {
   }
 
   return (
-    <ModuleContainer forwardRef={tileRef} elevation="high" className={styles.container}>
+    <ModuleContainer ref={tileRef} elevation="high" className={styles.container}>
       <AccountGrowthOverTime dataset={dataset} containerMeasurement={tileMeasurement} />
     </ModuleContainer>
   );
