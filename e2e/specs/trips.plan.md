@@ -11,7 +11,7 @@ Linking an expense to a trip is done through the "Log expense" form on the Dashb
 Key constraints sourced from the code:
 - tripName: required, min 1 character, max 100 characters (validated both client-side via zod and server-side via the contract).
 - startDate / endDate: required; the date-picker enforces startDate <= endDate (maxDate on start picker = endDate; minDate on end picker = startDate).
-- amountSpent for discretionary transactions: safe integer (whole number), required.
+- amountSpent for discretionary transactions: positive number (decimals allowed), required.
 - The seeded "Test Trip" ran ~14–10 days ago, so it is NOT an active trip during any test run. To test the active-trip auto-selection behaviour a new trip spanning today must be created first.
 - After a trip is deleted, linked transactions are unlinked (their linkedTripId is set to null) but not deleted.
 

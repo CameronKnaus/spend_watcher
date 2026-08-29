@@ -136,8 +136,6 @@ export async function seedBaselineData(api: APIRequestContext): Promise<void> {
     annualPercentageRate: 0,
   });
 
-  // Amounts are whole numbers on purpose: the contract types discretionary `amountSpent` (and
-  // recurring `expectedMonthlyAmount`) as a safe integer, so a float like 24.5 fails validation.
   for (const transaction of seededDiscretionary()) {
     await post(api, '/api/spending/discretionary/add', {
       category: transaction.category,

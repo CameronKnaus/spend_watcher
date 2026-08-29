@@ -73,7 +73,6 @@ test.describe('Discretionary spending — input validation (400)', () => {
 
   const cases: { name: string; body: Record<string, unknown>; badPath: string }[] = [
     { name: 'unknown category', body: { ...base, category: 'NOT_A_CATEGORY' }, badPath: 'category' },
-    { name: 'non-integer amount', body: { ...base, amountSpent: 24.5 }, badPath: 'amountSpent' },
     { name: 'negative amount', body: { ...base, amountSpent: -5 }, badPath: 'amountSpent' },
     { name: 'note over 60 chars', body: { ...base, note: 'N'.repeat(61) }, badPath: 'note' },
     { name: 'malformed date', body: { ...base, spentDate: '07/01/2026' }, badPath: 'spentDate' },
@@ -92,6 +91,22 @@ test.describe('Discretionary spending — input validation (400)', () => {
   test('rejects deleting with a mismatched id prefix (Recurring- on a discretionary route)', async ({ api }) => {
     const res = await api.post('/api/spending/discretionary/delete', { data: { transactionId: 'Recurring-1' } });
     expect(res.status()).toBe(400);
+  });
+});
+
+test.describe('Discretionary spending — decimal amounts', () => {
+  test('accepts a decimal amount and reads it back exactly', async ({ api }) => {
+    await post(api, '/api/spending/discretionary/add', {
+      category: SpendingCategory.GROCERIES,
+      amountSpent: 24.55,
+      spentDate: range.startDate,
+      note: 'Decimal amount',
+    });
+
+    const details = await readDetails(api);
+    const transactionId = details.discretionaryTransactionIdList[0];
+    expect(details.transactionDictionary[transactionId]).toMatchObject({ amountSpent: 24.55 });
+    expect(details.summary.discretionaryTotals).toEqual({ amount: 24.55, count: 1 });
   });
 });
 
