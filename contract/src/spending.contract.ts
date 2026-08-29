@@ -81,7 +81,7 @@ export const yearlyAverageContract = oc.route({ method: 'GET', path: '/spending/
 // POST /spending/discretionary/add
 export const discretionaryInputSchema = z.object({
   category: zSpendingCategory,
-  amountSpent: z.number().safe().positive(),
+  amountSpent: z.number().positive(),
   spentDate: z.iso.date(),
   // The `note` DB column is varchar(60).
   note: z.string().trim().max(60),
@@ -113,7 +113,7 @@ export const recurringSpendInputSchema = z.object({
   category: zSpendingCategory,
   // The `spend_name` DB column is varchar(30).
   recurringSpendName: z.string().trim().min(1).max(30),
-  expectedMonthlyAmount: z.number().safe().positive(),
+  expectedMonthlyAmount: z.number().positive(),
   isVariableRecurring: z.boolean(),
 });
 
@@ -139,7 +139,7 @@ export const recurringSpendSetActiveContract = oc
 // POST /spending/recurring/transactions/add
 export const recurringTransactionAddInputSchema = z.object({
   recurringSpendId: z.uuid(),
-  amountSpent: z.number().safe().nonnegative(),
+  amountSpent: z.number().nonnegative(),
   date: zMonthYearDate,
 });
 
@@ -150,7 +150,7 @@ export const recurringTransactionAddContract = oc
 // POST /spending/recurring/transactions/edit
 export const recurringTransactionEditInputSchema = z.object({
   transactionId: zRecurringTransactionId,
-  amountSpent: z.number().safe().positive(),
+  amountSpent: z.number().positive(),
 });
 
 export const recurringTransactionEditContract = oc
