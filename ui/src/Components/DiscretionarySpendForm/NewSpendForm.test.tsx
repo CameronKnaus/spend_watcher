@@ -124,6 +124,17 @@ describe('NewSpendForm submission', () => {
       note: 'Lunch out',
     });
   });
+
+  it('accepts amounts with decimals', async () => {
+    const { user, onSubmit, adds } = renderForm();
+
+    await user.type(screen.getByPlaceholderText('$0.00'), '12.34');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(adds).toHaveLength(1);
+    expect(adds[0].body).toMatchObject({ amountSpent: 12.34 });
+  });
 });
 
 describe('NewSpendForm active trip', () => {
