@@ -98,13 +98,13 @@ test.describe('Recurring spending — CRUD round-trip', () => {
     const spendId = await addAndFindId(api, {
       category: SpendingCategory.UTILITIES,
       recurringSpendName: 'Electric',
-      expectedMonthlyAmount: 100,
+      expectedMonthlyAmount: 100.5,
       isVariableRecurring: true,
     });
 
     await post(api, '/api/spending/recurring/transactions/add', {
       recurringSpendId: spendId,
-      amountSpent: 120,
+      amountSpent: 120.37,
       date: previousMonth,
     });
 
@@ -112,16 +112,16 @@ test.describe('Recurring spending — CRUD round-trip', () => {
       recurringSpendId: spendId,
     });
     const prior = list.transactions.find((t) => t.date === previousMonth);
-    expect(prior?.amountSpent).toBe(120);
+    expect(prior?.amountSpent).toBe(120.37);
 
     await post(api, '/api/spending/recurring/transactions/edit', {
       transactionId: prior!.transactionId,
-      amountSpent: 95,
+      amountSpent: 95.08,
     });
     list = await getJson<RecurringTransactionsListResponse>(api, '/api/spending/recurring/transactions', {
       recurringSpendId: spendId,
     });
-    expect(list.transactions.find((t) => t.transactionId === prior!.transactionId)?.amountSpent).toBe(95);
+    expect(list.transactions.find((t) => t.transactionId === prior!.transactionId)?.amountSpent).toBe(95.08);
   });
 });
 

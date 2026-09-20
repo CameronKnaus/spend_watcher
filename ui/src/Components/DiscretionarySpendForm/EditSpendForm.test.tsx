@@ -88,6 +88,19 @@ describe('EditSpendForm submission', () => {
       note: 'Lunch',
     });
   });
+
+  it('accepts an amount with cents', async () => {
+    const { user, onSubmit, edits } = renderForm({ ...LUNCH_TRANSACTION, amountSpent: 25.5 });
+
+    const amountInput = screen.getByPlaceholderText('$0.00');
+    await user.clear(amountInput);
+    await user.type(amountInput, '35.49');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(edits).toHaveLength(1);
+    expect(edits[0].body).toMatchObject({ transactionId: 'Discretionary-17', amountSpent: 35.49 });
+  });
 });
 
 describe('EditSpendForm delete', () => {
