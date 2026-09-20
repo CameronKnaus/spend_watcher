@@ -18,7 +18,7 @@ test.describe('Discretionary spending — CRUD round-trip', () => {
   test('add → read → edit → read → delete → gone', async ({ api }) => {
     const add: DiscretionaryAdd = {
       category: SpendingCategory.GROCERIES,
-      amountSpent: 86,
+      amountSpent: 86.42,
       spentDate: range.startDate,
       note: 'Weekly groceries',
     };
@@ -31,17 +31,17 @@ test.describe('Discretionary spending — CRUD round-trip', () => {
     const transactionId = details.discretionaryTransactionIdList[0];
     expect(details.transactionDictionary[transactionId]).toMatchObject({
       category: 'GROCERIES',
-      amountSpent: 86,
+      amountSpent: 86.42,
       note: 'Weekly groceries',
       isRecurring: false,
     });
-    expect(details.summary.discretionaryTotals).toEqual({ amount: 86, count: 1 });
+    expect(details.summary.discretionaryTotals).toEqual({ amount: 86.42, count: 1 });
 
     // Edit the same transaction and confirm the read reflects every changed field.
     const edit: AppInputs['spending']['discretionaryEdit'] = {
       transactionId,
       category: SpendingCategory.RESTAURANTS,
-      amountSpent: 40,
+      amountSpent: 40.15,
       spentDate: range.startDate,
       note: 'Dinner',
     };
@@ -50,10 +50,10 @@ test.describe('Discretionary spending — CRUD round-trip', () => {
     details = await readDetails(api);
     expect(details.transactionDictionary[transactionId]).toMatchObject({
       category: 'RESTAURANTS',
-      amountSpent: 40,
+      amountSpent: 40.15,
       note: 'Dinner',
     });
-    expect(details.summary.discretionaryTotals).toEqual({ amount: 40, count: 1 });
+    expect(details.summary.discretionaryTotals).toEqual({ amount: 40.15, count: 1 });
 
     // Delete and confirm it's gone from the read.
     await post(api, '/api/spending/discretionary/delete', { transactionId });
