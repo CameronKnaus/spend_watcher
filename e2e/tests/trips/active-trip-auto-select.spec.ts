@@ -13,8 +13,8 @@ test.describe('Active Trip Auto-Selection', () => {
     await expect(page.getByRole('heading', { name: 'New trip', level: 2 })).toBeVisible();
 
     // 2. Type the trip name.
-    await page.getByRole('textbox', { name: 'Europe summer trip' }).fill('Active Trip');
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue('Active Trip');
+    await page.getByLabel('Trip name').fill('Active Trip');
+    await expect(page.getByLabel('Trip name')).toHaveValue('Active Trip');
 
     // 3. Leave 'Start date' as today (the form defaults to today).
     // 4. Set the 'End date' picker to tomorrow so the trip spans today and is active.

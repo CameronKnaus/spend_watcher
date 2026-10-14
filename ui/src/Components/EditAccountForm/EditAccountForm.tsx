@@ -7,6 +7,7 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useAccountCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useAccountCategoryList/useAccountCategoryList';
 import PercentageInput from 'Components/FormInputs/PercentageInput/PercentageInput';
 import createContentGetter from 'Content/createContentGetter';
+import { useId } from 'react';
 import { useForm } from 'react-hook-form';
 import { AccountCategory, accountEditInputSchema, AccountWithStatus, AppInputs } from '@spend-watcher/contract';
 import styles from './EditAccountForm.module.css';
@@ -23,6 +24,11 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
   const queryClient = useQueryClient();
   const accountCategoryList = useAccountCategoryList();
   const getContent = createContentGetter('accounts');
+  const id = useId();
+  const nameId = `${id}-accountName`;
+  const categoryId = `${id}-accountCategory`;
+  const rateId = `${id}-annualPercentageRate`;
+  const fixedRateId = `${id}-isFixedRate`;
 
   const editAccountService = useMutation(orpc.accounts.edit.mutationOptions());
 
@@ -53,23 +59,26 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
   return (
     <>
       <form className={styles.form} onSubmit={form.handleSubmit(handleSubmission)}>
-        <label>{getContent('accountNameLabel')}</label>
+        <label htmlFor={nameId}>{getContent('accountNameLabel')}</label>
         <input
+          id={nameId}
           className={styles.textInput}
           placeholder={getContent('accountNamePlaceholder')}
           autoComplete="off"
           {...form.register('accountName', { maxLength: 50, required: true })}
         />
-        <label>{getContent('accountTypeLabel')}</label>
+        <label htmlFor={categoryId}>{getContent('accountTypeLabel')}</label>
         <FilterableSelect
+          id={categoryId}
           control={form.control}
           name="accountCategory"
           className={styles.textInput}
           defaultValue={AccountCategory.CHECKING}
           optionsList={accountCategoryList}
         />
-        <label>{getContent('annualGrowthRateLabel')}</label>
+        <label htmlFor={rateId}>{getContent('annualGrowthRateLabel')}</label>
         <PercentageInput
+          id={rateId}
           control={form.control}
           trigger={form.trigger}
           name="annualPercentageRate"
@@ -77,8 +86,9 @@ export default function EditAccountForm({ onSubmit, onCancel, accountToEdit }: E
           className={styles.textInput}
         />
         <div className={styles.checkInputContainer}>
-          <label aria-hidden>{getContent('fixedRateLabel')}</label>
+          <label htmlFor={fixedRateId}>{getContent('fixedRateLabel')}</label>
           <input
+            id={fixedRateId}
             className={styles.checkBox}
             type="checkbox"
             {...form.register('isFixedRate')}

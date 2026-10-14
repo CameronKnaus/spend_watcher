@@ -16,10 +16,10 @@ test.describe('Edit Trip — Happy Path', () => {
     await expect(page.getByRole('heading', { name: 'Edit trip details' })).toBeVisible();
 
     // The Trip name input is pre-populated with 'Test Trip'
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue('Test Trip');
+    await expect(page.getByLabel('Trip name')).toHaveValue('Test Trip');
 
     // The start and end date pickers are pre-populated with the trip's existing dates.
-    // datePickerInputs() matches on both desktop ("MMMM DD, YYYY") and mobile ("Choose date…").
+    // datePickerInputs() matches both platform variants.
     const allDateInputs = datePickerInputs(page);
     await expect(allDateInputs.first()).not.toHaveValue('');
     await expect(allDateInputs.last()).not.toHaveValue('');
@@ -28,8 +28,8 @@ test.describe('Edit Trip — Happy Path', () => {
     await expect(page.getByRole('button', { name: 'Permanently delete this trip' })).toBeVisible();
 
     // 3. Clear the 'Trip name' input and type 'Edited Trip Name'.
-    await page.getByRole('textbox', { name: 'Europe summer trip' }).fill('Edited Trip Name');
-    await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue('Edited Trip Name');
+    await page.getByLabel('Trip name').fill('Edited Trip Name');
+    await expect(page.getByLabel('Trip name')).toHaveValue('Edited Trip Name');
 
     // 4. Click 'Submit'.
     await page.getByRole('button', { name: 'Submit' }).click();

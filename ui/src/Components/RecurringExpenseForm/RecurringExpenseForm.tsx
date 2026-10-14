@@ -7,7 +7,7 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   AppInputs,
@@ -30,6 +30,11 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
   const getGeneralContent = createContentGetter('general');
   const spendingCategoryList = useSpendCategoryList();
   const queryClient = useQueryClient();
+  const id = useId();
+  const nameId = `${id}-recurringSpendName`;
+  const categoryId = `${id}-category`;
+  const variableId = `${id}-isVariableRecurring`;
+  const amountId = `${id}-expectedMonthlyAmount`;
 
   const form = useForm<AddRecurringSpendRequestParams>({
     resolver: zodResolver(recurringSpendInputSchema),
@@ -90,8 +95,9 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
     <>
       <form className={styles.newRecurringSpendForm} onSubmit={form.handleSubmit(handleSubmit)}>
         {/* Expense name */}
-        <label>{getContent('recurringSpendName')}</label>
+        <label htmlFor={nameId}>{getContent('recurringSpendName')}</label>
         <input
+          id={nameId}
           className={styles.textInput}
           placeholder={getContent('newSpendNamePlaceholder')}
           autoComplete="off"
@@ -99,8 +105,9 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
         />
 
         {/* Spend category */}
-        <label>{getContent('categoryLabel')}</label>
+        <label htmlFor={categoryId}>{getContent('categoryLabel')}</label>
         <FilterableSelect
+          id={categoryId}
           control={form.control}
           name="category"
           className={styles.textInput}
@@ -112,21 +119,26 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
         {/* TODO: Fix this so the touching anywhere on container updates checked status AND validates */}
         <div className={styles.checkInputContainer}>
           <input
+            id={variableId}
             className={styles.checkBox}
             type="checkbox"
             aria-label={`${getContent('variableExpenseLabel')}. ${getContent('variableExpenseDescription')}`}
             {...form.register('isVariableRecurring')}
             onClick={(e) => e.stopPropagation()}
           />
-          <label aria-hidden>{getContent('variableExpenseLabel')}</label>
+          {/* aria-hidden: the input's aria-label already covers this text plus the description below it */}
+          <label htmlFor={variableId} aria-hidden>
+            {getContent('variableExpenseLabel')}
+          </label>
           <span className={styles.varyingDescription}>{getContent('variableExpenseDescription')}</span>
         </div>
 
         {/* Monthly amount */}
-        <label>
+        <label htmlFor={amountId}>
           {getContent(form.watch('isVariableRecurring') ? 'monthlyAmountVariesLabel' : 'monthlyAmountLabel')}
         </label>
         <MoneyInput
+          id={amountId}
           isRequired
           control={form.control}
           trigger={form.trigger}

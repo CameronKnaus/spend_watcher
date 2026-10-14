@@ -121,3 +121,12 @@ describe('RecurringExpenseForm edit mode', () => {
     });
   });
 });
+
+describe('RecurringExpenseForm label association', () => {
+  it('associates the name and category labels with their inputs via htmlFor/id', () => {
+    renderForm();
+
+    expect(screen.getByLabelText('Expense name')).toBe(screen.getByPlaceholderText('Rent payment'));
+    expect(screen.getByLabelText('Category')).toBeInstanceOf(HTMLInputElement);
+  });
+});

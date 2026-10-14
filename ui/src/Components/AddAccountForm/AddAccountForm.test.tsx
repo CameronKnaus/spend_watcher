@@ -18,6 +18,14 @@ describe('AddAccountForm defaults', () => {
     expect(screen.getByDisplayValue('Checking')).toBeInTheDocument();
     expect(screen.getByRole('checkbox')).toBeChecked();
   });
+
+  it('associates the name, category, and fixed-rate labels with their inputs via htmlFor/id', () => {
+    renderForm();
+
+    expect(screen.getByLabelText('Account name')).toBe(screen.getByPlaceholderText('Account name'));
+    expect(screen.getByLabelText('Account type')).toBeInstanceOf(HTMLInputElement);
+    expect(screen.getByLabelText('This growth rate is fixed')).toBe(screen.getByRole('checkbox'));
+  });
 });
 
 describe('AddAccountForm cancel', () => {
