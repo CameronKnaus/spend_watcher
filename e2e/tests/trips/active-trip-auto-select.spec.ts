@@ -43,7 +43,7 @@ test.describe('Active Trip Auto-Selection', () => {
     ).toBeVisible();
 
     // 8. Verify the 'Linked Trip' field is pre-populated with the active trip name.
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Active Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Active Trip');
 
     // 9. Click 'Cancel' to dismiss without submitting.
     await page.getByRole('button', { name: 'Cancel' }).click();

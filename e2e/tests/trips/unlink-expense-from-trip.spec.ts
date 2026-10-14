@@ -16,9 +16,9 @@ test.describe('Linking an Expense to a Trip', () => {
 
     await page.getByRole('textbox', { name: 'About your expense' }).fill('Souvenir');
 
-    await page.getByRole('textbox', { name: '--' }).click();
+    await page.getByRole('combobox', { name: '--' }).click();
     await page.getByRole('dialog').getByText('Test Trip').click();
-    await expect(page.getByRole('textbox', { name: '--' })).toHaveValue('Test Trip');
+    await expect(page.getByRole('combobox', { name: '--' })).toHaveValue('Test Trip');
 
     await page.getByRole('button', { name: 'Submit' }).click();
     await expect(page.getByRole('heading', { name: 'New expense', level: 2 })).not.toBeVisible();
