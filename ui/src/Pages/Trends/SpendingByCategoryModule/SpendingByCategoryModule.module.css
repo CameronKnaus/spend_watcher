@@ -86,8 +86,3 @@
   height: 36px;
   margin-bottom: 8px;
 }
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}

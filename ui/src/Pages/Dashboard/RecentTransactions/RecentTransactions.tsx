@@ -1,6 +1,8 @@
 import Currency from 'Components/Currency/Currency';
 import DiscretionarySpendPanel from 'Components/DiscretionarySpendForm/DiscretionarySpendPanel';
+import LoadingInteractiveRow from 'Components/InteractiveRow/LoadingInteractiveRow';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import TransactionRow from 'Components/TransactionRow/TransactionRow';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
@@ -10,6 +12,9 @@ import { DbDate } from 'Types/dateTypes';
 import { DiscretionarySpendTransaction, TransactionsByDate } from '@spend-watcher/contract';
 import { isDiscretionaryTransactionId } from 'Util/SpendTransactionUtils/narrowIdType';
 import styles from './RecentTransactions.module.css';
+
+// Static keys for the fixed-size loading placeholder list (it never reorders).
+const SKELETON_KEYS = Array.from({ length: 5 }, (_, i) => `recent-transactions-skeleton-${i}`);
 
 export default function RecentTransactions() {
   const getContent = createContentGetter('transactions');
@@ -57,8 +62,13 @@ export default function RecentTransactions() {
   }, [spendingData]);
 
   if (!spendingData) {
-    // TODO: Add a skeleton loader here
-    return <h2>Placeholder loading</h2>;
+    return (
+      <ModuleContainer heading={getContent('recent')} elevation="low">
+        {SKELETON_KEYS.map((key) => (
+          <LoadingInteractiveRow key={key} />
+        ))}
+      </ModuleContainer>
+    );
   }
 
   const noTransactions = Object.keys(applicableTransactionsByDate).length === 0;
@@ -68,7 +78,7 @@ export default function RecentTransactions() {
       <ModuleContainer heading={getContent('recent')} elevation="low">
         {/* Loop through each date group */}
         {noTransactions ? (
-          <div className={styles.noTransactions}>{getContent('noRecentTransactions')}</div>
+          <EmptyState message={getContent('noRecentTransactions')} />
         ) : (
           Object.entries(applicableTransactionsByDate).map(([dateString, dateSpendSummary]) => {
             const date = parseISO(dateString);

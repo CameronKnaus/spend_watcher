@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
 import { accountsSummaryQueryOptions } from 'queryOptions/accountsSummaryQueryOptions';
@@ -73,7 +74,7 @@ export default function NetWorthSummaryTile() {
           </div>
         </>
       ) : (
-        <div className={styles.emptyMessage}>{getContent('netWorthAllocationEmpty')}</div>
+        <EmptyState message={getContent('netWorthAllocationEmpty')} />
       )}
     </ModuleContainer>
   );

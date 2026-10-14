@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
 import createContentGetter from 'Content/createContentGetter';
 import { format } from 'date-fns';
@@ -41,7 +42,7 @@ export default function MonthsInsightTile() {
     return (
       <ModuleContainer className={styles.tile} elevation="low">
         <div className={styles.label}>{getContent('monthsInsightLabel')}</div>
-        <div className={styles.emptyMessage}>{getContent('monthsInsightEmpty')}</div>
+        <EmptyState message={getContent('monthsInsightEmpty')} />
       </ModuleContainer>
     );
   }

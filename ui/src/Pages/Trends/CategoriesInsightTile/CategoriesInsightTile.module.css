@@ -26,8 +26,3 @@
   gap: 8px;
   margin-top: auto;
 }
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}

@@ -3,6 +3,7 @@ import { clsx } from 'clsx';
 import Sparkline from 'Components/charts/Sparkline/Sparkline';
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import { spendCategoryColorMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
@@ -111,7 +112,7 @@ export default function CategoryLedgerTile() {
   if (!firstRow) {
     return (
       <ModuleContainer heading={getContent('categoryLedgerHeading')} className={styles.module} elevation="medium">
-        <div className={styles.emptyMessage}>{getContent('categoryLedgerEmpty')}</div>
+        <EmptyState message={getContent('categoryLedgerEmpty')} />
       </ModuleContainer>
     );
   }
@@ -226,7 +227,7 @@ export default function CategoryLedgerTile() {
               <span className={styles.historyHint}>{getContent('newestFirst')}</span>
             </div>
             {transactions.length === 0 ? (
-              <div className={styles.noTransactions}>{getContent('noTransactionsForMonth')}</div>
+              <EmptyState message={getContent('noTransactionsForMonth')} />
             ) : (
               transactions.map((transaction) => (
                 <div key={transaction.transactionId} className={styles.transactionRow}>

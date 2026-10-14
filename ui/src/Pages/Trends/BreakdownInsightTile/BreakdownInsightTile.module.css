@@ -32,8 +32,3 @@
 .remainderSegment {
   background: var(--theme-color-neutral-300);
 }
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}

@@ -217,12 +217,6 @@
   color: var(--token-color-text-standard);
 }
 
-.noTransactions {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-  padding: 8px 0;
-}
-
 .comparisonList {
   display: flex;
   flex-direction: column;
@@ -275,9 +269,4 @@
   font-size: var(--font-body-small);
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
-}
-
-.emptyMessage {
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
 }

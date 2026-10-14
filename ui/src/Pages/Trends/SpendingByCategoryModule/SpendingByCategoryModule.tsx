@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import Sparkline from 'Components/charts/Sparkline/Sparkline';
 import Currency from 'Components/Currency/Currency';
 import ModuleContainer from 'Components/ModuleContainer/ModuleContainer';
+import EmptyState from 'Components/Shared/EmptyState/EmptyState';
 import { spendCategoryColorMapper } from 'Components/Shared/Icons/spendCategoryIconMapper';
 import SpendingCategoryIcon from 'Components/Shared/Icons/SpendingCategoryIcon';
 import SkeletonLoader from 'Components/Shared/SkeletonLoader/SkeletonLoader';
@@ -73,7 +74,7 @@ export default function SpendingByCategoryModule() {
   if (sortedList.length === 0) {
     return (
       <ModuleContainer heading={getContent('spendingByCategory')} className={styles.module} elevation="medium">
-        <div className={styles.emptyMessage}>{getContent('spendingByCategoryEmpty')}</div>
+        <EmptyState message={getContent('spendingByCategoryEmpty')} />
       </ModuleContainer>
     );
   }

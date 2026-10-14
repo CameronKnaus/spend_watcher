@@ -52,9 +52,3 @@
   border-radius: 999px;
   flex-shrink: 0;
 }
-
-.emptyMessage {
-  margin-top: 12px;
-  font-size: var(--font-body-medium);
-  color: var(--token-color-text-subdued);
-}
