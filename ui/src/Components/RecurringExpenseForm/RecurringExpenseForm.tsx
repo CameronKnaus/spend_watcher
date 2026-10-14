@@ -7,7 +7,6 @@ import FilterableSelect from 'Components/FormInputs/FilterableSelect/FilterableS
 import useSpendCategoryList from 'Components/FormInputs/FilterableSelect/presetLists/useSpendCategoryList/useSpendCategoryList';
 import MoneyInput from 'Components/FormInputs/MoneyInput/MoneyInput';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   AppInputs,
@@ -38,6 +37,7 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
       isVariableRecurring: false,
       category: SpendingCategory.OTHER,
     },
+    values: expenseToEdit,
   });
 
   function invalidateRecurring() {
@@ -61,10 +61,6 @@ export default function RecurringExpenseForm({ onCancel, onSubmit, expenseToEdit
       },
     }),
   );
-
-  useEffect(() => {
-    form.reset(expenseToEdit);
-  }, [expenseToEdit, form]);
 
   function handleCancel() {
     form.reset();

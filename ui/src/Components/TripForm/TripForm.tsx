@@ -7,7 +7,7 @@ import DeleteButton from 'Components/DeleteButton/DeleteButton';
 import DatePicker from 'Components/FormInputs/DatePickerController/DatePickerController';
 import { format } from 'date-fns';
 import createContentGetter from 'Content/createContentGetter';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { dbDateFormat } from 'Types/dateTypes';
 import { AppInputs, Trip, tripInputSchema } from '@spend-watcher/contract';
@@ -56,11 +56,8 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
       startDate: defaultStartDate,
       endDate: defaultStartDate,
     },
+    values: tripToEdit,
   });
-
-  useEffect(() => {
-    form.reset(tripToEdit);
-  }, [tripToEdit, form]);
 
   function handleCancel() {
     form.reset();
