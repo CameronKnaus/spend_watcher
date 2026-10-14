@@ -9,7 +9,7 @@ import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetai
 import { spendingPaceQueryOptions } from 'queryOptions/spendingPaceQueryOptions';
 import { useState } from 'react';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
-import { dbDateFormat } from 'Types/dateTypes';
+import { formatDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import styles from './DiscretionaryTotalTile.module.css';
 
 export default function DiscretionaryTotalTile() {
@@ -20,7 +20,7 @@ export default function DiscretionaryTotalTile() {
 
   const [now] = useState(() => new Date());
   const { data: paceData } = useQuery({
-    ...spendingPaceQueryOptions({ targetDate: format(now, dbDateFormat) }),
+    ...spendingPaceQueryOptions({ targetDate: formatDbDate(now) }),
     enabled: isAuthenticated,
   });
 

@@ -9,7 +9,7 @@ import useSpendingDetailsService from 'Hooks/useSpendingService/useSpendingDetai
 import { spendingPaceQueryOptions } from 'queryOptions/spendingPaceQueryOptions';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import { useState } from 'react';
-import { dbDateFormat } from 'Types/dateTypes';
+import { formatDbDate } from 'Util/Formatters/dateFormatters/dateFormatters';
 import formatCurrency from 'Util/Formatters/formatCurrency/formatCurrency';
 import { useIsMobile } from 'Util/IsMobileContext';
 import DailySpendBars from './DailySpendBars';
@@ -26,7 +26,7 @@ export default function TotalSpentHero() {
   // progress and projection math can key off a mount-time snapshot of "now".
   const [now] = useState(() => new Date());
   const { data: paceData } = useQuery({
-    ...spendingPaceQueryOptions({ targetDate: format(now, dbDateFormat) }),
+    ...spendingPaceQueryOptions({ targetDate: formatDbDate(now) }),
     enabled: isAuthenticated,
   });
 
