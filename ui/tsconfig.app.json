@@ -9,16 +9,8 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "@msw/*": ["../msw/*"],
-      "@type/*": ["src/Types/*"],
-      "@components/*": ["src/Components/*"],
-      "@pages/*": ["src/Pages/*"],
-      "@utils/*": ["src/Util/*"],
-      "@hooks/*": ["src/Hooks/*"],
-      "@constants/*": ["src/Constants/*"],
-      "@content/*": ["src/Content/*"]
+      "@msw/*": ["../msw/*"]
     },
-    "allowJs": true,
     "noEmit": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
@@ -27,6 +19,5 @@
     "noUnusedParameters": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["./src", "./custom.d.ts"],
-  "exclude": ["./src/Legacy"]
+  "include": ["./src", "./custom.d.ts"]
 }
