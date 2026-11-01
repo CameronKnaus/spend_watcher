@@ -2,8 +2,8 @@
 // seed: tests/seed.spec.ts
 
 import { test, expect } from '../../src/fixtures';
-import { subDays } from 'date-fns';
 import { datePickerInputs, selectDate } from '../../src/datePicker';
+import { daysAgoInCurrentMonth } from '../../src/seed';
 
 test.describe('Log Discretionary Spend — Happy Path', () => {
   test('Log a new expense with all optional fields filled', async ({ page }) => {
@@ -40,9 +40,11 @@ test.describe('Log Discretionary Spend — Happy Path', () => {
 
     // 7. Click the Date of Expense date picker and select a date from 2 days ago.
     // Uses the cross-platform helper so it works on both desktop (fill) and mobile (dialog).
-    const twoDaysAgo = subDays(new Date(), 2);
+    // Stays in the current month because the dashboard list checked below only shows this month;
+    // a plain "2 days ago" lands in the previous month on the 1st and 2nd.
+    const expenseDate = daysAgoInCurrentMonth(2);
     const dateInput = datePickerInputs(page).first();
-    await selectDate(page, dateInput, twoDaysAgo);
+    await selectDate(page, dateInput, expenseDate);
     await expect(dateInput).not.toHaveValue('');
 
     // 8. Open the 'Linked Trip' select and choose 'Test Trip'
