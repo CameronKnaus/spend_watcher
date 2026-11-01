@@ -10,7 +10,7 @@ Linking an expense to a trip is done through the "Log expense" form on the Dashb
 
 Key constraints sourced from the code:
 - tripName: required, min 1 character, max 100 characters (validated both client-side via zod and server-side via the contract).
-- startDate / endDate: required; the date-picker enforces startDate <= endDate (maxDate on start picker = endDate; minDate on end picker = startDate).
+- startDate / endDate: required; startDate <= endDate. The end picker's calendar won't offer days before startDate (minDate). The start picker has no upper limit: picking a later date in its calendar moves endDate to match, and a typed date past endDate blocks Submit until endDate is fixed.
 - amountSpent for discretionary transactions: positive number (decimals allowed), required.
 - The seeded "Test Trip" ran ~14–10 days ago, so it is NOT an active trip during any test run. To test the active-trip auto-selection behaviour a new trip spanning today must be created first.
 - After a trip is deleted, linked transactions are unlinked (their linkedTripId is set to null) but not deleted.
@@ -156,8 +156,9 @@ Key constraints sourced from the code:
   5. Set the 'End date' to August 15, 2026 (same as start date) to confirm the minimum allowed value.
     - expect: End date accepts August 15, 2026.
     - expect: The 'Submit' button is enabled.
-  6. Attempt to set the 'Start date' picker to August 20, 2026 (after the current end date of August 15, 2026).
-    - expect: The start-date picker does not allow selecting August 20 because maxDate is set to the current endDate value.
+  6. Pick August 20, 2026 in the 'Start date' calendar (after the current end date of August 15, 2026).
+    - expect: Start date shows August 20, 2026 and End date moves to August 20, 2026.
+    - expect: The 'Submit' button is enabled.
 
 ### 4. Trip Details Panel
 
@@ -215,6 +216,19 @@ Key constraints sourced from the code:
     - expect: The panel title now reads 'Edited Trip Name'.
   5. Click 'Close' to dismiss the panel.
     - expect: On the trips list, the card formerly labeled 'Test Trip' now shows 'Edited Trip Name'.
+
+#### 5.1a. Move a past trip to later dates by changing the start date first
+
+**File:** `tests/trips/edit-trip-happy-path.spec.ts`
+
+**Steps:**
+  1. Navigate to /trips, open 'Test Trip' details, and click 'Edit trip details'.
+    - expect: The 'Start date' and 'End date' pickers show the seeded trip's dates, both in the past.
+  2. Set the 'Start date' picker to the 1st of next month.
+    - expect: The picker allows the date even though it is after the current end date.
+  3. Set the 'End date' picker to the 5th of next month.
+  4. Click 'Submit', then reload the page.
+    - expect: The 'Test Trip' card shows the new date range.
 
 #### 5.2. Cancel in edit mode returns to the trip details base state without saving
 

@@ -13,7 +13,7 @@ type DatePickerControllerPropTypes<T extends FieldValues> = {
   isRequired?: boolean;
 } & DatePickerWithoutEssentialAttributes;
 
-// This is a wrapper to use MUI-DatePicker with react-hook-form. All props from DatePicker are passed through except onChange, onAccept, and value
+// This is a wrapper to use MUI-DatePicker with react-hook-form. All props from DatePicker are passed through except onChange, which feeds the form
 export default function DatePickerController<T extends FieldValues>({
   control,
   name,

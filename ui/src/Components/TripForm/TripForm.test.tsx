@@ -35,7 +35,31 @@ function renderEditForm() {
   return { ...utils, onSubmit, onCancel, onDelete, edits, deletes };
 }
 
+async function pickCalendarDay(
+  user: ReturnType<typeof renderWithProviders>['user'],
+  pickerIndex: number,
+  day: string,
+  closeWith: 'OK' | 'Cancel' = 'OK',
+) {
+  await user.click(screen.getAllByRole('textbox', { name: /Choose date/ })[pickerIndex]);
+  const dialog = await screen.findByRole('dialog');
+  await user.click(within(dialog).getByRole('gridcell', { name: day }));
+  await user.click(within(dialog).getByRole('button', { name: closeWith }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+}
+
 describe('TripForm add mode', () => {
+  it('lets a new trip start in the future without touching the end date first', async () => {
+    const { user, adds } = renderAddForm();
+
+    await user.type(screen.getByPlaceholderText('Europe summer trip'), 'Planned Trip');
+    await pickCalendarDay(user, 0, '20');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(adds).toHaveLength(1));
+    expect(adds[0].body).toMatchObject({ startDate: '2026-06-20', endDate: '2026-06-20' });
+  });
+
   it('fires onCancel without sending any request', async () => {
     const { user, onCancel, adds } = renderAddForm();
 
@@ -115,6 +139,67 @@ describe('TripForm edit mode', () => {
       startDate: '2026-06-01',
       endDate: '2026-06-05',
     });
+  });
+
+  it('lets the start date go past the current end date, into later months too', async () => {
+    const { user } = renderEditForm();
+
+    await user.click(screen.getAllByRole('textbox', { name: /Choose date/ })[0]);
+    const dialog = await screen.findByRole('dialog');
+
+    expect(within(dialog).getByRole('gridcell', { name: '20' })).toBeEnabled();
+    expect(within(dialog).getByRole('button', { name: 'Next month' })).toBeEnabled();
+  });
+
+  it('carries the end date along when the start date moves past it', async () => {
+    const { user, edits } = renderEditForm();
+
+    await pickCalendarDay(user, 0, '20');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(edits).toHaveLength(1));
+    expect(edits[0].body).toMatchObject({ startDate: '2026-06-20', endDate: '2026-06-20' });
+  });
+
+  it('leaves the end date alone when the start date stays on or before it', async () => {
+    const { user, edits } = renderEditForm();
+
+    await pickCalendarDay(user, 0, '3');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(edits).toHaveLength(1));
+    expect(edits[0].body).toMatchObject({ startDate: '2026-06-03', endDate: '2026-06-05' });
+  });
+
+  it('leaves both dates alone when the calendar is cancelled', async () => {
+    const { user, edits } = renderEditForm();
+
+    await pickCalendarDay(user, 0, '20', 'Cancel');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(edits).toHaveLength(1));
+    expect(edits[0].body).toMatchObject({ startDate: '2026-06-01', endDate: '2026-06-05' });
+  });
+
+  it('blocks submit while the end date is before the start date', async () => {
+    const onSubmit = vi.fn();
+    const edits = captureRequests('/api/trips/edit');
+    const { user } = renderWithProviders(
+      <TripForm
+        tripToEdit={{ ...TEST_TRIP, startDate: '2026-06-05', endDate: '2026-06-01' }}
+        onSubmit={onSubmit}
+        onCancel={vi.fn()}
+        onDelete={vi.fn()}
+      />,
+    );
+
+    // Typing settles the form's validity, so Submit can't be inert merely because validation is still pending.
+    await user.type(screen.getByPlaceholderText('Europe summer trip'), ' renamed');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeDisabled();
+    expect(edits).toHaveLength(0);
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   it('shows the delete action only in edit mode and hands off to onDelete without a request', async () => {
