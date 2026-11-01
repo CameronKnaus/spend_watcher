@@ -35,11 +35,10 @@ test.describe('Add Trip — Happy Path', () => {
     await page.getByRole('textbox', { name: 'Europe summer trip' }).fill('Summer Vacation');
     await expect(page.getByRole('textbox', { name: 'Europe summer trip' })).toHaveValue('Summer Vacation');
 
-    // 4. Set the END date first, then the start date. Order matters on mobile: the start picker's
-    // maxDate is the current end date (which defaults to today), so its "Next month" button is
-    // disabled until the end date has been pushed into the future.
-    await selectDate(page, allDateInputs.last(), endDate);
+    // 4. Set the start date first. It's later than the default end date (today), so on mobile the
+    // calendar carries the end date along and the end picker then opens on the start date's month.
     await selectDate(page, allDateInputs.first(), startDate);
+    await selectDate(page, allDateInputs.last(), endDate, startDate);
     await expect(page.getByRole('button', { name: 'Submit' })).toBeEnabled();
 
     // 5. Click the 'Submit' button.

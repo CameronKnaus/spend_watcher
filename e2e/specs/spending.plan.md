@@ -159,7 +159,7 @@ SpendWatcher is a personal spending and savings tracker built as a React SPA bac
 6. Click the Notes field and type 'Trader Joes run'
    - expect: The notes field contains 'Trader Joes run'
 
-7. Click the Date of Expense date picker and select a date from 2 days ago
+7. Click the Date of Expense date picker and select a date from 2 days ago, or the 1st of the month if that is later (the list checked below only shows the current month)
    - expect: The date field shows the selected past date
 
 8. Open the 'Linked Trip' select and choose 'Test Trip'
@@ -169,7 +169,7 @@ SpendWatcher is a personal spending and savings tracker built as a React SPA bac
    - expect: The panel closes; no error is shown
 
 10. Check the 'Recent transactions' list on the dashboard
-    - expect: A new Groceries transaction for -$42.00 appears, grouped under the date 2 days ago with note 'Trader Joes run' visible
+    - expect: A new Groceries transaction for -$42.00 appears, grouped under the selected date with note 'Trader Joes run' visible
 
 #### 2.2. Log a new expense with only required fields
 

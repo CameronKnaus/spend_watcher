@@ -16,6 +16,12 @@ import styles from './TripForm.module.css';
 
 type AddTripRequestParams = AppInputs['trips']['add'];
 
+// The pickers only limit what the calendar offers, so a typed date can still land on the wrong side
+// of the other one. 'yyyy-MM-dd' strings sort chronologically, so they compare without parsing.
+const tripFormSchema = tripInputSchema.refine(({ startDate, endDate }) => startDate <= endDate, {
+  path: ['endDate'],
+});
+
 type NewTripForm = {
   onSubmit: () => void;
   onCancel: () => void;
@@ -49,7 +55,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
 
   const [defaultStartDate] = useState(() => format(new Date(), dbDateFormat));
   const form = useForm<AddTripRequestParams>({
-    resolver: zodResolver(tripInputSchema),
+    resolver: zodResolver(tripFormSchema),
     mode: 'onChange', // Least performant but not a concern here
     defaultValues: {
       tripName: '',
@@ -76,8 +82,16 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
     onSubmit();
   }
 
+  // Runs on accept rather than on every change: a date tapped and then cancelled in the mobile
+  // calendar shouldn't leave the end date moved.
+  function carryEndDateToStartDate() {
+    const { startDate, endDate } = form.getValues();
+    if (startDate > endDate) {
+      form.setValue('endDate', startDate, { shouldValidate: true });
+    }
+  }
+
   const startDate = getDateFromDBDateString(form.watch('startDate'));
-  const endDate = getDateFromDBDateString(form.watch('endDate'));
 
   return (
     <>
@@ -96,7 +110,7 @@ export default function TripForm({ onSubmit, onCancel, onDelete, tripToEdit }: T
           name="startDate"
           views={['year', 'month', 'day']}
           format="MMMM do, yyyy"
-          maxDate={endDate}
+          onAccept={carryEndDateToStartDate}
           className={styles.textInput}
         />
         <label className={styles.dateLabel}>{getContent('endDate')}</label>
